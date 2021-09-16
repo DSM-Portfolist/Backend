@@ -1,3 +1,12 @@
+buildscript {
+    ext {
+        redisVersion = '0.7.2'
+        jwtVersion = '0.9.1'
+        junitVersion = '5.6.0'
+        assertjVersion = '3.19.0'
+    }
+}
+
 plugins {
     id 'org.springframework.boot' version '2.5.4'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
@@ -16,6 +25,44 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // mail
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    // lombok
+    compileOnly 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    // spring security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation group: 'it.ozimov', name:'embedded-redis', version: redisVersion
+
+    // jwt
+    implementation group: 'io.jsonwebtoken', name: 'jjwt', version: jwtVersion
+
+    // validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // jpa
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // database
+    runtimeOnly 'mysql:mysql-connector-java'
+
+    // test database
+    testImplementation 'com.h2database:h2'
+
+    // test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitVersion
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitVersion
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: assertjVersion
 }
 
 jacocoTestReport {
