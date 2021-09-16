@@ -18,8 +18,6 @@ spring:
       hibernate:
         id:
           new_generator_mappings: false
-  profiles:
-    active: local
   redis:
     host: localhost
     port: 6379
