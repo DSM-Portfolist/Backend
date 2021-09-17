@@ -1,0 +1,23 @@
+auth:
+  jwt:
+    secret: asdf
+    access: 3600000
+    refresh: 1209600000
+spring:
+  h2:
+    console:
+      enabled: true
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;
+  jpa:
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        id:
+          new_generator_mappings: false
+  redis:
+    host: localhost
+    port: 6379
