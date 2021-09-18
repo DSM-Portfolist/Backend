@@ -1,7 +1,7 @@
 package com.example.portfolist.global.security;
 
 import com.example.portfolist.domain.auth.entity.User;
-import com.example.portfolist.domain.auth.repository.UserRepository;
+import com.example.portfolist.domain.auth.repository.repository.UserJpaRepository;
 import com.example.portfolist.global.error.exception.InvalidTokenException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -20,7 +20,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
 
-    private final UserRepository userRepository;
+    private final UserJpaRepository userRepository;
 
     @Value("${auth.jwt.secret}")
     private String secretKey;
@@ -31,11 +31,9 @@ public class JwtTokenProvider {
     @Value("${auth.jwt.refresh}")
     private Long refreshLifespan;
 
-    public String generateAccessToken(String id) {
-        return makingToken(id, "access", accessLifespan);
-    }
+    public String generateAccessToken(Long id) { return makingToken(String.valueOf(id), "access", accessLifespan); }
 
-    public String generateRefreshToken(String id) { return makingToken(id, "refresh", refreshLifespan*3); }
+    public String generateRefreshToken(Long id) { return makingToken(String.valueOf(id), "refresh", refreshLifespan*3); }
 
     public boolean isAccessToken(String token){
         return checkTokenType(token, "access");

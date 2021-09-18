@@ -1,9 +1,7 @@
 package com.example.portfolist;
 
-import com.example.portfolist.global.security.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -16,8 +14,6 @@ public class ApiTest extends IntegrationTest{
 
     @Autowired
     private MockMvc mvc;
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -51,14 +47,6 @@ public class ApiTest extends IntegrationTest{
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("AUTHORIZATION", "Bearer " + token))
                 .andDo(print());
-    }
-
-    protected String makeAccessToken(String user){
-        return jwtTokenProvider.generateAccessToken(user);
-    }
-
-    protected String makeRefreshToken(String user){
-        return jwtTokenProvider.generateRefreshToken(user);
     }
 
 }
