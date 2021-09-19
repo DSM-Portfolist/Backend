@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -51,7 +53,7 @@ public class AuthService {
 
     }
 
-    public void certifyEmail(EmailCertificationRequest request) {
+    public void sendEmail(EmailCertificationRequest request) {
         String baseurl = localServerIp + ":" + port;
         String token = makeToken();
         String content = htmlSourceProvider.makeEmailCertification(baseurl, token);
@@ -59,6 +61,7 @@ public class AuthService {
         Certification certification = Certification.builder()
                 .email(request.getEmail())
                 .token(token)
+                .certification(false)
                 .exp(300000L)
                 .build();
         certificationRepository.save(certification);
@@ -70,6 +73,15 @@ public class AuthService {
             token.append(Math.random() * 9);
         }
         return String.valueOf(token);
+    }
+
+    public String certifyEmail(String token) {
+        Optional<Certification> certification = certificationRepository.findByToken(token);
+        if(certification.isEmpty()) {
+            return "fail";
+        }
+        certification.get().setCertificationTrue();
+        return "success";
     }
 
 }

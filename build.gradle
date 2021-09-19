@@ -28,6 +28,7 @@ dependencies {
     // starter
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
     // openfeign
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: openfeignVersion

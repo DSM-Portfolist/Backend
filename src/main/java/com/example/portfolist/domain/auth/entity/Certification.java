@@ -29,7 +29,12 @@ public class Certification implements Serializable {
 
     private String token;
 
+    private boolean certification;
+
     @TimeToLive
     private Long exp;
 
+    public void setCertificationTrue() {
+        this.certification = true;
+    }
 }
