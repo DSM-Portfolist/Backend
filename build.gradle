@@ -1,5 +1,6 @@
 buildscript {
     ext {
+        openfeignVersion = '3.0.3'
         redisVersion = '0.7.2'
         querydslVersion = '4.4.0'
         jwtVersion = '0.9.1'
@@ -27,6 +28,9 @@ dependencies {
     // starter
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter'
+
+    // openfeign
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: openfeignVersion
 
     // mail
     implementation 'org.springframework.boot:spring-boot-starter-mail'
