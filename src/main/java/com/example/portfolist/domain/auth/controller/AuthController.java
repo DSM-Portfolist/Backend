@@ -38,6 +38,6 @@ public class AuthController {
 
     @RequestMapping("/receive")
     public String certifyEmailReceive(@RequestParam("token") String token) {
-        return authService.certifyEmail(token);
+        return "redirect:" + authService.certifyEmail(token);
     }
 }

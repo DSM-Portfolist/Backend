@@ -35,6 +35,12 @@ public class AuthService {
     @Value(value = "${server.port}")
     private String port;
 
+    @Value(value = "${page.success}")
+    private String successPage;
+
+    @Value(value = "${page.fail}")
+    private String failPage;
+
     public NormalUserLoginResponse login(NormalUserLoginRequest request) {
         User user = userFacade.findByNormalUserEmail(request.getEmail());
         if(!passwordEncoder.matches(request.getPassword(),user.getNormalUser().getPassword())) {
@@ -78,10 +84,10 @@ public class AuthService {
     public String certifyEmail(String token) {
         Optional<Certification> certification = certificationRepository.findByToken(token);
         if(certification.isEmpty()) {
-            return "fail";
+            return failPage;
         }
         certification.get().setCertificationTrue();
-        return "success";
+        return successPage;
     }
 
 }

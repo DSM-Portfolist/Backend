@@ -1,5 +1,8 @@
 server:
   port: 8080
+page:
+  success: ${SUCCESS_PAGE:https://www.naver.com}
+  fail: ${FAIL_PAGE:https://www.google.com}
 auth:
   jwt:
     secret: asdf
