@@ -11,21 +11,15 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "normal_user")
+@Table(name = "field_kind")
 @Entity
-public class NormalUser {
+public class FieldKind {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long pk;
+    private int field;
 
-    @Column(name = "email", nullable = false)
-    private String email;
-
-    @Column(name = "password", nullable = false)
-    private String password;
-
-    @Column(name = "url", nullable = false)
-    private String url;
+    @Column(name = "content", nullable = false)
+    private String content;
 
 }

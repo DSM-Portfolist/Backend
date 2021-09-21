@@ -11,21 +11,20 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "normal_user")
+@Table(name = "field")
 @Entity
-public class NormalUser {
+public class Field {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long pk;
+    private Long pk;
 
-    @Column(name = "email", nullable = false)
-    private String email;
+    @ManyToOne
+    @JoinColumn(name = "user_pk")
+    private User user;
 
-    @Column(name = "password", nullable = false)
-    private String password;
-
-    @Column(name = "url", nullable = false)
-    private String url;
+    @OneToOne
+    @JoinColumn(name = "fieldKind_field")
+    private FieldKind fieldKind;
 
 }

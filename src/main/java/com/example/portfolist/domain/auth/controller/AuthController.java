@@ -40,4 +40,5 @@ public class AuthController {
     public String certifyEmailReceive(@RequestParam("token") String token) {
         return "redirect:" + authService.certifyEmail(token);
     }
+
 }

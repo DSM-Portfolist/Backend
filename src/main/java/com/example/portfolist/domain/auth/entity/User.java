@@ -11,7 +11,8 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "user")
+@Table(name = "user")
+@Entity
 public class User {
 
     @Id
@@ -19,7 +20,7 @@ public class User {
     private long pk;
 
     @OneToOne
-    @JoinColumn(name = "normalUser_id")
+    @JoinColumn(name = "normalUser_pk")
     private NormalUser normalUser;
 
     @Column(name = "github_id")
