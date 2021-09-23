@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Builder
@@ -17,9 +18,12 @@ public class FieldKind {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int field;
+    private int pk;
 
     @Column(name = "content", nullable = false)
     private String content;
+
+    @OneToMany(mappedBy = "fieldKind", fetch = FetchType.LAZY)
+    private List<Field> field;
 
 }

@@ -6,10 +6,15 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class NormalUserLoginRequest {
+public class NormalUserJoinRequest {
+
+    @NotBlank
+    @Size(max = 20)
+    private String name;
 
     @Email
     private String email;
@@ -17,5 +22,8 @@ public class NormalUserLoginRequest {
     @NotBlank
     @Size(min = 4, max = 12)
     private String password;
+
+    @NotBlank
+    private List<Integer> field;
 
 }

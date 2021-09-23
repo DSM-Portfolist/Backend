@@ -1,4 +1,4 @@
-package com.example.portfolist.domain.auth.entity;
+package com.example.portfolist.domain.auth.entity.redis;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,24 +17,21 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@RedisHash(value = "certification")
-public class Certification implements Serializable {
+@RedisHash(value = "refresh_token")
+public class RefreshToken implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Indexed
-    private String email;
-
-    private String token;
-
-    private boolean certification;
+    private String refreshToken;
 
     @TimeToLive
     private Long exp;
 
-    public void setCertificationTrue() {
-        this.certification = true;
+    public void updateExp(Long refreshExp) {
+        this.exp = refreshExp;
     }
+
 }

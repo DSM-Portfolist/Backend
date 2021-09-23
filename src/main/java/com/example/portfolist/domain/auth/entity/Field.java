@@ -19,12 +19,12 @@ public class Field {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long pk;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_pk")
     private User user;
 
-    @OneToOne
-    @JoinColumn(name = "fieldKind_field")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fieldKind_pk")
     private FieldKind fieldKind;
 
 }

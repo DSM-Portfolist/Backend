@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Builder
@@ -19,7 +20,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long pk;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "normalUser_pk")
     private NormalUser normalUser;
 
@@ -31,5 +32,8 @@ public class User {
 
     @Column(name = "introduce")
     private String introduce;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Field> fields;
 
 }

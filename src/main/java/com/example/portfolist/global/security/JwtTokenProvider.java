@@ -1,7 +1,7 @@
 package com.example.portfolist.global.security;
 
 import com.example.portfolist.domain.auth.entity.User;
-import com.example.portfolist.domain.auth.repository.repository.UserJpaRepository;
+import com.example.portfolist.domain.auth.repository.repository.UserRepository;
 import com.example.portfolist.global.error.exception.InvalidTokenException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -20,7 +20,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
 
-    private final UserJpaRepository userRepository;
+    private final UserRepository userRepository;
 
     @Value("${auth.jwt.secret}")
     private String secretKey;
