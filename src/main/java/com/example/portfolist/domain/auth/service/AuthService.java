@@ -11,12 +11,12 @@ import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.auth.entity.redis.Certification;
 import com.example.portfolist.domain.auth.exception.PasswordNotMatchedException;
 import com.example.portfolist.domain.auth.repository.AuthFacade;
-import com.example.portfolist.domain.auth.repository.repository.FieldKindRepository;
 import com.example.portfolist.domain.auth.repository.repository.FieldRepository;
 import com.example.portfolist.domain.auth.repository.repository.NormalUserRepository;
 import com.example.portfolist.domain.auth.repository.repository.UserRepository;
 import com.example.portfolist.domain.auth.repository.repository.redis.CertificationRepository;
 import com.example.portfolist.domain.auth.repository.repository.redis.RefreshTokenRepository;
+import com.example.portfolist.domain.auth.util.api.client.GithubClient;
 import com.example.portfolist.global.error.exception.InvalidTokenException;
 import com.example.portfolist.global.mail.HtmlSourceProvider;
 import com.example.portfolist.global.mail.MailSendProvider;
@@ -48,7 +48,8 @@ public class AuthService {
     private final NormalUserRepository normalUserRepository;
     private final UserRepository userRepository;
     private final FieldRepository fieldRepository;
-    private final FieldKindRepository fieldKindRepository;
+
+    private final GithubClient githubClient;
 
     @Value("${auth.jwt.refresh}")
     private Long refreshLifespan;
@@ -76,8 +77,28 @@ public class AuthService {
     }
 
     public GithubUserLoginResponse login(GithubUserLoginRequest request) {
+        String nickname = githubClient.getUserInfo("token " + request.getGithubToken()).getLogin();
 
-        return null; // TODO openfeign 공부 후 개발 예정
+        Optional<User> optionalUser = userRepository.findByGithubId(nickname);
+        long pk;
+
+        if(optionalUser.isEmpty()) {
+            User user = User.builder()
+                    .githubId(nickname)
+                    .name(nickname)
+                    .build();
+            user = userRepository.save(user);
+            pk = user.getPk();
+        }
+        else{
+            pk = optionalUser.get().getPk();
+        }
+
+        String accessToken = jwtTokenProvider.generateAccessToken(pk);
+        String refreshToken = jwtTokenProvider.generateRefreshToken(pk);
+        refreshTokenRepository.saveRefreshToken(refreshToken, refreshLifespan);
+
+        return new GithubUserLoginResponse(accessToken, refreshToken);
 
     }
 

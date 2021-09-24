@@ -1,5 +1,6 @@
 package com.example.portfolist.global.error;
 
+import com.example.portfolist.domain.auth.exception.OauthServerException;
 import com.example.portfolist.global.error.exception.GlobalException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+    protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
         e.printStackTrace();
         final ErrorResponse response = new ErrorResponse(ErrorCode.INVALID_INPUT_VALUE);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
@@ -25,9 +26,15 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    protected ResponseEntity<ErrorResponse> handleException(Exception e) {
+    protected ResponseEntity<ErrorResponse> handleException(final Exception e) {
         e.printStackTrace();
         final ErrorResponse response = new ErrorResponse(ErrorCode.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
+    }
+
+    @ExceptionHandler(OauthServerException.class)
+    protected ResponseEntity<ErrorResponse> handleOauthServerException(final OauthServerException e) {
+        final ErrorResponse response = new ErrorResponse(e.getStatus(), e.getMessage());
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
     }
 

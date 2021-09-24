@@ -16,6 +16,8 @@ spring:
     username: ${MYSQL_USERNAME:}
   jackson:
     property-naming-strategy: SNAKE_CASE
+  main:
+    allow-bean-definition-overriding: true
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
