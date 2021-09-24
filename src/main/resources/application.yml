@@ -1,3 +1,8 @@
+server:
+  port: 8080
+page:
+  success: ${SUCCESS_PAGE:}
+  fail: ${FAIL_PAGE:}
 auth:
   jwt:
     secret: ${JWT_SECRET:}
@@ -11,6 +16,8 @@ spring:
     username: ${MYSQL_USERNAME:}
   jackson:
     property-naming-strategy: SNAKE_CASE
+  main:
+    allow-bean-definition-overriding: true
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -22,3 +29,14 @@ spring:
     host: localhost
     port: ${REDIS_PORT:}
     password: ${REDIS_PASSWORD:}
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_ADDRESS}
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true

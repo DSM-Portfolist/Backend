@@ -1,7 +1,7 @@
 package com.example.portfolist.global.security;
 
 import com.example.portfolist.domain.auth.entity.User;
-import com.example.portfolist.domain.auth.repository.UserRepository;
+import com.example.portfolist.domain.auth.repository.repository.UserRepository;
 import com.example.portfolist.global.error.exception.InvalidTokenException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -31,11 +31,9 @@ public class JwtTokenProvider {
     @Value("${auth.jwt.refresh}")
     private Long refreshLifespan;
 
-    public String generateAccessToken(String id) {
-        return makingToken(id, "access", accessLifespan);
-    }
+    public String generateAccessToken(Long id) { return makingToken(String.valueOf(id), "access", accessLifespan); }
 
-    public String generateRefreshToken(String id) { return makingToken(id, "refresh", refreshLifespan*3); }
+    public String generateRefreshToken(Long id) { return makingToken(String.valueOf(id), "refresh", refreshLifespan*3); }
 
     public boolean isAccessToken(String token){
         return checkTokenType(token, "access");
@@ -45,9 +43,10 @@ public class JwtTokenProvider {
         return checkTokenType(token, "refresh");
     }
 
-    public String getId(String token) {
+    public Long getId(String token) {
         try {
-            return Jwts.parser().setSigningKey(encodingSecretKey()).parseClaimsJws(token).getBody().getSubject();
+            String id = Jwts.parser().setSigningKey(encodingSecretKey()).parseClaimsJws(token).getBody().getSubject();
+            return Long.parseLong(id);
         } catch (Exception e) {
             throw new InvalidTokenException();
         }
@@ -66,7 +65,7 @@ public class JwtTokenProvider {
     }
 
     public Authentication getAuthentication(String token) {
-        Long pk = Long.parseLong(getId(token));
+        Long pk = getId(token);
         Optional<User> user = userRepository.findById(pk);
         if(user.isPresent()) {
             return new UsernamePasswordAuthenticationToken(user.get(), "", getAuthorities());
