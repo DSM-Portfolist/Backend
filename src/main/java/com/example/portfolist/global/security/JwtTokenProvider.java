@@ -43,9 +43,10 @@ public class JwtTokenProvider {
         return checkTokenType(token, "refresh");
     }
 
-    public String getId(String token) {
+    public Long getId(String token) {
         try {
-            return Jwts.parser().setSigningKey(encodingSecretKey()).parseClaimsJws(token).getBody().getSubject();
+            String id = Jwts.parser().setSigningKey(encodingSecretKey()).parseClaimsJws(token).getBody().getSubject();
+            return Long.parseLong(id);
         } catch (Exception e) {
             throw new InvalidTokenException();
         }
@@ -64,7 +65,7 @@ public class JwtTokenProvider {
     }
 
     public Authentication getAuthentication(String token) {
-        Long pk = Long.parseLong(getId(token));
+        Long pk = getId(token);
         Optional<User> user = userRepository.findById(pk);
         if(user.isPresent()) {
             return new UsernamePasswordAuthenticationToken(user.get(), "", getAuthorities());

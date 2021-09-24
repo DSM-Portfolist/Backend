@@ -30,8 +30,4 @@ public class RefreshToken implements Serializable {
     @TimeToLive
     private Long exp;
 
-    public void updateExp(Long refreshExp) {
-        this.exp = refreshExp;
-    }
-
 }

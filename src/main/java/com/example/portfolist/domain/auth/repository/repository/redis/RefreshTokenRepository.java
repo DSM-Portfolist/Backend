@@ -11,4 +11,6 @@ public interface RefreshTokenRepository extends CrudRepository<RefreshToken, Lon
                 .build();
         this.save(refreshToken);
     }
+
+    boolean existsByRefreshToken(String token);
 }

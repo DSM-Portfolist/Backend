@@ -1,11 +1,9 @@
 package com.example.portfolist.domain.auth.service;
 
-import com.example.portfolist.domain.auth.dto.request.EmailCertificationRequest;
-import com.example.portfolist.domain.auth.dto.request.GithubUserLoginRequest;
-import com.example.portfolist.domain.auth.dto.request.NormalUserJoinRequest;
-import com.example.portfolist.domain.auth.dto.request.NormalUserLoginRequest;
+import com.example.portfolist.domain.auth.dto.request.*;
 import com.example.portfolist.domain.auth.dto.response.GithubUserLoginResponse;
 import com.example.portfolist.domain.auth.dto.response.NormalUserLoginResponse;
+import com.example.portfolist.domain.auth.dto.response.TokenRefreshResponse;
 import com.example.portfolist.domain.auth.entity.Field;
 import com.example.portfolist.domain.auth.entity.FieldKind;
 import com.example.portfolist.domain.auth.entity.NormalUser;
@@ -19,6 +17,7 @@ import com.example.portfolist.domain.auth.repository.repository.NormalUserReposi
 import com.example.portfolist.domain.auth.repository.repository.UserRepository;
 import com.example.portfolist.domain.auth.repository.repository.redis.CertificationRepository;
 import com.example.portfolist.domain.auth.repository.repository.redis.RefreshTokenRepository;
+import com.example.portfolist.global.error.exception.InvalidTokenException;
 import com.example.portfolist.global.mail.HtmlSourceProvider;
 import com.example.portfolist.global.mail.MailSendProvider;
 import com.example.portfolist.global.security.JwtTokenProvider;
@@ -140,6 +139,19 @@ public class AuthService {
                     .build();
             fieldRepository.save(field);
         }
+    }
+
+    public TokenRefreshResponse tokenRefresh(TokenRefreshRequest request) {
+        String token = request.getRefreshToken();
+
+        authFacade.checkExistsRefreshToken(token);
+        if(!jwtTokenProvider.isRefreshToken(token)) {
+            throw new InvalidTokenException();
+        }
+
+        Long id = jwtTokenProvider.getId(token);
+        String accessToken = jwtTokenProvider.generateAccessToken(id);
+        return new TokenRefreshResponse(accessToken);
     }
 
 }

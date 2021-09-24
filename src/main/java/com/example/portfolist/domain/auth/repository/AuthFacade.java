@@ -10,6 +10,8 @@ import com.example.portfolist.domain.auth.exception.UserNotFoundException;
 import com.example.portfolist.domain.auth.repository.repository.FieldKindRepository;
 import com.example.portfolist.domain.auth.repository.repository.UserRepository;
 import com.example.portfolist.domain.auth.repository.repository.redis.CertificationRepository;
+import com.example.portfolist.domain.auth.repository.repository.redis.RefreshTokenRepository;
+import com.example.portfolist.global.error.exception.InvalidTokenException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +24,7 @@ public class AuthFacade {
     private final UserRepository userRepository;
     private final FieldKindRepository fieldKindRepository;
     private final CertificationRepository certificationRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public User findByNormalUserEmail(String email) {
         return userRepository.findByNormalUserEmail(email)
@@ -44,6 +47,12 @@ public class AuthFacade {
     public FieldKind findByFieldKindId(int pk) {
         return fieldKindRepository.findById(pk)
                 .orElseThrow(FieldNotFoundException::new);
+    }
+
+    public void checkExistsRefreshToken(String token) {
+        if(!refreshTokenRepository.existsByRefreshToken(token)) {
+            throw new InvalidTokenException();
+        }
     }
 
 }

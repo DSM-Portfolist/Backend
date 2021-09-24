@@ -1,11 +1,9 @@
 package com.example.portfolist.domain.auth.controller;
 
-import com.example.portfolist.domain.auth.dto.request.EmailCertificationRequest;
-import com.example.portfolist.domain.auth.dto.request.GithubUserLoginRequest;
-import com.example.portfolist.domain.auth.dto.request.NormalUserJoinRequest;
-import com.example.portfolist.domain.auth.dto.request.NormalUserLoginRequest;
+import com.example.portfolist.domain.auth.dto.request.*;
 import com.example.portfolist.domain.auth.dto.response.GithubUserLoginResponse;
 import com.example.portfolist.domain.auth.dto.response.NormalUserLoginResponse;
+import com.example.portfolist.domain.auth.dto.response.TokenRefreshResponse;
 import com.example.portfolist.domain.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -48,7 +46,14 @@ public class AuthController {
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/join")
-    public void join(@RequestBody NormalUserJoinRequest request) {
+    public void join(@Valid @RequestBody NormalUserJoinRequest request) {
         authService.join(request);
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/token-refresh")
+    public TokenRefreshResponse tokenRefresh(@Valid @RequestBody TokenRefreshRequest request) {
+        return authService.tokenRefresh(request);
     }
 }
