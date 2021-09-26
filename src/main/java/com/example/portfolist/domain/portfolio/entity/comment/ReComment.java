@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Recomment {
+public class ReComment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

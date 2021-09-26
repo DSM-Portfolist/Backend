@@ -34,5 +34,5 @@ public class Comment {
     private String content;
 
     @OneToMany(mappedBy = "comment")
-    private List<Recomment> recommentList;
+    private List<ReComment> recommentList;
 }

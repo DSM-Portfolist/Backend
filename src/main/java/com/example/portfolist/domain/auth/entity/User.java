@@ -1,7 +1,7 @@
 package com.example.portfolist.domain.auth.entity;
 
 import com.example.portfolist.domain.portfolio.entity.comment.Comment;
-import com.example.portfolist.domain.portfolio.entity.comment.Recomment;
+import com.example.portfolist.domain.portfolio.entity.comment.ReComment;
 import com.example.portfolist.domain.portfolio.entity.portfolio.Portfolio;
 import com.example.portfolist.domain.portfolio.entity.touching.Touching;
 import lombok.AllArgsConstructor;
@@ -47,7 +47,7 @@ public class User {
     private List<Comment> commentList;
 
     @OneToMany(mappedBy = "user")
-    private List<Recomment>  recommentList;
+    private List<ReComment>  recommentList;
 
     @OneToMany(mappedBy = "user")
     private List<Field> fieldList;
