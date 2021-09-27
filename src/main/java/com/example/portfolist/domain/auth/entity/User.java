@@ -1,5 +1,9 @@
 package com.example.portfolist.domain.auth.entity;
 
+import com.example.portfolist.domain.portfolio.entity.comment.Comment;
+import com.example.portfolist.domain.portfolio.entity.comment.ReComment;
+import com.example.portfolist.domain.portfolio.entity.portfolio.Portfolio;
+import com.example.portfolist.domain.portfolio.entity.touching.Touching;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,7 +37,18 @@ public class User {
     @Column(name = "introduce")
     private String introduce;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<Field> fields;
+    @OneToMany(mappedBy = "user")
+    private List<Portfolio> portfolioList;
 
+    @OneToMany(mappedBy = "user")
+    private List<Touching> touchingList;
+
+    @OneToMany(mappedBy = "user")
+    private List<Comment> commentList;
+
+    @OneToMany(mappedBy = "user")
+    private List<ReComment>  recommentList;
+
+    @OneToMany(mappedBy = "user")
+    private List<Field> fieldList;
 }
