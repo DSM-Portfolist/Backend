@@ -1,9 +1,6 @@
 package com.example.portfolist.domain.auth.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -22,6 +19,7 @@ public class NormalUser {
     @Column(name = "email", nullable = false)
     private String email;
 
+    @Setter
     @Column(name = "password", nullable = false)
     private String password;
 
