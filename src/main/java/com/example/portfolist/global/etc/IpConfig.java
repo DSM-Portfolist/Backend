@@ -1,7 +1,7 @@
-package com.example.portfolist.global.etc;
+package com.example.portfolist.global.etc.ip;
 
 import com.example.portfolist.domain.auth.exception.UserNotFoundException;
-import com.example.portfolist.global.etc.dto.LocalServerIp;
+import com.example.portfolist.global.etc.ip.dto.LocalServerIp;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
