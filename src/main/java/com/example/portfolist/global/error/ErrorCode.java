@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ErrorCode {
     INTERNAL_SERVER_ERROR(500, "Internal Server Error"),
+    NOT_FOUND_LOCAL_SERVER_IP(500, "Not Found Local Server Ip"),
     INVALID_INPUT_VALUE(400, "Invalid Input Value"),
+    WRONG_FILE_EXTENSION(400, "Wrong File Extension"),
     INVALID_TOKEN(401, "Invalid Token"),
     PASSWORD_NOT_MATCHED(401, "Password Not Matched"),
 
