@@ -39,3 +39,15 @@ spring:
           auth: true
           starttls:
             enable: true
+cloud:
+  aws:
+    s3:
+      bucket: ${AWS_BUCKET:test}
+    region:
+      static: ${AWS_REGION:ap-northeast-2}
+    stack:
+      auto: false
+    credentials:
+      instanceProfile: true
+      accessKey: ${AWS_ACCESS:access}
+      secretKey: ${AWS_SECRET:secret}

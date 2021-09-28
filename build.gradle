@@ -6,6 +6,7 @@ buildscript {
         jwtVersion = '0.9.1'
         junitVersion = '5.6.0'
         assertjVersion = '3.19.0'
+        cloudStarterAwsVersion = '2.2.6.RELEASE'
     }
 }
 
@@ -65,6 +66,12 @@ dependencies {
 
     // database
     runtimeOnly 'mysql:mysql-connector-java'
+
+    // aws
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: cloudStarterAwsVersion
+
+    // configure
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     // test database
     testImplementation 'com.h2database:h2'

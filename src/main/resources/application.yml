@@ -9,6 +9,14 @@ auth:
     access: ${ACCESS_LIFESPAN}
     refresh: ${REFRESH_LIFESPAN}
 spring:
+  profiles:
+    include:
+      - aws
+      - credentials
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     password: ${MYSQL_PASSWORD:}
