@@ -1,5 +1,6 @@
 package com.example.portfolist.domain.auth.entity;
 
+import com.example.portfolist.domain.portfolio.entity.portfolio.PortfolioField;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,4 +27,6 @@ public class FieldKind {
     @OneToMany(mappedBy = "fieldKind", fetch = FetchType.LAZY)
     private List<Field> field;
 
+    @OneToMany(mappedBy = "fieldKind", fetch = FetchType.LAZY)
+    private List<PortfolioField> portfolioFields;
 }

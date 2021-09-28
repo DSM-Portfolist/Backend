@@ -64,4 +64,7 @@ public class Portfolio {
 
     @OneToMany(mappedBy = "portfolio")
     private List<Touching> touchingList;
+
+    @OneToMany(mappedBy = "portfolio")
+    private List<PortfolioField> portfolioFields;
 }
