@@ -1,7 +1,7 @@
 package com.example.portfolist.global.file;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.example.portfolist.global.error.exception.WrongFileExtensionException;
+import com.example.portfolist.global.error.exception.WrongFileException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,13 +16,20 @@ public class FileUploadProvider {
 
     private final AwsS3UploadService s3UploadService;
 
-    public String uploadFile(MultipartFile file) throws IOException {
+    public String uploadFile(MultipartFile file) {
         String fileName = createFileName(file.getOriginalFilename());
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(file.getSize());
         objectMetadata.setContentType(file.getContentType());
 
-        InputStream inputStream = file.getInputStream();
+        InputStream inputStream = null;
+        try {
+            inputStream = file.getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new WrongFileException();
+        }
+
         s3UploadService.uploadFile(inputStream, objectMetadata, fileName);
         return s3UploadService.getFileUrl(fileName);
     }
@@ -40,7 +47,7 @@ public class FileUploadProvider {
         try {
             return fileName.substring(fileName.lastIndexOf("."));
         } catch (StringIndexOutOfBoundsException e) {
-            throw new WrongFileExtensionException();
+            throw new WrongFileException();
         }
     }
 
