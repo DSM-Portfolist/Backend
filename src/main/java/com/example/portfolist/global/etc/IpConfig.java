@@ -1,7 +1,7 @@
-package com.example.portfolist.global.etc.ip;
+package com.example.portfolist.global.etc;
 
-import com.example.portfolist.domain.auth.exception.UserNotFoundException;
-import com.example.portfolist.global.etc.ip.dto.LocalServerIp;
+import com.example.portfolist.global.error.exception.NotFoundLocalServerIpException;
+import com.example.portfolist.global.etc.dto.LocalServerIp;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,7 +17,7 @@ public class IpConfig {
             InetAddress ip = java.net.InetAddress.getLocalHost();
             return new LocalServerIp(ip.getHostAddress());
         } catch (UnknownHostException e) {
-            throw new UserNotFoundException();
+            throw new NotFoundLocalServerIpException();
         }
     }
 

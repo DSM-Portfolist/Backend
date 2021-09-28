@@ -1,4 +1,4 @@
-package com.example.portfolist.global.etc.ip.dto;
+package com.example.portfolist.global.etc.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
