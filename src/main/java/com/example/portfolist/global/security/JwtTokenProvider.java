@@ -54,7 +54,7 @@ public class JwtTokenProvider {
 
     public String resolveToken(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
-        if(checkToken(token)) {
+        if (checkToken(token)) {
             return token.substring(7);
         }
         return null;
@@ -67,7 +67,7 @@ public class JwtTokenProvider {
     public Authentication getAuthentication(String token) {
         Long pk = getId(token);
         Optional<User> user = userRepository.findById(pk);
-        if(user.isPresent()) {
+        if (user.isPresent()) {
             return new UsernamePasswordAuthenticationToken(user.get(), "", getAuthorities());
         }
         return new UsernamePasswordAuthenticationToken(null, "", null);

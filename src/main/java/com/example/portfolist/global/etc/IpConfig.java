@@ -1,6 +1,7 @@
 package com.example.portfolist.global.etc;
 
 import com.example.portfolist.domain.auth.exception.UserNotFoundException;
+import com.example.portfolist.global.etc.dto.LocalServerIp;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,10 +12,10 @@ import java.net.UnknownHostException;
 public class IpConfig {
 
     @Bean
-    public String localServerIp() {
+    public LocalServerIp localServerIp() {
         try {
             InetAddress ip = java.net.InetAddress.getLocalHost();
-            return ip.getHostAddress();
+            return new LocalServerIp(ip.getHostAddress());
         } catch (UnknownHostException e) {
             throw new UserNotFoundException();
         }
