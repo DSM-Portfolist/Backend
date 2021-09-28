@@ -18,7 +18,7 @@ public class EmbeddedRedisConfig {
 
     @PostConstruct
     public void runRedis() throws IOException {
-        if(redisServer == null) {
+        if (redisServer == null) {
             redisServer = new RedisServer(port);
             redisServer.start();
         }
@@ -26,7 +26,7 @@ public class EmbeddedRedisConfig {
 
     @PreDestroy
     public void stopRedis() {
-        if(redisServer != null) {
+        if (redisServer != null) {
             redisServer.stop();
         }
     }
