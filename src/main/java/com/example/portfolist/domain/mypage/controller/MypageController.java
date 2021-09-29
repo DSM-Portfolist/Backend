@@ -6,10 +6,8 @@ import com.example.portfolist.domain.mypage.service.MypageService;
 import com.example.portfolist.global.security.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -23,12 +21,12 @@ public class MypageController {
 
     @PatchMapping("/password")
     public void changePassword(@Valid @RequestBody PasswordChangeRequest request) {
-        mypageService.changePassword(request, authenticationFacade.getUser());
+        mypageService.changePassword(request, authenticationFacade.getNormalUser());
     }
 
     @PostMapping("/password")
     public void checkPassword(@Valid @RequestBody PasswordCheckRequest request) {
-        mypageService.checkPassword(request, authenticationFacade.getUser());
+        mypageService.checkPassword(request, authenticationFacade.getNormalUser());
     }
 
 }
