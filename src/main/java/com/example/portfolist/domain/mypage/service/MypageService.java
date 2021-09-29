@@ -40,4 +40,12 @@ public class MypageService {
         normalUser.setUrl(fileUrl);
     }
 
+    public void deleteProfile(NormalUser normalUser) {
+        String url = normalUser.getUrl();
+        if (url != null) {
+            fileUploadProvider.deleteFile(url);
+            normalUser.setUrl(null);
+        }
+    }
+
 }
