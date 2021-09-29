@@ -23,6 +23,7 @@ public class NormalUser {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Setter
     @Column(name = "url", nullable = false)
     private String url;
 

@@ -29,4 +29,9 @@ public class MypageController {
         mypageService.checkPassword(request, authenticationFacade.getNormalUser());
     }
 
+    @PatchMapping("/profile")
+    public void changeProfile(@RequestPart(value = "file", required = false) MultipartFile file) {
+        mypageService.changeProfile(file, authenticationFacade.getNormalUser());
+    }
+
 }
