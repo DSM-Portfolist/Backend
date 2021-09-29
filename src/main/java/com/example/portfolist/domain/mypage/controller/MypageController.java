@@ -5,6 +5,7 @@ import com.example.portfolist.domain.mypage.dto.request.PasswordCheckRequest;
 import com.example.portfolist.domain.mypage.service.MypageService;
 import com.example.portfolist.global.security.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,6 +33,12 @@ public class MypageController {
     @PostMapping("/profile")
     public void registerProfile(@RequestPart(value = "file", required = false) MultipartFile file) {
         mypageService.registerProfile(file, authenticationFacade.getNormalUser());
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/profile")
+    public void deleteProfile() {
+        mypageService.deleteProfile(authenticationFacade.getNormalUser());
     }
 
 }
