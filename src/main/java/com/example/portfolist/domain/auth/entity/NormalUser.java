@@ -19,12 +19,18 @@ public class NormalUser {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Setter
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Setter
     @Column(name = "url")
     private String url;
+
+    public void changePassword(String password) {
+        this.password = password;
+    }
+
+    public void updateUrl(String url) {
+        this.url = url;
+    }
 
 }

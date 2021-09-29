@@ -132,7 +132,7 @@ public class AuthService {
 
         User user = User.builder()
                 .normalUser(normalUser)
-                .name(request.getName())
+                .name(passwordEncoder.encode(request.getName()))
                 .build();
         user = authFacade.save(user);
 
