@@ -24,7 +24,7 @@ public class NormalUser {
     private String password;
 
     @Setter
-    @Column(name = "url", nullable = false)
+    @Column(name = "url")
     private String url;
 
 }

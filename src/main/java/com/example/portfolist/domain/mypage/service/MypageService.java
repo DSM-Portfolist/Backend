@@ -31,8 +31,11 @@ public class MypageService {
         }
     }
 
-    public void changeProfile(MultipartFile file, NormalUser normalUser) {
-        fileUploadProvider.deleteFile(normalUser.getUrl());
+    public void registerProfile(MultipartFile file, NormalUser normalUser) {
+        if (normalUser.getUrl() != null) {
+            fileUploadProvider.deleteFile(normalUser.getUrl());
+        }
+
         String fileUrl = fileUploadProvider.uploadFile(file);
         normalUser.setUrl(fileUrl);
     }
