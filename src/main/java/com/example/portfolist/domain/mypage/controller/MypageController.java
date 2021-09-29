@@ -2,6 +2,7 @@ package com.example.portfolist.domain.mypage.controller;
 
 import com.example.portfolist.domain.mypage.dto.request.PasswordChangeRequest;
 import com.example.portfolist.domain.mypage.dto.request.PasswordCheckRequest;
+import com.example.portfolist.domain.mypage.dto.response.UserInfoGetRes.UserInfoGetResponse;
 import com.example.portfolist.domain.mypage.service.MypageService;
 import com.example.portfolist.global.security.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
@@ -41,4 +42,8 @@ public class MypageController {
         mypageService.deleteProfile(authenticationFacade.getNormalUser());
     }
 
+    @GetMapping("/info")
+    public UserInfoGetResponse getUserInfo() {
+        return mypageService.getUserInfo(authenticationFacade.getUser());
+    }
 }

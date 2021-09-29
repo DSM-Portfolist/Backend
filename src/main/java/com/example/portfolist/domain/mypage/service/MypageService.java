@@ -5,6 +5,7 @@ import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.auth.exception.PasswordNotMatchedException;
 import com.example.portfolist.domain.mypage.dto.request.PasswordChangeRequest;
 import com.example.portfolist.domain.mypage.dto.request.PasswordCheckRequest;
+import com.example.portfolist.domain.mypage.dto.response.UserInfoGetRes.UserInfoGetResponse;
 import com.example.portfolist.global.file.FileUploadProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,7 +23,7 @@ public class MypageService {
         if (!passwordEncoder.matches(request.getNowPassword(), normalUser.getPassword())) {
             throw new PasswordNotMatchedException();
         }
-        normalUser.changePassword(request.getNewPassword());
+        normalUser.changePassword(passwordEncoder.encode(request.getNewPassword()));
     }
 
     public void checkPassword(PasswordCheckRequest request, NormalUser normalUser) {
@@ -48,4 +49,7 @@ public class MypageService {
         }
     }
 
+    public UserInfoGetResponse getUserInfo(User user) {
+        return UserInfoGetResponse.from(user);
+    }
 }
