@@ -22,7 +22,7 @@ public class MypageService {
         if (!passwordEncoder.matches(request.getNowPassword(), normalUser.getPassword())) {
             throw new PasswordNotMatchedException();
         }
-        normalUser.setPassword(request.getNewPassword());
+        normalUser.changePassword(request.getNewPassword());
     }
 
     public void checkPassword(PasswordCheckRequest request, NormalUser normalUser) {
@@ -37,14 +37,14 @@ public class MypageService {
         }
 
         String fileUrl = fileUploadProvider.uploadFile(file);
-        normalUser.setUrl(fileUrl);
+        normalUser.updateUrl(fileUrl);
     }
 
     public void deleteProfile(NormalUser normalUser) {
         String url = normalUser.getUrl();
         if (url != null) {
             fileUploadProvider.deleteFile(url);
-            normalUser.setUrl(null);
+            normalUser.updateUrl(null);
         }
     }
 
