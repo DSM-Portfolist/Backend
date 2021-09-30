@@ -1,5 +1,6 @@
 package com.example.portfolist.domain.auth.entity;
 
+import com.example.portfolist.domain.mypage.entity.Notification;
 import com.example.portfolist.domain.portfolio.entity.comment.Comment;
 import com.example.portfolist.domain.portfolio.entity.comment.ReComment;
 import com.example.portfolist.domain.portfolio.entity.portfolio.Portfolio;
@@ -52,6 +53,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Field> fieldList;
+
+    @OneToMany(mappedBy = "fromUser", fetch = FetchType.LAZY)
+    private List<Notification> notificationList;
 
     public void updateUserInfo(String name, String introduce) {
         if (!StringUtil.isNullOrEmpty(name)) {

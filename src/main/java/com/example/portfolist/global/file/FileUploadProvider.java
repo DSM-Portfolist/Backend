@@ -3,6 +3,7 @@ package com.example.portfolist.global.file;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.example.portfolist.global.error.exception.WrongFileException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,6 +35,7 @@ public class FileUploadProvider {
         return s3UploadService.getFileUrl(fileName);
     }
 
+    @Async
     public void deleteFile(String fileUrl) {
         String fileName = fileUrl.substring(fileUrl.lastIndexOf("/"));
         s3UploadService.deleteFile(fileName);
