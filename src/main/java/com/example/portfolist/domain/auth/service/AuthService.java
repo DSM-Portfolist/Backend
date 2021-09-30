@@ -14,8 +14,8 @@ import com.example.portfolist.domain.auth.repository.AuthCheckFacade;
 import com.example.portfolist.domain.auth.repository.AuthFacade;
 import com.example.portfolist.domain.auth.util.api.client.GithubClient;
 import com.example.portfolist.global.error.exception.InvalidTokenException;
+import com.example.portfolist.global.event.GlobalEventPublisher;
 import com.example.portfolist.global.mail.HtmlSourceProvider;
-import com.example.portfolist.global.mail.MailSendProvider;
 import com.example.portfolist.global.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,7 +36,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
 
     private final HtmlSourceProvider htmlSourceProvider;
-    private final MailSendProvider mailSendProvider;
+    private final GlobalEventPublisher globalEventPublisher;
 
     private final GithubClient githubClient;
 
@@ -100,7 +100,7 @@ public class AuthService {
         String baseurl = domain + ":" + port;
         String token = makeToken();
         String content = htmlSourceProvider.makeEmailCertification(baseurl, token);
-        mailSendProvider.sendCertification(request.getEmail(), "포트폴리스트 이메일 인증", content);
+        globalEventPublisher.sendEmail(request.getEmail(), "포트폴리스트 이메일 인증", content);
         authFacade.save(request.getEmail(), token);
     }
 

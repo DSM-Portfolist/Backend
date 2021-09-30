@@ -8,6 +8,7 @@ import com.example.portfolist.domain.mypage.dto.request.PasswordCheckRequest;
 import com.example.portfolist.domain.mypage.dto.response.UserInfoGetResponse;
 import com.example.portfolist.global.file.FileUploadProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,6 +42,7 @@ public class MypageService {
         normalUser.updateUrl(fileUrl);
     }
 
+    @Async
     public void deleteProfile(NormalUser normalUser) {
         String url = normalUser.getUrl();
         if (url != null) {
