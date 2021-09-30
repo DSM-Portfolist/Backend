@@ -1,4 +1,4 @@
-package com.example.portfolist.domain.portfolio.entity.experience;
+package com.example.portfolist.domain.portfolio.entity.container;
 
 import com.example.portfolist.domain.portfolio.entity.portfolio.Portfolio;
 import lombok.AccessLevel;
@@ -11,19 +11,19 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Experience {
+public class Box {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long pk;
 
     @ManyToOne
-    @JoinColumn(name = "portfolio_id", nullable = false)
-    private Portfolio portfolio;
+    @JoinColumn(name = "container_id", nullable = false)
+    private Container container;
 
-    @OneToMany(mappedBy = "experience")
-    private List<ExperienceImage> experienceImageList;
+    @OneToMany(mappedBy = "box")
+    private List<BoxImage> boxImageList;
 
-    @OneToMany(mappedBy = "experience")
-    private List<ExperienceText> experienceTextList;
+    @OneToMany(mappedBy = "box")
+    private List<BoxText> boxTextList;
 }

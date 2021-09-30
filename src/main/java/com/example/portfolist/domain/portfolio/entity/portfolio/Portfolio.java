@@ -2,8 +2,8 @@ package com.example.portfolist.domain.portfolio.entity.portfolio;
 
 import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.portfolio.entity.comment.Comment;
-import com.example.portfolist.domain.portfolio.entity.experience.Experience;
-import com.example.portfolist.domain.portfolio.entity.project.Project;
+import com.example.portfolist.domain.portfolio.entity.container.Box;
+import com.example.portfolist.domain.portfolio.entity.container.Container;
 import com.example.portfolist.domain.portfolio.entity.touching.Touching;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -54,10 +54,7 @@ public class Portfolio {
     private List<MoreInfo> moreInfoList;
 
     @OneToMany(mappedBy = "portfolio")
-    private List<Experience> experienceList;
-
-    @OneToMany(mappedBy = "portfolio")
-    private List<Project> projectList;
+    private List<Container> containerList;
 
     @OneToMany(mappedBy = "portfolio")
     private List<Certificate> certificateList;
