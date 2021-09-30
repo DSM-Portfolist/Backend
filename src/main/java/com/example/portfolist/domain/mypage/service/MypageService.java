@@ -5,7 +5,7 @@ import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.auth.exception.PasswordNotMatchedException;
 import com.example.portfolist.domain.mypage.dto.request.PasswordChangeRequest;
 import com.example.portfolist.domain.mypage.dto.request.PasswordCheckRequest;
-import com.example.portfolist.domain.mypage.dto.response.UserInfoGetRes.UserInfoGetResponse;
+import com.example.portfolist.domain.mypage.dto.response.UserInfoGetResponse;
 import com.example.portfolist.global.file.FileUploadProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
