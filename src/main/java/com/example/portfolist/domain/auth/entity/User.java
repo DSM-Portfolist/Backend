@@ -4,6 +4,7 @@ import com.example.portfolist.domain.portfolio.entity.comment.Comment;
 import com.example.portfolist.domain.portfolio.entity.comment.ReComment;
 import com.example.portfolist.domain.portfolio.entity.portfolio.Portfolio;
 import com.example.portfolist.domain.portfolio.entity.touching.Touching;
+import io.netty.util.internal.StringUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -51,4 +52,14 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Field> fieldList;
+
+    public void updateUserInfo(String name, String introduce) {
+        if (!StringUtil.isNullOrEmpty(name)) {
+            this.name = name;
+        }
+        if (!StringUtil.isNullOrEmpty(introduce)) {
+            this.introduce = introduce;
+        }
+    }
+
 }
