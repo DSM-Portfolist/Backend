@@ -2,18 +2,20 @@ package com.example.portfolist.domain.auth.repository;
 
 import com.example.portfolist.domain.auth.entity.Field;
 import com.example.portfolist.domain.auth.entity.NormalUser;
+import com.example.portfolist.domain.auth.entity.QField;
 import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.auth.entity.redis.Certification;
 import com.example.portfolist.domain.auth.entity.redis.RefreshToken;
-import com.example.portfolist.domain.auth.repository.repository.FieldKindRepository;
 import com.example.portfolist.domain.auth.repository.repository.FieldRepository;
 import com.example.portfolist.domain.auth.repository.repository.NormalUserRepository;
 import com.example.portfolist.domain.auth.repository.repository.UserRepository;
 import com.example.portfolist.domain.auth.repository.repository.redis.CertificationRepository;
 import com.example.portfolist.domain.auth.repository.repository.redis.RefreshTokenRepository;
+import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -27,6 +29,7 @@ public class AuthFacade {
     private final NormalUserRepository normalUserRepository;
     private final FieldRepository fieldRepository;
 
+    private final QField qfield = QField.field;
 
     public void save(String token, Long refreshLifespan) {
         RefreshToken refreshToken = RefreshToken.builder()
@@ -62,7 +65,16 @@ public class AuthFacade {
         return normalUserRepository.save(normalUser);
     }
 
-    public void save(Field field) {
-        fieldRepository.save(field);
+    public void delete(List<Field> fields) {
+        fieldRepository.deleteAll(fields);
     }
+
+    public void save(List<Field> fields) {
+        fieldRepository.saveAll(fields);
+    }
+
+    public List<Field> findFieldByUser(User user) {
+        return fieldRepository.findByUser(user);
+    }
+
 }

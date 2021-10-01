@@ -2,6 +2,7 @@ package com.example.portfolist.domain.mypage.controller;
 
 import com.example.portfolist.domain.mypage.dto.request.PasswordChangeRequest;
 import com.example.portfolist.domain.mypage.dto.request.PasswordCheckRequest;
+import com.example.portfolist.domain.mypage.dto.request.UserInfoChangeRequest;
 import com.example.portfolist.domain.mypage.dto.response.UserInfoGetResponse;
 import com.example.portfolist.domain.mypage.service.MypageService;
 import com.example.portfolist.global.security.AuthenticationFacade;
@@ -45,5 +46,11 @@ public class MypageController {
     @GetMapping("/info")
     public UserInfoGetResponse getUserInfo() {
         return mypageService.getUserInfo(authenticationFacade.getUser());
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PatchMapping("/info")
+    public void changeUserInfo(@RequestBody UserInfoChangeRequest request) {
+        mypageService.changeUserInfo(request, authenticationFacade.getUser());
     }
 }

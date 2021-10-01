@@ -23,7 +23,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -137,14 +140,17 @@ public class AuthService {
                 .build();
         user = authFacade.save(user);
 
+        List<Field> fields = new ArrayList<>();
         for (int pk : request.getField()) {
-            FieldKind fieldKind = authCheckFacade.findByFieldKindId(pk);
+            FieldKind fieldKind = authCheckFacade.findFieldKindById(pk);
             Field field = Field.builder()
                     .user(user)
                     .fieldKind(fieldKind)
                     .build();
-            authFacade.save(field);
+            fields.add(field);
         }
+
+        authFacade.save(fields);
     }
 
     public TokenRefreshResponse tokenRefresh(TokenRefreshRequest request) {
