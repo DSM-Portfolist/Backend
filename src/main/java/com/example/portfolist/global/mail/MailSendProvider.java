@@ -20,7 +20,7 @@ public class MailSendProvider {
 
     private final JavaMailSender mailSender;
 
-    public void sendCertification(String toEmail, String title, String content) {
+    public void sendEmail(String toEmail, String title, String content) {
 
         MimeMessage message = mailSender.createMimeMessage();
 

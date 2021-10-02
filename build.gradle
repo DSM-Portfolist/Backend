@@ -29,6 +29,7 @@ dependencies {
     // starter
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     // openfeign
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: openfeignVersion
@@ -44,6 +45,7 @@ dependencies {
 
     // spring security
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
 
     // redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
@@ -77,8 +79,6 @@ dependencies {
     testImplementation 'com.h2database:h2'
 
     // test
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitVersion
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitVersion
     testImplementation group: 'org.assertj', name: 'assertj-core', version: assertjVersion

@@ -1,5 +1,6 @@
 package com.example.portfolist.domain.auth.repository;
 
+import com.example.portfolist.domain.auth.entity.Field;
 import com.example.portfolist.domain.auth.entity.FieldKind;
 import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.auth.entity.redis.Certification;
@@ -8,6 +9,7 @@ import com.example.portfolist.domain.auth.exception.FieldNotFoundException;
 import com.example.portfolist.domain.auth.exception.UserDuplicatedException;
 import com.example.portfolist.domain.auth.exception.UserNotFoundException;
 import com.example.portfolist.domain.auth.repository.repository.FieldKindRepository;
+import com.example.portfolist.domain.auth.repository.repository.FieldRepository;
 import com.example.portfolist.domain.auth.repository.repository.UserRepository;
 import com.example.portfolist.domain.auth.repository.repository.redis.CertificationRepository;
 import com.example.portfolist.domain.auth.repository.repository.redis.RefreshTokenRepository;
@@ -22,6 +24,7 @@ import java.util.Optional;
 public class AuthCheckFacade {
 
     private final UserRepository userRepository;
+    private final FieldRepository fieldRepository;
     private final FieldKindRepository fieldKindRepository;
 
     private final CertificationRepository certificationRepository;
@@ -45,7 +48,7 @@ public class AuthCheckFacade {
         }
     }
 
-    public FieldKind findByFieldKindId(int pk) {
+    public FieldKind findFieldKindById(int pk) {
         return fieldKindRepository.findById(pk)
                 .orElseThrow(FieldNotFoundException::new);
     }
@@ -54,6 +57,11 @@ public class AuthCheckFacade {
         if(!refreshTokenRepository.existsByRefreshToken(token)) {
             throw new InvalidTokenException();
         }
+    }
+
+    public Field findFieldByFieldKindPk(int pk) {
+        return fieldRepository.findByFieldKindPk(pk)
+                .orElseThrow(FieldNotFoundException::new);
     }
 
 }

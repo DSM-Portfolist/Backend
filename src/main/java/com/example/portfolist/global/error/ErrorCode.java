@@ -14,6 +14,7 @@ public enum ErrorCode {
     PASSWORD_NOT_MATCHED(401, "Password Not Matched"),
 
     USER_NOT_FOUND(404, "User Not Found"),
+    NOT_NORMAL_USER(404, "Not Normal User"),
     USER_DUPLICATED(409, "User Duplicated"),
     EMAIL_NOT_AUTHORIZED(401, "Email Not Authorized"),
     FIELD_NOT_FOUND(404, "Field Not Found");

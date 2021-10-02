@@ -14,9 +14,8 @@ import com.example.portfolist.domain.auth.repository.AuthCheckFacade;
 import com.example.portfolist.domain.auth.repository.AuthFacade;
 import com.example.portfolist.domain.auth.util.api.client.GithubClient;
 import com.example.portfolist.global.error.exception.InvalidTokenException;
-import com.example.portfolist.global.etc.dto.LocalServerIp;
+import com.example.portfolist.global.event.GlobalEventPublisher;
 import com.example.portfolist.global.mail.HtmlSourceProvider;
-import com.example.portfolist.global.mail.MailSendProvider;
 import com.example.portfolist.global.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +23,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,9 +38,8 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
-    private final LocalServerIp localServerIp;
     private final HtmlSourceProvider htmlSourceProvider;
-    private final MailSendProvider mailSendProvider;
+    private final GlobalEventPublisher globalEventPublisher;
 
     private final GithubClient githubClient;
 
@@ -47,6 +48,9 @@ public class AuthService {
 
     @Value(value = "${server.port}")
     private String port;
+
+    @Value(value = "${link.domain}")
+    private String domain;
 
     @Value(value = "${page.success}")
     private String successPage;
@@ -96,10 +100,10 @@ public class AuthService {
     public void sendEmail(EmailCertificationRequest request) {
         authCheckFacade.checkConflictEmail(request.getEmail());
 
-        String baseurl = localServerIp.getIp() + ":" + port;
+        String baseurl = domain + ":" + port;
         String token = makeToken();
         String content = htmlSourceProvider.makeEmailCertification(baseurl, token);
-        mailSendProvider.sendCertification(request.getEmail(), "포트폴리스트 이메일 인증", content);
+        globalEventPublisher.sendEmail(request.getEmail(), "포트폴리스트 이메일 인증", content);
         authFacade.save(request.getEmail(), token);
     }
 
@@ -132,18 +136,21 @@ public class AuthService {
 
         User user = User.builder()
                 .normalUser(normalUser)
-                .name(request.getName())
+                .name(passwordEncoder.encode(request.getName()))
                 .build();
         user = authFacade.save(user);
 
+        List<Field> fields = new ArrayList<>();
         for (int pk : request.getField()) {
-            FieldKind fieldKind = authCheckFacade.findByFieldKindId(pk);
+            FieldKind fieldKind = authCheckFacade.findFieldKindById(pk);
             Field field = Field.builder()
                     .user(user)
                     .fieldKind(fieldKind)
                     .build();
-            authFacade.save(field);
+            fields.add(field);
         }
+
+        authFacade.save(fields);
     }
 
     public TokenRefreshResponse tokenRefresh(TokenRefreshRequest request) {

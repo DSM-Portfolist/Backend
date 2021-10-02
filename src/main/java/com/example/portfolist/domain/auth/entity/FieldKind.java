@@ -28,5 +28,5 @@ public class FieldKind {
     private List<Field> field;
 
     @OneToMany(mappedBy = "fieldKind", fetch = FetchType.LAZY)
-    private List<PortfolioField> portfolioFields;
+    private List<PortfolioField> portfolioFieldList;
 }
