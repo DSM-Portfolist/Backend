@@ -53,4 +53,5 @@ public class MypageController {
     public void changeUserInfo(@RequestBody UserInfoChangeRequest request) {
         mypageService.changeUserInfo(request, authenticationFacade.getUser());
     }
+
 }

@@ -77,8 +77,7 @@ public class MypageService {
             List<Integer> nowField = authFacade.findFieldByUser(user).stream()
                     .map(field -> {
                         return field.getFieldKind().getPk();
-                    })
-                    .collect(Collectors.toList());
+                    }).collect(Collectors.toList());
 
             List<Field> deleteField = new ArrayList<>();
             for(int fieldId : nowField) {
