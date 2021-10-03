@@ -10,17 +10,21 @@ import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@IdClass(TouchingId.class)
 @Entity
+@Table(name = "touching")
 public class Touching {
 
-    @ManyToOne
-    @JoinColumn(name = "portfolio_id", nullable = false)
-    @Id
-    private Portfolio portfolio;
+    @EmbeddedId
+    private TouchingId id;
 
     @ManyToOne
+    @MapsId("userId")
     @JoinColumn(name = "toucher_id", nullable = false)
-    @Id
     private User user;
+
+    @ManyToOne
+    @MapsId("portfolioId")
+    @JoinColumn(name = "portfolio_id", nullable = false)
+    private Portfolio portfolio;
+
 }

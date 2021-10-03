@@ -13,6 +13,7 @@ import com.example.portfolist.domain.auth.exception.PasswordNotMatchedException;
 import com.example.portfolist.domain.auth.repository.AuthCheckFacade;
 import com.example.portfolist.domain.auth.repository.AuthFacade;
 import com.example.portfolist.domain.auth.util.api.client.GithubClient;
+import com.example.portfolist.domain.auth.util.api.dto.GithubResponse;
 import com.example.portfolist.global.error.exception.InvalidTokenException;
 import com.example.portfolist.global.event.GlobalEventPublisher;
 import com.example.portfolist.global.mail.HtmlSourceProvider;
@@ -72,7 +73,10 @@ public class AuthService {
     }
 
     public GithubUserLoginResponse login(GithubUserLoginRequest request) {
-        String nickname = githubClient.getUserInfo("token " + request.getGithubToken()).getLogin();
+        GithubResponse response = githubClient.getUserInfo("token " + request.getGithubToken());
+        String nickname = response.getLogin();
+        String name = response.getName();
+        String url = response.getAvatar_url();
 
         Optional<User> optionalUser = authFacade.findUserByGithubId(nickname);
         long pk;
@@ -80,13 +84,16 @@ public class AuthService {
         if (optionalUser.isEmpty()) {
             User user = User.builder()
                     .githubId(nickname)
-                    .name(nickname)
+                    .name(name==null ? nickname : name)
+                    .url(url)
                     .build();
             user = authFacade.save(user);
             pk = user.getPk();
         }
         else{
-            pk = optionalUser.get().getPk();
+            User user = optionalUser.get();
+            pk = user.getPk();
+            user.updateChange(name, url);
         }
 
         String accessToken = jwtTokenProvider.generateAccessToken(pk);

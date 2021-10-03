@@ -2,10 +2,12 @@ package com.example.portfolist.domain.portfolio.entity.portfolio;
 
 import com.example.portfolist.domain.auth.entity.FieldKind;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class PortfolioField {

@@ -77,4 +77,16 @@ public class AuthFacade {
         return fieldRepository.findByUser(user);
     }
 
+    public void deleteFieldByUser(User user) {
+        fieldRepository.deleteByUser(user);
+    }
+
+    public void deleteNormalByUser(User user) {
+        normalUserRepository.deleteByUser(user);
+    }
+
+    public void deleteUser(User user) {
+        userRepository.delete(user);
+    }
+
 }

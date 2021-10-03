@@ -31,4 +31,5 @@ public class UserInfoGetResponse {
                 .name(user.getName())
                 .build();
     }
+
 }
