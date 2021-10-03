@@ -1,7 +1,6 @@
 package com.example.portfolist.domain.mypage.dto.response;
 
 import com.example.portfolist.domain.portfolio.entity.portfolio.Portfolio;
-import com.example.portfolist.domain.portfolio.entity.touching.Touching;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

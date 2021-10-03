@@ -24,12 +24,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MypageService {
 
     private final PasswordEncoder passwordEncoder;
@@ -84,9 +86,7 @@ public class MypageService {
         if (!CollectionUtils.isNullOrEmpty(request.getField())) {
             List<Integer> changeField = request.getField();
             List<Integer> nowField = authFacade.findFieldByUser(user).stream()
-                    .map(field -> {
-                        return field.getFieldKind().getPk();
-                    }).collect(Collectors.toList());
+                    .map(field -> field.getFieldKind().getPk()).collect(Collectors.toList());
 
             List<Field> deleteField = new ArrayList<>();
             for(int fieldId : nowField) {
