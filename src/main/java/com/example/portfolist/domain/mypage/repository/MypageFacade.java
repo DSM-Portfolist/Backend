@@ -33,4 +33,9 @@ public class MypageFacade {
         return notificationRepository.findByToUser(user);
     }
 
+    public void deleteNotificationByUser(User user) {
+        notificationRepository.deleteByToUser(user);
+        notificationRepository.deleteByFromUser(user);
+    }
+
 }

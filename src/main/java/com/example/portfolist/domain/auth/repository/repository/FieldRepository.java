@@ -12,5 +12,6 @@ public interface FieldRepository extends JpaRepository<Field, Long>, QuerydslPre
 
     List<Field> findByUser(User user);
     Optional<Field> findByFieldKindPk(int pk);
+    void deleteByUser(User user);
 
 }

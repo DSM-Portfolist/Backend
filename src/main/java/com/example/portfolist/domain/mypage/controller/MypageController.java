@@ -58,6 +58,12 @@ public class MypageController {
         mypageService.changeUserInfo(request, authenticationFacade.getUser());
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping
+    public void deleteUser() {
+        mypageService.deleteUser(authenticationFacade.getUser());
+    }
+
     @GetMapping("/touching")
     public TouchingPortfolioGetRes.Response getTouchingPortfolio(@PathVariable(value = "page", required = false) int page,
                                                                  @PathVariable(value = "size", required = false) int size) {

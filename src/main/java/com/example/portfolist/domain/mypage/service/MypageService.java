@@ -113,6 +113,26 @@ public class MypageService {
         }
     }
 
+    @Async
+    public void deleteUser(User user) {
+        portfolioFacade.deleteMoreInfoByUser(user);
+        portfolioFacade.deleteBoxImageByUser(user);
+        portfolioFacade.deleteBoxTextByUser(user);
+        portfolioFacade.deleteContainerByUser(user);
+        portfolioFacade.deleteCertificateByUser(user);
+        portfolioFacade.deleteTouchingByUser(user);
+        portfolioFacade.deletePortfolioFieldByUser(user);
+        portfolioFacade.deleteReCommentByUser(user);
+        portfolioFacade.deleteCommentByUser(user);
+        portfolioFacade.deletePortfolioByUser(user);
+
+        mypageFacade.deleteNotificationByUser(user);
+
+        authFacade.deleteFieldByUser(user);
+        authFacade.deleteNormalByUser(user);
+        authFacade.deleteUser(user);
+    }
+
     public TouchingPortfolioGetRes.Response getTouchingPortfolio(int page, int size, User user) {
         return TouchingPortfolioGetRes.Response.from(portfolioFacade.findTouchingAll(page, size));
     }
