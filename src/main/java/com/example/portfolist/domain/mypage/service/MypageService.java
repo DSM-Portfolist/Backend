@@ -15,6 +15,7 @@ import com.example.portfolist.domain.mypage.dto.response.NotificationGetResponse
 import com.example.portfolist.domain.mypage.dto.response.TouchingPortfolioGetRes;
 import com.example.portfolist.domain.mypage.dto.response.UserInfoGetResponse;
 import com.example.portfolist.domain.mypage.repository.MypageFacade;
+import com.example.portfolist.domain.portfolio.repository.PortfolioFacade;
 import com.example.portfolist.global.file.FileUploadProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -36,6 +37,7 @@ public class MypageService {
     private final AuthFacade authFacade;
     private final AuthCheckFacade authCheckFacade;
     private final MypageFacade mypageFacade;
+    private final PortfolioFacade portfolioFacade;
 
     public void changePassword(PasswordChangeRequest request, NormalUser normalUser) {
         if (!passwordEncoder.matches(request.getNowPassword(), normalUser.getPassword())) {
@@ -110,8 +112,8 @@ public class MypageService {
         }
     }
 
-    public TouchingPortfolioGetRes.Response getTouchingPortfoio(User user) {
-        return TouchingPortfolioGetRes.Response.from(user.getTouchingList());
+    public TouchingPortfolioGetRes.Response getTouchingPortfolio(int page, int size, User user) {
+        return TouchingPortfolioGetRes.Response.from(portfolioFacade.findTouchingAll(page, size));
     }
 
     public List<NotificationGetResponse> getNotification(User user) {

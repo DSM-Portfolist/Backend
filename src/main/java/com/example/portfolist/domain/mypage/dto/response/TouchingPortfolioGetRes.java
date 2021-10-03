@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -78,14 +79,14 @@ public class TouchingPortfolioGetRes {
     @Builder(access = AccessLevel.PROTECTED)
     public static class Response {
 
-        private int totalElements;
+        private long totalElements;
         private List<Content> content;
 
-        public static Response from(List<Touching> touchings) {
+        public static Response from(Page<Touching> touchings) {
             List<Content> contents = touchings.stream()
                     .map(Content::from).collect(Collectors.toList());
             return Response.builder()
-                    .totalElements(touchings.size())
+                    .totalElements(touchings.getTotalElements())
                     .content(contents)
                     .build();
         }

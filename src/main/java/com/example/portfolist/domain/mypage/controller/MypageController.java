@@ -58,8 +58,9 @@ public class MypageController {
     }
 
     @GetMapping("/touching")
-    public TouchingPortfolioGetRes.Response getTouchingPortfolio() {
-        return mypageService.getTouchingPortfoio(authenticationFacade.getUser());
+    public TouchingPortfolioGetRes.Response getTouchingPortfolio(@PathVariable(value = "page", required = false) int page,
+                                                                 @PathVariable(value = "size", required = false) int size) {
+        return mypageService.getTouchingPortfolio(page, size, authenticationFacade.getUser());
     }
 
     @GetMapping("/notification")
