@@ -3,6 +3,7 @@ package com.example.portfolist.domain.mypage.controller;
 import com.example.portfolist.domain.mypage.dto.request.PasswordChangeRequest;
 import com.example.portfolist.domain.mypage.dto.request.PasswordCheckRequest;
 import com.example.portfolist.domain.mypage.dto.request.UserInfoChangeRequest;
+import com.example.portfolist.domain.mypage.dto.response.NotificationGetResponse;
 import com.example.portfolist.domain.mypage.dto.response.UserInfoGetResponse;
 import com.example.portfolist.domain.mypage.service.MypageService;
 import com.example.portfolist.global.security.AuthenticationFacade;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -52,6 +54,11 @@ public class MypageController {
     @PatchMapping("/info")
     public void changeUserInfo(@RequestBody UserInfoChangeRequest request) {
         mypageService.changeUserInfo(request, authenticationFacade.getUser());
+    }
+
+    @GetMapping("/notification")
+    public List<NotificationGetResponse> getNotification() {
+        return mypageService.getNotification(authenticationFacade.getUser());
     }
 
 }

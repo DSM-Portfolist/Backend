@@ -11,7 +11,9 @@ import com.example.portfolist.domain.auth.repository.AuthFacade;
 import com.example.portfolist.domain.mypage.dto.request.PasswordChangeRequest;
 import com.example.portfolist.domain.mypage.dto.request.PasswordCheckRequest;
 import com.example.portfolist.domain.mypage.dto.request.UserInfoChangeRequest;
+import com.example.portfolist.domain.mypage.dto.response.NotificationGetResponse;
 import com.example.portfolist.domain.mypage.dto.response.UserInfoGetResponse;
+import com.example.portfolist.domain.mypage.repository.MypageFacade;
 import com.example.portfolist.global.file.FileUploadProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -32,6 +34,7 @@ public class MypageService {
 
     private final AuthFacade authFacade;
     private final AuthCheckFacade authCheckFacade;
+    private final MypageFacade mypageFacade;
 
     public void changePassword(PasswordChangeRequest request, NormalUser normalUser) {
         if (!passwordEncoder.matches(request.getNowPassword(), normalUser.getPassword())) {
@@ -103,4 +106,13 @@ public class MypageService {
             authFacade.save(saveField);
         }
     }
+
+    public List<NotificationGetResponse> getNotification(User user) {
+        mypageFacade.deleteAlreadyReadNotification(user);
+
+        return mypageFacade.findByUser(user).stream()
+                .map(NotificationGetResponse::from)
+                .collect(Collectors.toList());
+    }
+
 }
