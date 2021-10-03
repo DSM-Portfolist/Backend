@@ -12,6 +12,7 @@ import com.example.portfolist.domain.mypage.dto.request.PasswordChangeRequest;
 import com.example.portfolist.domain.mypage.dto.request.PasswordCheckRequest;
 import com.example.portfolist.domain.mypage.dto.request.UserInfoChangeRequest;
 import com.example.portfolist.domain.mypage.dto.response.NotificationGetResponse;
+import com.example.portfolist.domain.mypage.dto.response.TouchingPortfolioGetRes;
 import com.example.portfolist.domain.mypage.dto.response.UserInfoGetResponse;
 import com.example.portfolist.domain.mypage.repository.MypageFacade;
 import com.example.portfolist.global.file.FileUploadProvider;
@@ -50,20 +51,22 @@ public class MypageService {
     }
 
     public void registerProfile(MultipartFile file, NormalUser normalUser) {
-        if (normalUser.getUrl() != null) {
-            fileUploadProvider.deleteFile(normalUser.getUrl());
+        User user = normalUser.getUser();
+        if (user.getUrl() != null) {
+            fileUploadProvider.deleteFile(user.getUrl());
         }
 
         String fileUrl = fileUploadProvider.uploadFile(file);
-        normalUser.updateUrl(fileUrl);
+        user.updateProfile(fileUrl);
     }
 
     @Async
     public void deleteProfile(NormalUser normalUser) {
-        String url = normalUser.getUrl();
+        User user = normalUser.getUser();
+        String url = user.getUrl();
         if (url != null) {
             fileUploadProvider.deleteFile(url);
-            normalUser.updateUrl(null);
+            user.updateProfile(null);
         }
     }
 
@@ -105,6 +108,10 @@ public class MypageService {
             authFacade.delete(deleteField);
             authFacade.save(saveField);
         }
+    }
+
+    public TouchingPortfolioGetRes.Response getTouchingPortfoio(User user) {
+        return TouchingPortfolioGetRes.Response.from(user.getTouchingList());
     }
 
     public List<NotificationGetResponse> getNotification(User user) {

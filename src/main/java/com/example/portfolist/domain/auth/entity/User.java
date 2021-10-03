@@ -39,6 +39,9 @@ public class User {
     @Column(name = "introduce")
     private String introduce;
 
+    @Column(name = "url")
+    private String url;
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Portfolio> portfolioList;
 
@@ -64,6 +67,15 @@ public class User {
         if (!StringUtil.isNullOrEmpty(introduce)) {
             this.introduce = introduce;
         }
+    }
+
+    public void updateProfile(String url) {
+        this.url = url;
+    }
+
+    public void updateChange(String name, String url) {
+        this.name = name;
+        this.url = url;
     }
 
 }

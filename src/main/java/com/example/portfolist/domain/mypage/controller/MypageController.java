@@ -4,6 +4,7 @@ import com.example.portfolist.domain.mypage.dto.request.PasswordChangeRequest;
 import com.example.portfolist.domain.mypage.dto.request.PasswordCheckRequest;
 import com.example.portfolist.domain.mypage.dto.request.UserInfoChangeRequest;
 import com.example.portfolist.domain.mypage.dto.response.NotificationGetResponse;
+import com.example.portfolist.domain.mypage.dto.response.TouchingPortfolioGetRes;
 import com.example.portfolist.domain.mypage.dto.response.UserInfoGetResponse;
 import com.example.portfolist.domain.mypage.service.MypageService;
 import com.example.portfolist.global.security.AuthenticationFacade;
@@ -54,6 +55,11 @@ public class MypageController {
     @PatchMapping("/info")
     public void changeUserInfo(@RequestBody UserInfoChangeRequest request) {
         mypageService.changeUserInfo(request, authenticationFacade.getUser());
+    }
+
+    @GetMapping("/touching")
+    public TouchingPortfolioGetRes.Response getTouchingPortfolio() {
+        return mypageService.getTouchingPortfoio(authenticationFacade.getUser());
     }
 
     @GetMapping("/notification")

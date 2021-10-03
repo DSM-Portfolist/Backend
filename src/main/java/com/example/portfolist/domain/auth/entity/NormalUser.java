@@ -25,15 +25,11 @@ public class NormalUser {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "url")
-    private String url;
+    @OneToOne(mappedBy = "normalUser")
+    private User user;
 
     public void changePassword(String password) {
         this.password = password;
-    }
-
-    public void updateUrl(String url) {
-        this.url = url;
     }
 
 }
