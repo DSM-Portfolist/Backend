@@ -6,6 +6,7 @@ import com.example.portfolist.domain.mypage.dto.request.UserInfoChangeRequest;
 import com.example.portfolist.domain.mypage.dto.response.NotificationGetResponse;
 import com.example.portfolist.domain.mypage.dto.response.TouchingPortfolioGetRes;
 import com.example.portfolist.domain.mypage.dto.response.UserInfoGetResponse;
+import com.example.portfolist.domain.mypage.dto.response.UserPortfolioGetResponse;
 import com.example.portfolist.domain.mypage.service.MypageService;
 import com.example.portfolist.global.security.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
@@ -61,6 +62,11 @@ public class MypageController {
     public TouchingPortfolioGetRes.Response getTouchingPortfolio(@PathVariable(value = "page", required = false) int page,
                                                                  @PathVariable(value = "size", required = false) int size) {
         return mypageService.getTouchingPortfolio(page, size, authenticationFacade.getUser());
+    }
+
+    @GetMapping("/portfolio")
+    public List<UserPortfolioGetResponse> getUserPortfolio() {
+        return mypageService.getUserPortfolio(authenticationFacade.getUser());
     }
 
     @GetMapping("/notification")

@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -28,7 +28,7 @@ public class Comment {
     private User user;
 
     @Column
-    private LocalDateTime date;
+    private LocalDate date;
 
     @Column(length = 300)
     private String content;

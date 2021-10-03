@@ -14,6 +14,7 @@ import com.example.portfolist.domain.mypage.dto.request.UserInfoChangeRequest;
 import com.example.portfolist.domain.mypage.dto.response.NotificationGetResponse;
 import com.example.portfolist.domain.mypage.dto.response.TouchingPortfolioGetRes;
 import com.example.portfolist.domain.mypage.dto.response.UserInfoGetResponse;
+import com.example.portfolist.domain.mypage.dto.response.UserPortfolioGetResponse;
 import com.example.portfolist.domain.mypage.repository.MypageFacade;
 import com.example.portfolist.domain.portfolio.repository.PortfolioFacade;
 import com.example.portfolist.global.file.FileUploadProvider;
@@ -114,6 +115,12 @@ public class MypageService {
 
     public TouchingPortfolioGetRes.Response getTouchingPortfolio(int page, int size, User user) {
         return TouchingPortfolioGetRes.Response.from(portfolioFacade.findTouchingAll(page, size));
+    }
+
+    public List<UserPortfolioGetResponse> getUserPortfolio(User user) {
+        return user.getPortfolioList().stream()
+                .map(UserPortfolioGetResponse::from)
+                .collect(Collectors.toList());
     }
 
     public List<NotificationGetResponse> getNotification(User user) {

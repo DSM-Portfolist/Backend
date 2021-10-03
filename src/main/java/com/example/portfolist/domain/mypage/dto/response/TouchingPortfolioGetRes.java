@@ -68,6 +68,7 @@ public class TouchingPortfolioGetRes {
                     .user(ContentUser.from(portfolio.getUser()))
                     .comment(portfolio.getCommentList().size())
                     .touching(portfolio.getTouchingList().size())
+                    .date(portfolio.getDate())
                     .build();
         }
 

@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,7 +26,7 @@ public class ReComment {
     private Comment comment;
 
     @Column
-    private LocalDateTime date;
+    private LocalDate date;
 
     @Column(length = 300)
     private String content;
