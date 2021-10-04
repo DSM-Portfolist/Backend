@@ -1,7 +1,7 @@
 server:
   port: 8080
 link:
-  domain: ${DOMAIN:}
+  domain: ${DOMAIN:hello}
 page:
   success: ${SUCCESS_PAGE:https://www.naver.com}
   fail: ${FAIL_PAGE:https://www.google.com}
