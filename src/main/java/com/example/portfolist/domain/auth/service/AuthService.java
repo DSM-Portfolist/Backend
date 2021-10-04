@@ -75,7 +75,7 @@ public class AuthService {
         GithubResponse response = githubClient.getUserInfo("token " + request.getGithubToken());
         String nickname = response.getLogin();
         String name = response.getName();
-        String url = response.getAvatar_url();
+        String url = response.getAvatarUrl();
 
         Optional<User> optionalUser = authFacade.findUserByGithubId(nickname);
         long pk;

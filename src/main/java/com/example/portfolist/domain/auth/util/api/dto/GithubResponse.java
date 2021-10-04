@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 public class GithubResponse {
 
     private String login;
-    private String avatar_url;
+    private String avatarUrl;
     private String name;
 
 }

@@ -14,8 +14,6 @@ spring:
   h2:
     console:
       enabled: true
-  jackson:
-    property-naming-strategy: SNAKE_CASE
   main:
     allow-bean-definition-overriding: true
   datasource:

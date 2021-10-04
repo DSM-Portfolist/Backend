@@ -1,12 +1,16 @@
 package com.example.portfolist.domain.auth.controller;
 
 import com.example.portfolist.ApiTest;
+import com.example.portfolist.domain.auth.dto.request.GithubUserLoginRequest;
 import com.example.portfolist.domain.auth.dto.request.NormalUserLoginRequest;
 import com.example.portfolist.domain.auth.entity.NormalUser;
 import com.example.portfolist.domain.auth.entity.User;
+import com.example.portfolist.domain.auth.exception.OauthServerException;
 import com.example.portfolist.domain.auth.repository.repository.NormalUserRepository;
 import com.example.portfolist.domain.auth.repository.repository.UserRepository;
+import com.example.portfolist.domain.auth.repository.repository.redis.RefreshTokenRepository;
 import com.example.portfolist.domain.auth.util.api.client.GithubClient;
+import com.example.portfolist.domain.auth.util.api.dto.GithubResponse;
 import com.example.portfolist.global.event.GlobalEventPublisher;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,6 +20,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -123,6 +128,85 @@ public class AuthControllerTest extends ApiTest {
 
         // then
         resultActions.andExpect(status().is(404))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("깃허브 유저 첫 로그인 201")
+    void githubUserLogin_first_201() throws Exception {
+        // given
+        GithubResponse githubResponse = new GithubResponse();
+        inputField(githubResponse, "login", "nickname");
+        inputField(githubResponse, "avatarUrl", "profile");
+        inputField(githubResponse, "name", "name");
+        given(githubClient.getUserInfo("token githubToken")).willReturn(githubResponse);
+
+        GithubUserLoginRequest request = new GithubUserLoginRequest();
+        inputField(request, "githubToken", "githubToken");
+
+        // when
+        ResultActions resultActions = requestMvc(post("/login/github"), request);
+
+        // then
+        resultActions.andExpect(status().is(201))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("깃허브 유저 로그인 201")
+    void githubUserLogin_201() throws Exception {
+        // given
+        GithubResponse githubResponse = new GithubResponse();
+        inputField(githubResponse, "login", "nickname");
+        inputField(githubResponse, "avatarUrl", "profile");
+        inputField(githubResponse, "name", "name");
+        given(githubClient.getUserInfo("token githubToken")).willReturn(githubResponse);
+
+        GithubUserLoginRequest request = new GithubUserLoginRequest();
+        inputField(request, "githubToken", "githubToken");
+
+        User user = User.builder()
+                .githubId("nickname")
+                .name("name")
+                .build();
+        userRepository.save(user);
+
+        // when
+        ResultActions resultActions = requestMvc(post("/login/github"), request);
+
+        // then
+        resultActions.andExpect(status().is(201))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("깃허브 유저 로그인 400")
+    void githubUserLogin_400() throws Exception {
+        // given
+        GithubUserLoginRequest request = new GithubUserLoginRequest();
+
+        // when
+        ResultActions resultActions = requestMvc(post("/login/github"), request);
+
+        // then
+        resultActions.andExpect(status().is(400))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("깃허브 유저 로그인 401")
+    void githubUserLogin_401() throws Exception {
+        // given
+        given(githubClient.getUserInfo("token githubToken")).willThrow(new OauthServerException(401, "Invalid Token"));
+
+        GithubUserLoginRequest request = new GithubUserLoginRequest();
+        inputField(request, "githubToken", "githubToken");
+
+        // when
+        ResultActions resultActions = requestMvc(post("/login/github"), request);
+
+        // then
+        resultActions.andExpect(status().is(401))
                 .andDo(print());
     }
 

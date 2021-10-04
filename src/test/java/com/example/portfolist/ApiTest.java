@@ -1,10 +1,13 @@
 package com.example.portfolist;
 
+import com.example.portfolist.domain.auth.repository.repository.redis.CertificationRepository;
+import com.example.portfolist.domain.auth.repository.repository.redis.RefreshTokenRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.AccessLevel;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -21,6 +24,11 @@ public class ApiTest extends IntegrationTest{
 
     @Setter(AccessLevel.PROTECTED)
     private String token;
+
+    @MockBean
+    protected RefreshTokenRepository refreshTokenRepository;
+    @MockBean
+    protected CertificationRepository certificationRepository;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
