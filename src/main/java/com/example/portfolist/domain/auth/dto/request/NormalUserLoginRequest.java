@@ -12,6 +12,7 @@ import javax.validation.constraints.Size;
 public class NormalUserLoginRequest {
 
     @Email
+    @NotBlank
     private String email;
 
     @NotBlank

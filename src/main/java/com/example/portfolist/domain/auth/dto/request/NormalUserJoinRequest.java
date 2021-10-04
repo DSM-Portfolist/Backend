@@ -17,6 +17,7 @@ public class NormalUserJoinRequest {
     private String name;
 
     @Email
+    @NotBlank
     private String email;
 
     @NotBlank

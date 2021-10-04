@@ -1,6 +1,7 @@
 package com.example.portfolist.domain.auth.controller;
 
 import com.example.portfolist.ApiTest;
+import com.example.portfolist.domain.auth.dto.request.EmailCertificationRequest;
 import com.example.portfolist.domain.auth.dto.request.GithubUserLoginRequest;
 import com.example.portfolist.domain.auth.dto.request.NormalUserLoginRequest;
 import com.example.portfolist.domain.auth.entity.NormalUser;
@@ -8,7 +9,6 @@ import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.auth.exception.OauthServerException;
 import com.example.portfolist.domain.auth.repository.repository.NormalUserRepository;
 import com.example.portfolist.domain.auth.repository.repository.UserRepository;
-import com.example.portfolist.domain.auth.repository.repository.redis.RefreshTokenRepository;
 import com.example.portfolist.domain.auth.util.api.client.GithubClient;
 import com.example.portfolist.domain.auth.util.api.dto.GithubResponse;
 import com.example.portfolist.global.event.GlobalEventPublisher;
@@ -207,6 +207,61 @@ public class AuthControllerTest extends ApiTest {
 
         // then
         resultActions.andExpect(status().is(401))
+                .andDo(print());
+    }
+    
+    @Test
+    @DisplayName("이메일 인증 200")
+    void emailCertificate_200() throws Exception {
+        // given
+        EmailCertificationRequest request = new EmailCertificationRequest();
+        inputField(request, "email", "testtest@gmail.com");
+
+        // when
+        ResultActions resultActions = requestMvc(post("/email"), request);
+
+        // then
+        resultActions.andExpect(status().is(200))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("이메일 인증 400")
+    void emailCertificate_400() throws Exception {
+        // given
+        EmailCertificationRequest request = new EmailCertificationRequest();
+
+        // when
+        ResultActions resultActions = requestMvc(post("/email"), request);
+
+        // then
+        resultActions.andExpect(status().is(400))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("이메일 인증 409")
+    void emailCertificate_409() throws Exception {
+        // given
+        EmailCertificationRequest request = new EmailCertificationRequest();
+        inputField(request, "email", "testtest@gmail.com");
+        NormalUser normalUser = NormalUser.builder()
+                .email("testtest@gmail.com")
+                .password(passwordEncoder.encode("testFakePassword"))
+                .build();
+        normalUser = normalUserRepository.save(normalUser);
+
+        User user = User.builder()
+                .normalUser(normalUser)
+                .name("가나다")
+                .build();
+        userRepository.save(user);
+
+        // when
+        ResultActions resultActions = requestMvc(post("/email"), request);
+
+        // then
+        resultActions.andExpect(status().is(409))
                 .andDo(print());
     }
 
