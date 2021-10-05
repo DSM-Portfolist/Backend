@@ -7,14 +7,10 @@ import com.example.portfolist.domain.auth.entity.NormalUser;
 import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.auth.entity.redis.Certification;
 import com.example.portfolist.domain.auth.exception.OauthServerException;
-import com.example.portfolist.domain.auth.repository.repository.FieldKindRepository;
-import com.example.portfolist.domain.auth.repository.repository.NormalUserRepository;
-import com.example.portfolist.domain.auth.repository.repository.UserRepository;
 import com.example.portfolist.domain.auth.util.api.client.GithubClient;
 import com.example.portfolist.domain.auth.util.api.dto.GithubResponse;
 import com.example.portfolist.global.event.GlobalEventPublisher;
 import com.example.portfolist.global.security.JwtTokenProvider;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -34,26 +30,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class AuthControllerTest extends ApiTest {
 
-    @MockBean
-    private GlobalEventPublisher globalEventPublisher;
-    @MockBean
-    private GithubClient githubClient;
-
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private NormalUserRepository normalUserRepository;
-    @Autowired
-    private FieldKindRepository fieldKindRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    @AfterEach
-    void clear() {
-        setToken(null);
-    }
+    @MockBean
+    private GlobalEventPublisher globalEventPublisher;
+    @MockBean
+    private GithubClient githubClient;
 
     @Nested
     @DisplayName("일반 유저 로그인")

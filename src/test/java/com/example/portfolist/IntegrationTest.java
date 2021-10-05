@@ -15,6 +15,5 @@ import javax.transaction.Transactional;
 @SpringBootTest(classes = PortfolistApplication.class)
 @AutoConfigureMockMvc
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
-@Transactional
 public class IntegrationTest {
 }
