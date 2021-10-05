@@ -136,13 +136,13 @@ public class AuthService {
 
         NormalUser normalUser = NormalUser.builder()
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .build();
         normalUser = authFacade.save(normalUser);
 
         User user = User.builder()
                 .normalUser(normalUser)
-                .name(passwordEncoder.encode(request.getName()))
+                .name(request.getName())
                 .build();
         user = authFacade.save(user);
 

@@ -3,6 +3,7 @@ package com.example.portfolist.domain.auth.service;
 import com.example.portfolist.ServiceTest;
 import com.example.portfolist.domain.auth.dto.request.EmailCertificationRequest;
 import com.example.portfolist.domain.auth.dto.request.GithubUserLoginRequest;
+import com.example.portfolist.domain.auth.dto.request.NormalUserJoinRequest;
 import com.example.portfolist.domain.auth.dto.request.NormalUserLoginRequest;
 import com.example.portfolist.domain.auth.dto.response.GithubUserLoginResponse;
 import com.example.portfolist.domain.auth.dto.response.NormalUserLoginResponse;
@@ -28,13 +29,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.swing.text.html.Option;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class AuthServiceTest extends ServiceTest {
 
@@ -229,8 +232,8 @@ public class AuthServiceTest extends ServiceTest {
             authService.sendEmail(request);
 
             // then
-            verify(globalEventPublisher, atLeastOnce()).sendEmail("testtest@gmail.com", "포트폴리스트 이메일 인증", "html");
-            verify(authFacade, atLeastOnce()).save(any(String.class), any(String.class));
+            verify(globalEventPublisher, times(1)).sendEmail("testtest@gmail.com", "포트폴리스트 이메일 인증", "html");
+            verify(authFacade, times(1)).save(any(String.class), any(String.class));
         }
 
     }
@@ -259,6 +262,51 @@ public class AuthServiceTest extends ServiceTest {
 
             // then
             Assertions.assertEquals(token==null ? "failPage" : "successPage", page);
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Normal User Join")
+    class NormalUserJoin{
+
+        private NormalUserJoinRequest makeRequest(String name, String email, String password, List<Integer> field) throws NoSuchFieldException, IllegalAccessException {
+            NormalUserJoinRequest request = new NormalUserJoinRequest();
+            inputField(request, "name", name);
+            inputField(request, "email", email);
+            inputField(request, "password", password);
+            inputField(request, "field", field);
+            return request;
+        }
+
+        @Test
+        @DisplayName("Success")
+        void normalUserjoin() throws NoSuchFieldException, IllegalAccessException {
+            // given
+            List<Integer> field = new ArrayList<>();
+            field.add(1);
+            NormalUserJoinRequest request = makeRequest("가나다", "testtest@gmail.com", "testPassword", field);
+
+            NormalUser normalUser = NormalUser.builder()
+                    .pk(1)
+                    .email("testtest@gmail.com")
+                    .password(passwordEncoder.encode("testPassword"))
+                    .build();
+            given(authFacade.save(any(NormalUser.class))).willReturn(normalUser);
+
+            User user = User.builder()
+                    .pk(1)
+                    .normalUser(normalUser)
+                    .name("가나다")
+                    .build();
+            given(authFacade.save(any(User.class))).willReturn(user);
+
+            // when
+            authService.join(request);
+
+            // then
+            verify(authCheckFacade, times(1)).findFieldKindById(1);
+            verify(authFacade, times(1)).save(any(List.class));
         }
 
     }
