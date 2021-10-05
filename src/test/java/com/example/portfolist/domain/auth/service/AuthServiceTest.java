@@ -1,12 +1,10 @@
 package com.example.portfolist.domain.auth.service;
 
 import com.example.portfolist.ServiceTest;
-import com.example.portfolist.domain.auth.dto.request.EmailCertificationRequest;
-import com.example.portfolist.domain.auth.dto.request.GithubUserLoginRequest;
-import com.example.portfolist.domain.auth.dto.request.NormalUserJoinRequest;
-import com.example.portfolist.domain.auth.dto.request.NormalUserLoginRequest;
+import com.example.portfolist.domain.auth.dto.request.*;
 import com.example.portfolist.domain.auth.dto.response.GithubUserLoginResponse;
 import com.example.portfolist.domain.auth.dto.response.NormalUserLoginResponse;
+import com.example.portfolist.domain.auth.dto.response.TokenRefreshResponse;
 import com.example.portfolist.domain.auth.entity.NormalUser;
 import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.auth.entity.redis.Certification;
@@ -15,6 +13,7 @@ import com.example.portfolist.domain.auth.repository.AuthCheckFacade;
 import com.example.portfolist.domain.auth.repository.AuthFacade;
 import com.example.portfolist.domain.auth.util.api.client.GithubClient;
 import com.example.portfolist.domain.auth.util.api.dto.GithubResponse;
+import com.example.portfolist.global.error.exception.InvalidTokenException;
 import com.example.portfolist.global.event.GlobalEventPublisher;
 import com.example.portfolist.global.mail.HtmlSourceProvider;
 import com.example.portfolist.global.security.JwtTokenProvider;
@@ -307,6 +306,45 @@ public class AuthServiceTest extends ServiceTest {
             // then
             verify(authCheckFacade, times(1)).findFieldKindById(1);
             verify(authFacade, times(1)).save(any(List.class));
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Token Refresh")
+    class TokenRefresh {
+
+        private TokenRefreshRequest makeRequest(String token) throws NoSuchFieldException, IllegalAccessException {
+            TokenRefreshRequest request = new TokenRefreshRequest();
+            inputField(request, "refreshToken", token);
+            return request;
+        }
+
+        @Test
+        @DisplayName("Success")
+        void tokenRefresh() throws NoSuchFieldException, IllegalAccessException {
+            // given
+            TokenRefreshRequest request = makeRequest("refreshToken");
+            given(jwtTokenProvider.isRefreshToken("refreshToken")).willReturn(true);
+            given(jwtTokenProvider.getId("refreshToken")).willReturn(1L);
+            given(jwtTokenProvider.generateAccessToken(1L)).willReturn("accessToken");
+
+            // when
+            TokenRefreshResponse response = authService.tokenRefresh(request);
+
+            // then
+            Assertions.assertEquals(response.getAccessToken(), "accessToken");
+        }
+
+        @Test
+        @DisplayName("InvalidTokenException")
+        void tokenRefresh_InvalidTokenException() throws NoSuchFieldException, IllegalAccessException {
+            // given
+            TokenRefreshRequest request = makeRequest("refreshToken");
+            given(jwtTokenProvider.isRefreshToken("refreshToken")).willReturn(false);
+
+            // when -> then
+            Assertions.assertThrows(InvalidTokenException.class, () -> authService.tokenRefresh(request));
         }
 
     }
