@@ -380,5 +380,55 @@ public class AuthControllerTest extends ApiTest {
         resultActions.andExpect(status().is(404))
                 .andDo(print());
     }
-    
+
+    @Test
+    @DisplayName("토큰 리프레쉬 201")
+    void tokenRefresh_201() throws Exception {
+        // given
+        String token = jwtTokenProvider.generateRefreshToken(1L);
+        given(refreshTokenRepository.existsByRefreshToken(token)).willReturn(true);
+
+        TokenRefreshRequest request = new TokenRefreshRequest();
+        inputField(request, "refreshToken", token);
+
+        // when
+        ResultActions resultActions = requestMvc(post("/token-refresh"), request);
+
+        // then
+        resultActions.andExpect(status().is(201))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("토큰 리프레쉬 400")
+    void tokenRefresh_400() throws Exception {
+        // given
+        TokenRefreshRequest request = new TokenRefreshRequest();
+
+        // when
+        ResultActions resultActions = requestMvc(post("/token-refresh"), request);
+
+        // then
+        resultActions.andExpect(status().is(400))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("토큰 리프레쉬 401")
+    void tokenRefresh_401() throws Exception {
+        // given
+        String token = "이건 토큰 아니지롱";
+        given(refreshTokenRepository.existsByRefreshToken(token)).willReturn(true);
+
+        TokenRefreshRequest request = new TokenRefreshRequest();
+        inputField(request, "refreshToken", token);
+
+        // when
+        ResultActions resultActions = requestMvc(post("/token-refresh"), request);
+
+        // then
+        resultActions.andExpect(status().is(401))
+                .andDo(print());
+    }
+
 }
