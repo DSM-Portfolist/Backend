@@ -129,8 +129,8 @@ public class MypageService {
         mypageFacade.deleteNotificationByUser(user);
 
         authFacade.deleteFieldByUser(user);
-        authFacade.deleteNormalByUser(user);
         authFacade.deleteUser(user);
+        authFacade.deleteNormalByUser(user);
     }
 
     public TouchingPortfolioGetRes.Response getTouchingPortfolio(int page, int size, User user) {

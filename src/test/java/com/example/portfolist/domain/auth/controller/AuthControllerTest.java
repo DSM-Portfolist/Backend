@@ -7,15 +7,12 @@ import com.example.portfolist.domain.auth.entity.NormalUser;
 import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.auth.entity.redis.Certification;
 import com.example.portfolist.domain.auth.exception.OauthServerException;
-import com.example.portfolist.domain.auth.repository.repository.FieldKindRepository;
-import com.example.portfolist.domain.auth.repository.repository.NormalUserRepository;
-import com.example.portfolist.domain.auth.repository.repository.UserRepository;
 import com.example.portfolist.domain.auth.util.api.client.GithubClient;
 import com.example.portfolist.domain.auth.util.api.dto.GithubResponse;
 import com.example.portfolist.global.event.GlobalEventPublisher;
 import com.example.portfolist.global.security.JwtTokenProvider;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -33,402 +30,426 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class AuthControllerTest extends ApiTest {
 
-    @MockBean
-    private GlobalEventPublisher globalEventPublisher;
-    @MockBean
-    private GithubClient githubClient;
-
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private NormalUserRepository normalUserRepository;
-    @Autowired
-    private FieldKindRepository fieldKindRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    @AfterEach
-    void clear() {
-        setToken(null);
+    @MockBean
+    private GlobalEventPublisher globalEventPublisher;
+    @MockBean
+    private GithubClient githubClient;
+
+    @Nested
+    @DisplayName("일반 유저 로그인")
+    class NormalUserLogin{
+
+        private NormalUserLoginRequest makeRequest(String email, String password) throws NoSuchFieldException, IllegalAccessException {
+            NormalUserLoginRequest request = new NormalUserLoginRequest();
+            inputField(request, "email", email);
+            inputField(request, "password", password);
+            return request;
+        }
+
+        @Test
+        @DisplayName("201")
+        void normalUserLogin_201() throws Exception {
+            // given
+            NormalUserLoginRequest request = makeRequest("testtest@gmail.com", "testPassword");
+
+            NormalUser normalUser = NormalUser.builder()
+                    .email("testtest@gmail.com")
+                    .password(passwordEncoder.encode("testPassword"))
+                    .build();
+            normalUser = normalUserRepository.save(normalUser);
+
+            User user = User.builder()
+                    .normalUser(normalUser)
+                    .name("가나다")
+                    .build();
+            userRepository.save(user);
+
+            // when
+            ResultActions resultActions = requestMvc(post("/login/normal"), request);
+
+            // then
+            resultActions.andExpect(status().is(201))
+                    .andDo(print());
+        }
+
+        @Test
+        @DisplayName("400")
+        void normalUserLogin_400() throws Exception {
+            // given
+            NormalUserLoginRequest request = makeRequest(null, null);
+
+            // when
+            ResultActions resultActions = requestMvc(post("/login/normal"), request);
+
+            // then
+            resultActions.andExpect(status().is(400))
+                    .andDo(print());
+        }
+
+        @Test
+        @DisplayName("401")
+        void normalUserLogin_401() throws Exception {
+            // given
+            NormalUserLoginRequest request = makeRequest("testtest@gmail.com", "testPassword");
+
+            NormalUser normalUser = NormalUser.builder()
+                    .email("testtest@gmail.com")
+                    .password(passwordEncoder.encode("testFakePassword"))
+                    .build();
+            normalUser = normalUserRepository.save(normalUser);
+
+            User user = User.builder()
+                    .normalUser(normalUser)
+                    .name("가나다")
+                    .build();
+            userRepository.save(user);
+
+            // when
+            ResultActions resultActions = requestMvc(post("/login/normal"), request);
+
+            // then
+            resultActions.andExpect(status().is(401))
+                    .andDo(print());
+        }
+
+        @Test
+        @DisplayName("404")
+        void normalUserLogin_404() throws Exception {
+            // given
+            NormalUserLoginRequest request = makeRequest("testtest@gmail.com", "testPassword");
+
+            // when
+            ResultActions resultActions = requestMvc(post("/login/normal"), request);
+
+            // then
+            resultActions.andExpect(status().is(404))
+                    .andDo(print());
+        }
 
     }
 
-    @Test
-    @DisplayName("일반 유저 로그인 201")
-    void normalUserLogin_201() throws Exception {
-        // given
-        NormalUserLoginRequest request = new NormalUserLoginRequest();
-        inputField(request, "email", "testtest@gmail.com");
-        inputField(request, "password", "testPassword");
+    @Nested
+    @DisplayName("깃허브 유저 로그인")
+    class GithubUserLogin{
 
-        NormalUser normalUser = NormalUser.builder()
-                .email("testtest@gmail.com")
-                .password(passwordEncoder.encode("testPassword"))
-                .build();
-        normalUser = normalUserRepository.save(normalUser);
+        private GithubUserLoginRequest makeRequest(String githubToken) throws NoSuchFieldException, IllegalAccessException {
+            GithubUserLoginRequest request = new GithubUserLoginRequest();
+            inputField(request, "githubToken", githubToken);
+            return request;
+        }
 
-        User user = User.builder()
-                .normalUser(normalUser)
-                .name("가나다")
-                .build();
-        userRepository.save(user);
+        @Test
+        @DisplayName("201")
+        void githubUserLogin_first_201() throws Exception {
+            // given
+            GithubResponse githubResponse = new GithubResponse();
+            inputField(githubResponse, "login", "nickname");
+            inputField(githubResponse, "avatarUrl", "profile");
+            inputField(githubResponse, "name", "name");
+            given(githubClient.getUserInfo("token githubToken")).willReturn(githubResponse);
 
-        // when
-        ResultActions resultActions = requestMvc(post("/login/normal"), request);
+            GithubUserLoginRequest request = makeRequest("githubToken");
 
-        // then
-        resultActions.andExpect(status().is(201))
-                .andDo(print());
+            // when
+            ResultActions resultActions = requestMvc(post("/login/github"), request);
+
+            // then
+            resultActions.andExpect(status().is(201))
+                    .andDo(print());
+        }
+
+        @Test
+        @DisplayName("201")
+        void githubUserLogin_201() throws Exception {
+            // given
+            GithubResponse githubResponse = new GithubResponse();
+            inputField(githubResponse, "login", "nickname");
+            inputField(githubResponse, "avatarUrl", "profile");
+            inputField(githubResponse, "name", "name");
+            given(githubClient.getUserInfo("token githubToken")).willReturn(githubResponse);
+
+            GithubUserLoginRequest request = makeRequest("githubToken");
+
+            User user = User.builder()
+                    .githubId("nickname")
+                    .name("name")
+                    .build();
+            userRepository.save(user);
+
+            // when
+            ResultActions resultActions = requestMvc(post("/login/github"), request);
+
+            // then
+            resultActions.andExpect(status().is(201))
+                    .andDo(print());
+        }
+
+        @Test
+        @DisplayName("400")
+        void githubUserLogin_400() throws Exception {
+            // given
+            GithubUserLoginRequest request = makeRequest(null);
+
+            // when
+            ResultActions resultActions = requestMvc(post("/login/github"), request);
+
+            // then
+            resultActions.andExpect(status().is(400))
+                    .andDo(print());
+        }
+
+        @Test
+        @DisplayName("401")
+        void githubUserLogin_401() throws Exception {
+            // given
+            given(githubClient.getUserInfo("token githubToken")).willThrow(new OauthServerException(401, "Invalid Token"));
+
+            GithubUserLoginRequest request = makeRequest("githubToken");
+
+            // when
+            ResultActions resultActions = requestMvc(post("/login/github"), request);
+
+            // then
+            resultActions.andExpect(status().is(401))
+                    .andDo(print());
+        }
+
     }
 
-    @Test
-    @DisplayName("일반 유저 로그인 400")
-    void normalUserLogin_400() throws Exception {
-        // given
-        NormalUserLoginRequest request = new NormalUserLoginRequest();
+    @Nested
+    @DisplayName("이메일 인증")
+    class EmailCertificate{
 
-        // when
-        ResultActions resultActions = requestMvc(post("/login/normal"), request);
+        private EmailCertificationRequest makeRequest(String email) throws NoSuchFieldException, IllegalAccessException {
+            EmailCertificationRequest request = new EmailCertificationRequest();
+            inputField(request, "email", email);
+            return request;
+        }
 
-        // then
-        resultActions.andExpect(status().is(400))
-                .andDo(print());
+        @Test
+        @DisplayName("200")
+        void emailCertificate_200() throws Exception {
+            // given
+            EmailCertificationRequest request = makeRequest("testtest@gmail.com");
+
+            // when
+            ResultActions resultActions = requestMvc(post("/email"), request);
+
+            // then
+            resultActions.andExpect(status().is(200))
+                    .andDo(print());
+        }
+
+        @Test
+        @DisplayName("400")
+        void emailCertificate_400() throws Exception {
+            // given
+            EmailCertificationRequest request = makeRequest(null);
+
+            // when
+            ResultActions resultActions = requestMvc(post("/email"), request);
+
+            // then
+            resultActions.andExpect(status().is(400))
+                    .andDo(print());
+        }
+
+        @Test
+        @DisplayName("409")
+        void emailCertificate_409() throws Exception {
+            // given
+            EmailCertificationRequest request = makeRequest("testtest@gmail.com");
+
+            NormalUser normalUser = NormalUser.builder()
+                    .email("testtest@gmail.com")
+                    .password(passwordEncoder.encode("testFakePassword"))
+                    .build();
+            normalUser = normalUserRepository.save(normalUser);
+
+            User user = User.builder()
+                    .normalUser(normalUser)
+                    .name("가나다")
+                    .build();
+            userRepository.save(user);
+
+            // when
+            ResultActions resultActions = requestMvc(post("/email"), request);
+
+            // then
+            resultActions.andExpect(status().is(409))
+                    .andDo(print());
+        }
+
     }
 
-    @Test
-    @DisplayName("일반 유저 로그인 401")
-    void normalUserLogin_401() throws Exception {
-        // given
-        NormalUserLoginRequest request = new NormalUserLoginRequest();
-        inputField(request, "email", "testtest@gmail.com");
-        inputField(request, "password", "testPassword");
+    @Nested
+    @DisplayName("일반 유저 회원가입")
+    class NormalUserJoin{
 
-        NormalUser normalUser = NormalUser.builder()
-                .email("testtest@gmail.com")
-                .password(passwordEncoder.encode("testFakePassword"))
-                .build();
-        normalUser = normalUserRepository.save(normalUser);
+        private NormalUserJoinRequest makeRequest(String name, String email, String password, List<Integer> field) throws NoSuchFieldException, IllegalAccessException {
+            NormalUserJoinRequest request = new NormalUserJoinRequest();
+            inputField(request, "name", name);
+            inputField(request, "email", email);
+            inputField(request, "password", password);
+            inputField(request, "field", field);
+            return request;
+        }
 
-        User user = User.builder()
-                .normalUser(normalUser)
-                .name("가나다")
-                .build();
-        userRepository.save(user);
+        @Test
+        @DisplayName("201")
+        void normalUserJoin_201() throws Exception {
+            // given
+            Certification certification = Certification.builder()
+                    .id(1L)
+                    .email("testtest@gmail.com")
+                    .token("token")
+                    .certification(true)
+                    .exp(200000L)
+                    .build();
+            given(certificationRepository.findByEmail("testtest@gmail.com"))
+                    .willReturn(Optional.of(certification));
 
-        // when
-        ResultActions resultActions = requestMvc(post("/login/normal"), request);
+            FieldKind fieldKind = FieldKind.builder()
+                    .content("백엔드")
+                    .build();
+            fieldKind = fieldKindRepository.save(fieldKind);
 
-        // then
-        resultActions.andExpect(status().is(401))
-                .andDo(print());
+            List<Integer> field = new ArrayList<>();
+            field.add(fieldKind.getPk());
+            NormalUserJoinRequest request = makeRequest("가나다", "testtest@gmail.com", "testPassword", field);
+
+            // when
+            ResultActions resultActions = requestMvc(post("/join"), request);
+
+            // then
+            resultActions.andExpect(status().is(201))
+                    .andDo(print());
+        }
+
+        @Test
+        @DisplayName("400")
+        void normalUserJoin_400() throws Exception {
+            // given
+            NormalUserJoinRequest request = makeRequest(null, null, null, null);
+
+            // when
+            ResultActions resultActions = requestMvc(post("/join"), request);
+
+            // then
+            resultActions.andExpect(status().is(400))
+                    .andDo(print());
+        }
+
+        @Test
+        @DisplayName("401")
+        void normalUserJoin_401() throws Exception {
+            // given
+            given(certificationRepository.findByEmail("testtest@gmail.com"))
+                    .willReturn(Optional.empty());
+
+            List<Integer> field = new ArrayList<>();
+            field.add(1);
+            NormalUserJoinRequest request = makeRequest("가나다", "testtest@gmail.com", "testPassword", field);
+
+            // when
+            ResultActions resultActions = requestMvc(post("/join"), request);
+
+            // then
+            resultActions.andExpect(status().is(401))
+                    .andDo(print());
+        }
+
+        @Test
+        @DisplayName("404")
+        void normalUserJoin_404() throws Exception {
+            // given
+            Certification certification = Certification.builder()
+                    .id(1L)
+                    .email("testtest@gmail.com")
+                    .token("token")
+                    .certification(true)
+                    .exp(200000L)
+                    .build();
+            given(certificationRepository.findByEmail("testtest@gmail.com"))
+                    .willReturn(Optional.of(certification));
+
+            List<Integer> field = new ArrayList<>();
+            field.add(1);
+            NormalUserJoinRequest request = makeRequest("가나다", "testtest@gmail.com", "testPassword", field);
+
+            // when
+            ResultActions resultActions = requestMvc(post("/join"), request);
+
+            // then
+            resultActions.andExpect(status().is(404))
+                    .andDo(print());
+        }
+
     }
 
-    @Test
-    @DisplayName("일반 유저 로그인 404")
-    void normalUserLogin_404() throws Exception {
-        // given
-        NormalUserLoginRequest request = new NormalUserLoginRequest();
-        inputField(request, "email", "testtest@gmail.com");
-        inputField(request, "password", "testPassword");
+    @Nested
+    @DisplayName("토큰 리프레쉬")
+    class TokenRefresh{
 
-        // when
-        ResultActions resultActions = requestMvc(post("/login/normal"), request);
+        private TokenRefreshRequest makeRequest(String token) throws NoSuchFieldException, IllegalAccessException {
+            TokenRefreshRequest request = new TokenRefreshRequest();
+            inputField(request, "refreshToken", token);
+            return request;
+        }
 
-        // then
-        resultActions.andExpect(status().is(404))
-                .andDo(print());
-    }
+        @Test
+        @DisplayName("201")
+        void tokenRefresh_201() throws Exception {
+            // given
+            String token = jwtTokenProvider.generateRefreshToken(1L);
+            given(refreshTokenRepository.existsByRefreshToken(token)).willReturn(true);
 
-    @Test
-    @DisplayName("깃허브 유저 첫 로그인 201")
-    void githubUserLogin_first_201() throws Exception {
-        // given
-        GithubResponse githubResponse = new GithubResponse();
-        inputField(githubResponse, "login", "nickname");
-        inputField(githubResponse, "avatarUrl", "profile");
-        inputField(githubResponse, "name", "name");
-        given(githubClient.getUserInfo("token githubToken")).willReturn(githubResponse);
+            TokenRefreshRequest request = makeRequest(token);
 
-        GithubUserLoginRequest request = new GithubUserLoginRequest();
-        inputField(request, "githubToken", "githubToken");
+            // when
+            ResultActions resultActions = requestMvc(post("/token-refresh"), request);
 
-        // when
-        ResultActions resultActions = requestMvc(post("/login/github"), request);
+            // then
+            resultActions.andExpect(status().is(201))
+                    .andDo(print());
+        }
 
-        // then
-        resultActions.andExpect(status().is(201))
-                .andDo(print());
-    }
+        @Test
+        @DisplayName("400")
+        void tokenRefresh_400() throws Exception {
+            // given
+            TokenRefreshRequest request = makeRequest(null);
 
-    @Test
-    @DisplayName("깃허브 유저 로그인 201")
-    void githubUserLogin_201() throws Exception {
-        // given
-        GithubResponse githubResponse = new GithubResponse();
-        inputField(githubResponse, "login", "nickname");
-        inputField(githubResponse, "avatarUrl", "profile");
-        inputField(githubResponse, "name", "name");
-        given(githubClient.getUserInfo("token githubToken")).willReturn(githubResponse);
+            // when
+            ResultActions resultActions = requestMvc(post("/token-refresh"), request);
 
-        GithubUserLoginRequest request = new GithubUserLoginRequest();
-        inputField(request, "githubToken", "githubToken");
+            // then
+            resultActions.andExpect(status().is(400))
+                    .andDo(print());
+        }
 
-        User user = User.builder()
-                .githubId("nickname")
-                .name("name")
-                .build();
-        userRepository.save(user);
+        @Test
+        @DisplayName("401")
+        void tokenRefresh_401() throws Exception {
+            // given
+            String token = "이건 토큰 아니지롱";
+            given(refreshTokenRepository.existsByRefreshToken(token)).willReturn(true);
 
-        // when
-        ResultActions resultActions = requestMvc(post("/login/github"), request);
+            TokenRefreshRequest request = makeRequest(token);
 
-        // then
-        resultActions.andExpect(status().is(201))
-                .andDo(print());
-    }
+            // when
+            ResultActions resultActions = requestMvc(post("/token-refresh"), request);
 
-    @Test
-    @DisplayName("깃허브 유저 로그인 400")
-    void githubUserLogin_400() throws Exception {
-        // given
-        GithubUserLoginRequest request = new GithubUserLoginRequest();
+            // then
+            resultActions.andExpect(status().is(401))
+                    .andDo(print());
+        }
 
-        // when
-        ResultActions resultActions = requestMvc(post("/login/github"), request);
-
-        // then
-        resultActions.andExpect(status().is(400))
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("깃허브 유저 로그인 401")
-    void githubUserLogin_401() throws Exception {
-        // given
-        given(githubClient.getUserInfo("token githubToken")).willThrow(new OauthServerException(401, "Invalid Token"));
-
-        GithubUserLoginRequest request = new GithubUserLoginRequest();
-        inputField(request, "githubToken", "githubToken");
-
-        // when
-        ResultActions resultActions = requestMvc(post("/login/github"), request);
-
-        // then
-        resultActions.andExpect(status().is(401))
-                .andDo(print());
-    }
-    
-    @Test
-    @DisplayName("이메일 인증 200")
-    void emailCertificate_200() throws Exception {
-        // given
-        EmailCertificationRequest request = new EmailCertificationRequest();
-        inputField(request, "email", "testtest@gmail.com");
-
-        // when
-        ResultActions resultActions = requestMvc(post("/email"), request);
-
-        // then
-        resultActions.andExpect(status().is(200))
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("이메일 인증 400")
-    void emailCertificate_400() throws Exception {
-        // given
-        EmailCertificationRequest request = new EmailCertificationRequest();
-
-        // when
-        ResultActions resultActions = requestMvc(post("/email"), request);
-
-        // then
-        resultActions.andExpect(status().is(400))
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("이메일 인증 409")
-    void emailCertificate_409() throws Exception {
-        // given
-        EmailCertificationRequest request = new EmailCertificationRequest();
-        inputField(request, "email", "testtest@gmail.com");
-        NormalUser normalUser = NormalUser.builder()
-                .email("testtest@gmail.com")
-                .password(passwordEncoder.encode("testFakePassword"))
-                .build();
-        normalUser = normalUserRepository.save(normalUser);
-
-        User user = User.builder()
-                .normalUser(normalUser)
-                .name("가나다")
-                .build();
-        userRepository.save(user);
-
-        // when
-        ResultActions resultActions = requestMvc(post("/email"), request);
-
-        // then
-        resultActions.andExpect(status().is(409))
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("일반 유저 회원가입 201")
-    void normalUserJoin_201() throws Exception {
-        // given
-        Certification certification = Certification.builder()
-                .id(1L)
-                .email("testtest@gmail.com")
-                .token("token")
-                .certification(true)
-                .exp(200000L)
-                .build();
-        given(certificationRepository.findByEmail("testtest@gmail.com"))
-                .willReturn(Optional.of(certification));
-
-        FieldKind fieldKind = FieldKind.builder()
-                .content("백엔드")
-                .build();
-        fieldKind = fieldKindRepository.save(fieldKind);
-
-
-        NormalUserJoinRequest request = new NormalUserJoinRequest();
-        inputField(request, "name", "가나다");
-        inputField(request, "email", "testtest@gmail.com");
-        inputField(request, "password", "testPassword");
-
-        List<Integer> field = new ArrayList<>();
-        field.add(fieldKind.getPk());
-        inputField(request, "field", field);
-
-        // when
-        ResultActions resultActions = requestMvc(post("/join"), request);
-
-        // then
-        resultActions.andExpect(status().is(201))
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("일반 유저 회원가입 400")
-    void normalUserJoin_400() throws Exception {
-        // given
-        NormalUserJoinRequest request = new NormalUserJoinRequest();
-
-        // when
-        ResultActions resultActions = requestMvc(post("/join"), request);
-
-        // then
-        resultActions.andExpect(status().is(400))
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("일반 유저 회원가입 401")
-    void normalUserJoin_401() throws Exception {
-        // given
-        given(certificationRepository.findByEmail("testtest@gmail.com"))
-                .willReturn(Optional.empty());
-
-        NormalUserJoinRequest request = new NormalUserJoinRequest();
-        inputField(request, "name", "가나다");
-        inputField(request, "email", "testtest@gmail.com");
-        inputField(request, "password", "testPassword");
-
-        List<Integer> field = new ArrayList<>();
-        field.add(1);
-        inputField(request, "field", field);
-
-        // when
-        ResultActions resultActions = requestMvc(post("/join"), request);
-
-        // then
-        resultActions.andExpect(status().is(401))
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("일반 유저 회원가입 404")
-    void normalUserJoin_404() throws Exception {
-        // given
-        Certification certification = Certification.builder()
-                .id(1L)
-                .email("testtest@gmail.com")
-                .token("token")
-                .certification(true)
-                .exp(200000L)
-                .build();
-        given(certificationRepository.findByEmail("testtest@gmail.com"))
-                .willReturn(Optional.of(certification));
-
-        NormalUserJoinRequest request = new NormalUserJoinRequest();
-        inputField(request, "name", "가나다");
-        inputField(request, "email", "testtest@gmail.com");
-        inputField(request, "password", "testPassword");
-
-        List<Integer> field = new ArrayList<>();
-        field.add(1);
-        inputField(request, "field", field);
-
-        // when
-        ResultActions resultActions = requestMvc(post("/join"), request);
-
-        // then
-        resultActions.andExpect(status().is(404))
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("토큰 리프레쉬 201")
-    void tokenRefresh_201() throws Exception {
-        // given
-        String token = jwtTokenProvider.generateRefreshToken(1L);
-        given(refreshTokenRepository.existsByRefreshToken(token)).willReturn(true);
-
-        TokenRefreshRequest request = new TokenRefreshRequest();
-        inputField(request, "refreshToken", token);
-
-        // when
-        ResultActions resultActions = requestMvc(post("/token-refresh"), request);
-
-        // then
-        resultActions.andExpect(status().is(201))
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("토큰 리프레쉬 400")
-    void tokenRefresh_400() throws Exception {
-        // given
-        TokenRefreshRequest request = new TokenRefreshRequest();
-
-        // when
-        ResultActions resultActions = requestMvc(post("/token-refresh"), request);
-
-        // then
-        resultActions.andExpect(status().is(400))
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("토큰 리프레쉬 401")
-    void tokenRefresh_401() throws Exception {
-        // given
-        String token = "이건 토큰 아니지롱";
-        given(refreshTokenRepository.existsByRefreshToken(token)).willReturn(true);
-
-        TokenRefreshRequest request = new TokenRefreshRequest();
-        inputField(request, "refreshToken", token);
-
-        // when
-        ResultActions resultActions = requestMvc(post("/token-refresh"), request);
-
-        // then
-        resultActions.andExpect(status().is(401))
-                .andDo(print());
     }
 
 }
