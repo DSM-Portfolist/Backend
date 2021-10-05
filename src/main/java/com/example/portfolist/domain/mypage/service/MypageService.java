@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class MypageService {
 
     private final PasswordEncoder passwordEncoder;
