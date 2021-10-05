@@ -17,13 +17,14 @@ public class NormalUserJoinRequest {
     private String name;
 
     @Email
+    @NotBlank
     private String email;
 
     @NotBlank
     @Size(min = 4, max = 12)
     private String password;
 
-    @NotBlank
+    @Size(min = 1)
     private List<Integer> field;
 
 }

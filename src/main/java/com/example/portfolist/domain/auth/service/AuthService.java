@@ -27,7 +27,6 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -76,7 +75,7 @@ public class AuthService {
         GithubResponse response = githubClient.getUserInfo("token " + request.getGithubToken());
         String nickname = response.getLogin();
         String name = response.getName();
-        String url = response.getAvatar_url();
+        String url = response.getAvatarUrl();
 
         Optional<User> optionalUser = authFacade.findUserByGithubId(nickname);
         long pk;

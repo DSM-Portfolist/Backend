@@ -1,7 +1,6 @@
 buildscript {
     ext {
         openfeignVersion = '3.0.3'
-        redisVersion = '0.7.2'
         querydslVersion = '4.4.0'
         jwtVersion = '0.9.1'
         junitVersion = '5.6.0'
@@ -49,7 +48,6 @@ dependencies {
 
     // redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation group: 'it.ozimov', name:'embedded-redis', version: redisVersion
 
     // jwt
     implementation group: 'io.jsonwebtoken', name: 'jjwt', version: jwtVersion

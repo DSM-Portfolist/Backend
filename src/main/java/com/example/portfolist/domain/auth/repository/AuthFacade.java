@@ -29,8 +29,6 @@ public class AuthFacade {
     private final NormalUserRepository normalUserRepository;
     private final FieldRepository fieldRepository;
 
-    private final QField qfield = QField.field;
-
     public void save(String token, Long refreshLifespan) {
         RefreshToken refreshToken = RefreshToken.builder()
                 .refreshToken(token)
