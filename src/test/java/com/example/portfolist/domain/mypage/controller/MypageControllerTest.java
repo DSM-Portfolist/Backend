@@ -4,6 +4,7 @@ import com.example.portfolist.ApiTest;
 import com.example.portfolist.domain.auth.entity.NormalUser;
 import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.mypage.dto.request.PasswordChangeRequest;
+import com.example.portfolist.domain.mypage.dto.request.PasswordCheckRequest;
 import com.example.portfolist.global.file.FileUploadProvider;
 import com.example.portfolist.global.security.JwtTokenProvider;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -117,6 +119,102 @@ public class MypageControllerTest extends ApiTest {
             // when
             setToken(token);
             ResultActions resultActions = requestMvc(patch("/user/password"), request);
+
+            // then
+            resultActions.andExpect(status().is(401))
+                    .andDo(print());
+        }
+
+    }
+
+    @Nested
+    @DisplayName("비밀번호 확인")
+    class CheckPassword {
+
+        private PasswordCheckRequest makeRequest(String nowPassword) throws NoSuchFieldException, IllegalAccessException {
+            PasswordCheckRequest request = new PasswordCheckRequest();
+            inputField(request, "nowPassword", nowPassword);
+            return request;
+        }
+
+        @Test
+        @DisplayName("200")
+        void checkPassword_200() throws Exception {
+            // given
+            NormalUser normalUser = NormalUser.builder()
+                    .email("testtest@gmail.com")
+                    .password(passwordEncoder.encode("testPassword"))
+                    .build();
+            normalUser = normalUserRepository.save(normalUser);
+
+            User user = User.builder()
+                    .normalUser(normalUser)
+                    .name("가나다")
+                    .build();
+            user = userRepository.save(user);
+
+            PasswordCheckRequest request = makeRequest("testPassword");
+            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+
+            // when
+            setToken(token);
+            ResultActions resultActions = requestMvc(post("/user/password"), request);
+
+            // then
+            resultActions.andExpect(status().is(200))
+                    .andDo(print());
+        }
+
+        @Test
+        @DisplayName("400")
+        void checkPassword_400() throws Exception {
+            // given
+            NormalUser normalUser = NormalUser.builder()
+                    .email("testtest@gmail.com")
+                    .password(passwordEncoder.encode("testPassword"))
+                    .build();
+            normalUser = normalUserRepository.save(normalUser);
+
+            User user = User.builder()
+                    .normalUser(normalUser)
+                    .name("가나다")
+                    .build();
+            user = userRepository.save(user);
+
+            PasswordCheckRequest request = makeRequest(null);
+            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+
+            // when
+            setToken(token);
+            ResultActions resultActions = requestMvc(post("/user/password"), request);
+
+            // then
+            resultActions.andExpect(status().is(400))
+                    .andDo(print());
+        }
+
+        @Test
+        @DisplayName("401")
+        void checkPassword_401() throws Exception {
+            // given
+            NormalUser normalUser = NormalUser.builder()
+                    .email("testtest@gmail.com")
+                    .password(passwordEncoder.encode("testFakePassword"))
+                    .build();
+            normalUser = normalUserRepository.save(normalUser);
+
+            User user = User.builder()
+                    .normalUser(normalUser)
+                    .name("가나다")
+                    .build();
+            user = userRepository.save(user);
+
+            PasswordCheckRequest request = makeRequest("testPassword");
+            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+
+            // when
+            setToken(token);
+            ResultActions resultActions = requestMvc(post("/user/password"), request);
 
             // then
             resultActions.andExpect(status().is(401))
