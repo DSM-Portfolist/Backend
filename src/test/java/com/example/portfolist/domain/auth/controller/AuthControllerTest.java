@@ -44,13 +44,18 @@ public class AuthControllerTest extends ApiTest {
     @DisplayName("일반 유저 로그인")
     class NormalUserLogin{
 
+        private NormalUserLoginRequest makeRequest(String email, String password) throws NoSuchFieldException, IllegalAccessException {
+            NormalUserLoginRequest request = new NormalUserLoginRequest();
+            inputField(request, "email", email);
+            inputField(request, "password", password);
+            return request;
+        }
+
         @Test
         @DisplayName("201")
         void normalUserLogin_201() throws Exception {
             // given
-            NormalUserLoginRequest request = new NormalUserLoginRequest();
-            inputField(request, "email", "testtest@gmail.com");
-            inputField(request, "password", "testPassword");
+            NormalUserLoginRequest request = makeRequest("testtest@gmail.com", "testPassword");
 
             NormalUser normalUser = NormalUser.builder()
                     .email("testtest@gmail.com")
@@ -76,7 +81,7 @@ public class AuthControllerTest extends ApiTest {
         @DisplayName("400")
         void normalUserLogin_400() throws Exception {
             // given
-            NormalUserLoginRequest request = new NormalUserLoginRequest();
+            NormalUserLoginRequest request = makeRequest(null, null);
 
             // when
             ResultActions resultActions = requestMvc(post("/login/normal"), request);
@@ -90,9 +95,7 @@ public class AuthControllerTest extends ApiTest {
         @DisplayName("401")
         void normalUserLogin_401() throws Exception {
             // given
-            NormalUserLoginRequest request = new NormalUserLoginRequest();
-            inputField(request, "email", "testtest@gmail.com");
-            inputField(request, "password", "testPassword");
+            NormalUserLoginRequest request = makeRequest("testtest@gmail.com", "testPassword");
 
             NormalUser normalUser = NormalUser.builder()
                     .email("testtest@gmail.com")
@@ -118,9 +121,7 @@ public class AuthControllerTest extends ApiTest {
         @DisplayName("404")
         void normalUserLogin_404() throws Exception {
             // given
-            NormalUserLoginRequest request = new NormalUserLoginRequest();
-            inputField(request, "email", "testtest@gmail.com");
-            inputField(request, "password", "testPassword");
+            NormalUserLoginRequest request = makeRequest("testtest@gmail.com", "testPassword");
 
             // when
             ResultActions resultActions = requestMvc(post("/login/normal"), request);
@@ -136,6 +137,12 @@ public class AuthControllerTest extends ApiTest {
     @DisplayName("깃허브 유저 로그인")
     class GithubUserLogin{
 
+        private GithubUserLoginRequest makeRequest(String githubToken) throws NoSuchFieldException, IllegalAccessException {
+            GithubUserLoginRequest request = new GithubUserLoginRequest();
+            inputField(request, "githubToken", githubToken);
+            return request;
+        }
+
         @Test
         @DisplayName("201")
         void githubUserLogin_first_201() throws Exception {
@@ -146,8 +153,7 @@ public class AuthControllerTest extends ApiTest {
             inputField(githubResponse, "name", "name");
             given(githubClient.getUserInfo("token githubToken")).willReturn(githubResponse);
 
-            GithubUserLoginRequest request = new GithubUserLoginRequest();
-            inputField(request, "githubToken", "githubToken");
+            GithubUserLoginRequest request = makeRequest("githubToken");
 
             // when
             ResultActions resultActions = requestMvc(post("/login/github"), request);
@@ -167,8 +173,7 @@ public class AuthControllerTest extends ApiTest {
             inputField(githubResponse, "name", "name");
             given(githubClient.getUserInfo("token githubToken")).willReturn(githubResponse);
 
-            GithubUserLoginRequest request = new GithubUserLoginRequest();
-            inputField(request, "githubToken", "githubToken");
+            GithubUserLoginRequest request = makeRequest("githubToken");
 
             User user = User.builder()
                     .githubId("nickname")
@@ -188,7 +193,7 @@ public class AuthControllerTest extends ApiTest {
         @DisplayName("400")
         void githubUserLogin_400() throws Exception {
             // given
-            GithubUserLoginRequest request = new GithubUserLoginRequest();
+            GithubUserLoginRequest request = makeRequest(null);
 
             // when
             ResultActions resultActions = requestMvc(post("/login/github"), request);
@@ -204,8 +209,7 @@ public class AuthControllerTest extends ApiTest {
             // given
             given(githubClient.getUserInfo("token githubToken")).willThrow(new OauthServerException(401, "Invalid Token"));
 
-            GithubUserLoginRequest request = new GithubUserLoginRequest();
-            inputField(request, "githubToken", "githubToken");
+            GithubUserLoginRequest request = makeRequest("githubToken");
 
             // when
             ResultActions resultActions = requestMvc(post("/login/github"), request);
@@ -221,12 +225,17 @@ public class AuthControllerTest extends ApiTest {
     @DisplayName("이메일 인증")
     class EmailCertificate{
 
+        private EmailCertificationRequest makeRequest(String email) throws NoSuchFieldException, IllegalAccessException {
+            EmailCertificationRequest request = new EmailCertificationRequest();
+            inputField(request, "email", email);
+            return request;
+        }
+
         @Test
         @DisplayName("200")
         void emailCertificate_200() throws Exception {
             // given
-            EmailCertificationRequest request = new EmailCertificationRequest();
-            inputField(request, "email", "testtest@gmail.com");
+            EmailCertificationRequest request = makeRequest("testtest@gmail.com");
 
             // when
             ResultActions resultActions = requestMvc(post("/email"), request);
@@ -240,7 +249,7 @@ public class AuthControllerTest extends ApiTest {
         @DisplayName("400")
         void emailCertificate_400() throws Exception {
             // given
-            EmailCertificationRequest request = new EmailCertificationRequest();
+            EmailCertificationRequest request = makeRequest(null);
 
             // when
             ResultActions resultActions = requestMvc(post("/email"), request);
@@ -254,8 +263,8 @@ public class AuthControllerTest extends ApiTest {
         @DisplayName("409")
         void emailCertificate_409() throws Exception {
             // given
-            EmailCertificationRequest request = new EmailCertificationRequest();
-            inputField(request, "email", "testtest@gmail.com");
+            EmailCertificationRequest request = makeRequest("testtest@gmail.com");
+
             NormalUser normalUser = NormalUser.builder()
                     .email("testtest@gmail.com")
                     .password(passwordEncoder.encode("testFakePassword"))
@@ -282,6 +291,15 @@ public class AuthControllerTest extends ApiTest {
     @DisplayName("일반 유저 회원가입")
     class NormalUserJoin{
 
+        private NormalUserJoinRequest makeRequest(String name, String email, String password, List<Integer> field) throws NoSuchFieldException, IllegalAccessException {
+            NormalUserJoinRequest request = new NormalUserJoinRequest();
+            inputField(request, "name", name);
+            inputField(request, "email", email);
+            inputField(request, "password", password);
+            inputField(request, "field", field);
+            return request;
+        }
+
         @Test
         @DisplayName("201")
         void normalUserJoin_201() throws Exception {
@@ -301,15 +319,9 @@ public class AuthControllerTest extends ApiTest {
                     .build();
             fieldKind = fieldKindRepository.save(fieldKind);
 
-
-            NormalUserJoinRequest request = new NormalUserJoinRequest();
-            inputField(request, "name", "가나다");
-            inputField(request, "email", "testtest@gmail.com");
-            inputField(request, "password", "testPassword");
-
             List<Integer> field = new ArrayList<>();
             field.add(fieldKind.getPk());
-            inputField(request, "field", field);
+            NormalUserJoinRequest request = makeRequest("가나다", "testtest@gmail.com", "testPassword", field);
 
             // when
             ResultActions resultActions = requestMvc(post("/join"), request);
@@ -323,7 +335,7 @@ public class AuthControllerTest extends ApiTest {
         @DisplayName("400")
         void normalUserJoin_400() throws Exception {
             // given
-            NormalUserJoinRequest request = new NormalUserJoinRequest();
+            NormalUserJoinRequest request = makeRequest(null, null, null, null);
 
             // when
             ResultActions resultActions = requestMvc(post("/join"), request);
@@ -340,14 +352,9 @@ public class AuthControllerTest extends ApiTest {
             given(certificationRepository.findByEmail("testtest@gmail.com"))
                     .willReturn(Optional.empty());
 
-            NormalUserJoinRequest request = new NormalUserJoinRequest();
-            inputField(request, "name", "가나다");
-            inputField(request, "email", "testtest@gmail.com");
-            inputField(request, "password", "testPassword");
-
             List<Integer> field = new ArrayList<>();
             field.add(1);
-            inputField(request, "field", field);
+            NormalUserJoinRequest request = makeRequest("가나다", "testtest@gmail.com", "testPassword", field);
 
             // when
             ResultActions resultActions = requestMvc(post("/join"), request);
@@ -371,14 +378,9 @@ public class AuthControllerTest extends ApiTest {
             given(certificationRepository.findByEmail("testtest@gmail.com"))
                     .willReturn(Optional.of(certification));
 
-            NormalUserJoinRequest request = new NormalUserJoinRequest();
-            inputField(request, "name", "가나다");
-            inputField(request, "email", "testtest@gmail.com");
-            inputField(request, "password", "testPassword");
-
             List<Integer> field = new ArrayList<>();
             field.add(1);
-            inputField(request, "field", field);
+            NormalUserJoinRequest request = makeRequest("가나다", "testtest@gmail.com", "testPassword", field);
 
             // when
             ResultActions resultActions = requestMvc(post("/join"), request);
@@ -394,6 +396,12 @@ public class AuthControllerTest extends ApiTest {
     @DisplayName("토큰 리프레쉬")
     class TokenRefresh{
 
+        private TokenRefreshRequest makeRequest(String token) throws NoSuchFieldException, IllegalAccessException {
+            TokenRefreshRequest request = new TokenRefreshRequest();
+            inputField(request, "refreshToken", token);
+            return request;
+        }
+
         @Test
         @DisplayName("201")
         void tokenRefresh_201() throws Exception {
@@ -401,8 +409,7 @@ public class AuthControllerTest extends ApiTest {
             String token = jwtTokenProvider.generateRefreshToken(1L);
             given(refreshTokenRepository.existsByRefreshToken(token)).willReturn(true);
 
-            TokenRefreshRequest request = new TokenRefreshRequest();
-            inputField(request, "refreshToken", token);
+            TokenRefreshRequest request = makeRequest(token);
 
             // when
             ResultActions resultActions = requestMvc(post("/token-refresh"), request);
@@ -416,7 +423,7 @@ public class AuthControllerTest extends ApiTest {
         @DisplayName("400")
         void tokenRefresh_400() throws Exception {
             // given
-            TokenRefreshRequest request = new TokenRefreshRequest();
+            TokenRefreshRequest request = makeRequest(null);
 
             // when
             ResultActions resultActions = requestMvc(post("/token-refresh"), request);
@@ -433,8 +440,7 @@ public class AuthControllerTest extends ApiTest {
             String token = "이건 토큰 아니지롱";
             given(refreshTokenRepository.existsByRefreshToken(token)).willReturn(true);
 
-            TokenRefreshRequest request = new TokenRefreshRequest();
-            inputField(request, "refreshToken", token);
+            TokenRefreshRequest request = makeRequest(token);
 
             // when
             ResultActions resultActions = requestMvc(post("/token-refresh"), request);
