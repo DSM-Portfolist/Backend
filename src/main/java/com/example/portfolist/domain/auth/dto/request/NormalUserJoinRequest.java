@@ -24,7 +24,7 @@ public class NormalUserJoinRequest {
     @Size(min = 4, max = 12)
     private String password;
 
-    @NotBlank
+    @Size(min = 1)
     private List<Integer> field;
 
 }

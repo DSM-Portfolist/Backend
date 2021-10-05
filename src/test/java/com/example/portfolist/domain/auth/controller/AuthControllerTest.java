@@ -1,17 +1,19 @@
 package com.example.portfolist.domain.auth.controller;
 
 import com.example.portfolist.ApiTest;
-import com.example.portfolist.domain.auth.dto.request.EmailCertificationRequest;
-import com.example.portfolist.domain.auth.dto.request.GithubUserLoginRequest;
-import com.example.portfolist.domain.auth.dto.request.NormalUserLoginRequest;
+import com.example.portfolist.domain.auth.dto.request.*;
+import com.example.portfolist.domain.auth.entity.FieldKind;
 import com.example.portfolist.domain.auth.entity.NormalUser;
 import com.example.portfolist.domain.auth.entity.User;
+import com.example.portfolist.domain.auth.entity.redis.Certification;
 import com.example.portfolist.domain.auth.exception.OauthServerException;
+import com.example.portfolist.domain.auth.repository.repository.FieldKindRepository;
 import com.example.portfolist.domain.auth.repository.repository.NormalUserRepository;
 import com.example.portfolist.domain.auth.repository.repository.UserRepository;
 import com.example.portfolist.domain.auth.util.api.client.GithubClient;
 import com.example.portfolist.domain.auth.util.api.dto.GithubResponse;
 import com.example.portfolist.global.event.GlobalEventPublisher;
+import com.example.portfolist.global.security.JwtTokenProvider;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,6 +21,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.ResultActions;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -37,7 +43,11 @@ public class AuthControllerTest extends ApiTest {
     @Autowired
     private NormalUserRepository normalUserRepository;
     @Autowired
+    private FieldKindRepository fieldKindRepository;
+    @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     @AfterEach
     void clear() {
@@ -265,4 +275,110 @@ public class AuthControllerTest extends ApiTest {
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName("일반 유저 회원가입 201")
+    void normalUserJoin_201() throws Exception {
+        // given
+        Certification certification = Certification.builder()
+                .id(1L)
+                .email("testtest@gmail.com")
+                .token("token")
+                .certification(true)
+                .exp(200000L)
+                .build();
+        given(certificationRepository.findByEmail("testtest@gmail.com"))
+                .willReturn(Optional.of(certification));
+
+        FieldKind fieldKind = FieldKind.builder()
+                .content("백엔드")
+                .build();
+        fieldKind = fieldKindRepository.save(fieldKind);
+
+
+        NormalUserJoinRequest request = new NormalUserJoinRequest();
+        inputField(request, "name", "가나다");
+        inputField(request, "email", "testtest@gmail.com");
+        inputField(request, "password", "testPassword");
+
+        List<Integer> field = new ArrayList<>();
+        field.add(fieldKind.getPk());
+        inputField(request, "field", field);
+
+        // when
+        ResultActions resultActions = requestMvc(post("/join"), request);
+
+        // then
+        resultActions.andExpect(status().is(201))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("일반 유저 회원가입 400")
+    void normalUserJoin_400() throws Exception {
+        // given
+        NormalUserJoinRequest request = new NormalUserJoinRequest();
+
+        // when
+        ResultActions resultActions = requestMvc(post("/join"), request);
+
+        // then
+        resultActions.andExpect(status().is(400))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("일반 유저 회원가입 401")
+    void normalUserJoin_401() throws Exception {
+        // given
+        given(certificationRepository.findByEmail("testtest@gmail.com"))
+                .willReturn(Optional.empty());
+
+        NormalUserJoinRequest request = new NormalUserJoinRequest();
+        inputField(request, "name", "가나다");
+        inputField(request, "email", "testtest@gmail.com");
+        inputField(request, "password", "testPassword");
+
+        List<Integer> field = new ArrayList<>();
+        field.add(1);
+        inputField(request, "field", field);
+
+        // when
+        ResultActions resultActions = requestMvc(post("/join"), request);
+
+        // then
+        resultActions.andExpect(status().is(401))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("일반 유저 회원가입 404")
+    void normalUserJoin_404() throws Exception {
+        // given
+        Certification certification = Certification.builder()
+                .id(1L)
+                .email("testtest@gmail.com")
+                .token("token")
+                .certification(true)
+                .exp(200000L)
+                .build();
+        given(certificationRepository.findByEmail("testtest@gmail.com"))
+                .willReturn(Optional.of(certification));
+
+        NormalUserJoinRequest request = new NormalUserJoinRequest();
+        inputField(request, "name", "가나다");
+        inputField(request, "email", "testtest@gmail.com");
+        inputField(request, "password", "testPassword");
+
+        List<Integer> field = new ArrayList<>();
+        field.add(1);
+        inputField(request, "field", field);
+
+        // when
+        ResultActions resultActions = requestMvc(post("/join"), request);
+
+        // then
+        resultActions.andExpect(status().is(404))
+                .andDo(print());
+    }
+    
 }
