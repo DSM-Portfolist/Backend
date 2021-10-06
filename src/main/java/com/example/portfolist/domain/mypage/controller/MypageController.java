@@ -37,7 +37,7 @@ public class MypageController {
     }
 
     @PostMapping("/profile")
-    public void registerProfile(@RequestPart(value = "file", required = false) MultipartFile file) {
+    public void registerProfile(@RequestPart(value = "file") MultipartFile file) {
         mypageService.registerProfile(file, authenticationFacade.getNormalUser());
     }
 
@@ -65,8 +65,8 @@ public class MypageController {
     }
 
     @GetMapping("/touching")
-    public TouchingPortfolioGetRes.Response getTouchingPortfolio(@PathVariable(value = "page", required = false) int page,
-                                                                 @PathVariable(value = "size", required = false) int size) {
+    public TouchingPortfolioGetRes.Response getTouchingPortfolio(@PathVariable(value = "page") int page,
+                                                                 @PathVariable(value = "size") int size) {
         return mypageService.getTouchingPortfolio(page, size, authenticationFacade.getUser());
     }
 

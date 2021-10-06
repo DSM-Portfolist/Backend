@@ -12,11 +12,13 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import java.nio.charset.StandardCharsets;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -221,6 +223,66 @@ public class MypageControllerTest extends ApiTest {
                     .andDo(print());
         }
 
+    }
+
+    @Nested
+    @DisplayName("프로필 변경")
+    class ChangeProfile {
+
+        @Test
+        @DisplayName("200")
+        void changProfile_200() throws Exception {
+            // given
+            NormalUser normalUser = NormalUser.builder()
+                    .email("testtest@gmail.com")
+                    .password(passwordEncoder.encode("testFakePassword"))
+                    .build();
+            normalUser = normalUserRepository.save(normalUser);
+
+            User user = User.builder()
+                    .normalUser(normalUser)
+                    .name("가나다")
+                    .build();
+            user = userRepository.save(user);
+
+            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+            MockMultipartFile file = new MockMultipartFile("file", "hello.png", "png", "hello".getBytes(StandardCharsets.UTF_8));
+
+            // when
+            setToken(token);
+            ResultActions resultActions = requestMvc(multipart("/user/profile").file(file));
+
+            // then
+            resultActions.andExpect(status().is(200))
+                    .andDo(print());
+        }
+
+        @Test
+        @DisplayName("400")
+        void changProfile_400() throws Exception {
+            // given
+            NormalUser normalUser = NormalUser.builder()
+                    .email("testtest@gmail.com")
+                    .password(passwordEncoder.encode("testFakePassword"))
+                    .build();
+            normalUser = normalUserRepository.save(normalUser);
+
+            User user = User.builder()
+                    .normalUser(normalUser)
+                    .name("가나다")
+                    .build();
+            user = userRepository.save(user);
+
+            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+
+            // when
+            setToken(token);
+            ResultActions resultActions = requestMvc(post("/user/profile"));
+
+            // then
+            resultActions.andExpect(status().is(400))
+                    .andDo(print());
+        }
     }
 
 }

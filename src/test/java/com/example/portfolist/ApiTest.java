@@ -102,20 +102,20 @@ public class ApiTest extends IntegrationTest{
         normalUserRepository.deleteAll();
     }
 
-    protected ResultActions requestMvc(MockHttpServletRequestBuilder method) throws Exception {
+    protected ResultActions requestMvc(MockHttpServletRequestBuilder build) throws Exception {
         if (token != null) {
-            return mvc.perform(method.contentType(MediaType.APPLICATION_JSON)
+            return mvc.perform(build.contentType(MediaType.APPLICATION_JSON)
                             .header("AUTHORIZATION", "Bearer " + token))
                     .andDo(print());
         }
-        return mvc.perform(method
+        return mvc.perform(build
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print());
     }
 
-    protected ResultActions requestMvc(MockHttpServletRequestBuilder method, Object obj) throws Exception {
+    protected ResultActions requestMvc(MockHttpServletRequestBuilder build, Object obj) throws Exception {
         if (token != null) {
-            return mvc.perform(method
+            return mvc.perform(build
                             .content(objectMapper
                                     .registerModule(new JavaTimeModule())
                                     .writeValueAsString(obj))
@@ -123,7 +123,7 @@ public class ApiTest extends IntegrationTest{
                             .header("AUTHORIZATION", "Bearer " + token))
                     .andDo(print());
         }
-        return mvc.perform(method
+        return mvc.perform(build
                         .content(objectMapper
                                 .registerModule(new JavaTimeModule())
                                 .writeValueAsString(obj))
