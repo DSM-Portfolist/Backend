@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class NormalUser {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long pk;
 
     @Column(name = "email", nullable = false)

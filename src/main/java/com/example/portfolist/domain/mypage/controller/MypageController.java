@@ -51,9 +51,8 @@ public class MypageController {
         return mypageService.getUserInfo(authenticationFacade.getUser());
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PatchMapping("/info")
-    public void changeUserInfo(@RequestBody UserInfoChangeRequest request) {
+    public void changeUserInfo(@Valid @RequestBody UserInfoChangeRequest request) {
         mypageService.changeUserInfo(request, authenticationFacade.getUser());
     }
 

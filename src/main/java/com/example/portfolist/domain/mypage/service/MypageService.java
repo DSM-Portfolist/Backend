@@ -77,7 +77,6 @@ public class MypageService {
         return UserInfoGetResponse.from(user);
     }
 
-    @Async
     public void changeUserInfo(UserInfoChangeRequest request, User user) {
         user.updateUserInfo(request.getName(), request.getIntroduce());
 
@@ -102,7 +101,7 @@ public class MypageService {
                             .user(user)
                             .fieldKind(fieldKind)
                             .build();
-                    deleteField.add(field);
+                    saveField.add(field);
                 }
             }
 
@@ -116,6 +115,7 @@ public class MypageService {
         portfolioFacade.deleteMoreInfoByUser(user);
         portfolioFacade.deleteBoxImageByUser(user);
         portfolioFacade.deleteBoxTextByUser(user);
+        portfolioFacade.deleteBoxByUser(user);
         portfolioFacade.deleteContainerByUser(user);
         portfolioFacade.deleteCertificateByUser(user);
         portfolioFacade.deleteTouchingByUser(user);

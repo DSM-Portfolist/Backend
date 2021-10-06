@@ -1,22 +1,29 @@
 package com.example.portfolist.domain.mypage.controller;
 
 import com.example.portfolist.ApiTest;
+import com.example.portfolist.domain.auth.entity.FieldKind;
 import com.example.portfolist.domain.auth.entity.NormalUser;
 import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.mypage.dto.request.PasswordChangeRequest;
 import com.example.portfolist.domain.mypage.dto.request.PasswordCheckRequest;
+import com.example.portfolist.domain.mypage.dto.request.UserInfoChangeRequest;
 import com.example.portfolist.global.file.FileUploadProvider;
 import com.example.portfolist.global.security.JwtTokenProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
+import javax.transaction.Transactional;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -336,6 +343,110 @@ public class MypageControllerTest extends ApiTest {
 
             // then
             resultActions.andExpect(status().is(200));
+        }
+
+    }
+
+    @Nested
+    @DisplayName("유저 정보 변경")
+    class ChangeUserInfo {
+
+        private UserInfoChangeRequest makeRequest(List<Integer> field, String introduce, String name) throws NoSuchFieldException, IllegalAccessException {
+            UserInfoChangeRequest request = new UserInfoChangeRequest();
+            inputField(request, "field", field);
+            inputField(request, "introduce", introduce);
+            inputField(request, "name", name);
+            return request;
+        }
+
+        @Test
+        @DisplayName("200")
+        void changeUserInfo_200() throws Exception {
+            // given
+            NormalUser normalUser = NormalUser.builder()
+                    .email("testtest@gmail.com")
+                    .password(passwordEncoder.encode("testPassword"))
+                    .build();
+            normalUser = normalUserRepository.save(normalUser);
+
+            User user = User.builder()
+                    .normalUser(normalUser)
+                    .name("가나다")
+                    .build();
+            user = userRepository.save(user);
+
+            FieldKind fieldKind = FieldKind.builder()
+                    .content("백엔드")
+                    .build();
+            fieldKind = fieldKindRepository.save(fieldKind);
+
+            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+            List<Integer> field = new ArrayList<>();
+            field.add(fieldKind.getPk());
+            UserInfoChangeRequest request = makeRequest(field, "바람이 불지 않으면 노를 저어라", "김땡땡");
+
+            // when
+            setToken(token);
+            ResultActions resultActions = requestMvc(patch("/user/info"), request);
+
+            // then
+            resultActions.andExpect(status().is(200));
+        }
+
+        @Test
+        @DisplayName("400")
+        void changeUserInfo_400() throws Exception {
+            // given
+            NormalUser normalUser = NormalUser.builder()
+                    .email("testtest@gmail.com")
+                    .password(passwordEncoder.encode("testPassword"))
+                    .build();
+            normalUser = normalUserRepository.save(normalUser);
+
+            User user = User.builder()
+                    .normalUser(normalUser)
+                    .name("가나다")
+                    .build();
+            user = userRepository.save(user);
+
+            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+            UserInfoChangeRequest request = makeRequest(null, null, "바람이 불지 않으면 노를 저어라 김땡땡");
+
+            // when
+            setToken(token);
+            ResultActions resultActions = requestMvc(patch("/user/info"), request);
+
+            // then
+            resultActions.andExpect(status().is(400));
+        }
+
+        @Test
+        @DisplayName("404")
+        void changeUserInfo_404() throws Exception {
+            // given
+            NormalUser normalUser = NormalUser.builder()
+                    .email("testtest@gmail.com")
+                    .password(passwordEncoder.encode("testPassword"))
+                    .build();
+            normalUser = normalUserRepository.save(normalUser);
+
+            User user = User.builder()
+                    .normalUser(normalUser)
+                    .name("가나다")
+                    .build();
+            user = userRepository.save(user);
+
+            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+            List<Integer> field = new ArrayList<>();
+            field.add(1);
+            UserInfoChangeRequest request = makeRequest(field, "바람이 불지 않으면 노를 저어라", "김땡땡");
+
+            // when
+            setToken(token);
+            ResultActions resultActions = requestMvc(patch("/user/info"), request);
+
+            // then
+            resultActions.andExpect(status().is(404));
         }
 
     }

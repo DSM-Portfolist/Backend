@@ -18,7 +18,7 @@ import java.util.List;
 public class FieldKind {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int pk;
 
     @Column(name = "content", nullable = false)

@@ -130,7 +130,6 @@ public class AuthService {
         return successPage;
     }
 
-    @Transactional
     public void join(NormalUserJoinRequest request) {
         authCheckFacade.checkAuthorizedEmail(request.getEmail());
 

@@ -88,6 +88,7 @@ public class ApiTest extends IntegrationTest{
         moreInfoRepository.deleteAll();
         boxImageRepository.deleteAll();
         boxTextRepository.deleteAll();
+        boxRepository.deleteAll();
         containerRepository.deleteAll();
         certificateRepository.deleteAll();
         touchingRepository.deleteAll();

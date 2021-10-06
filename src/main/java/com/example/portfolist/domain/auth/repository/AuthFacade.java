@@ -2,7 +2,6 @@ package com.example.portfolist.domain.auth.repository;
 
 import com.example.portfolist.domain.auth.entity.Field;
 import com.example.portfolist.domain.auth.entity.NormalUser;
-import com.example.portfolist.domain.auth.entity.QField;
 import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.auth.entity.redis.Certification;
 import com.example.portfolist.domain.auth.entity.redis.RefreshToken;
@@ -11,7 +10,6 @@ import com.example.portfolist.domain.auth.repository.repository.NormalUserReposi
 import com.example.portfolist.domain.auth.repository.repository.UserRepository;
 import com.example.portfolist.domain.auth.repository.repository.redis.CertificationRepository;
 import com.example.portfolist.domain.auth.repository.repository.redis.RefreshTokenRepository;
-import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
