@@ -5,9 +5,7 @@ import com.example.portfolist.domain.portfolio.entity.comment.Comment;
 import com.example.portfolist.domain.portfolio.entity.container.Box;
 import com.example.portfolist.domain.portfolio.entity.container.Container;
 import com.example.portfolist.domain.portfolio.entity.touching.Touching;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -15,7 +13,9 @@ import java.util.Date;
 import java.util.List;
 
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 @Entity
 public class Portfolio {
 

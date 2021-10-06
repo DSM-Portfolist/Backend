@@ -7,23 +7,25 @@ import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.mypage.dto.request.PasswordChangeRequest;
 import com.example.portfolist.domain.mypage.dto.request.PasswordCheckRequest;
 import com.example.portfolist.domain.mypage.dto.request.UserInfoChangeRequest;
+import com.example.portfolist.domain.mypage.entity.NoticeType;
+import com.example.portfolist.domain.mypage.entity.Notification;
+import com.example.portfolist.domain.portfolio.entity.portfolio.Portfolio;
 import com.example.portfolist.global.file.FileUploadProvider;
 import com.example.portfolist.global.security.JwtTokenProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
-import javax.transaction.Transactional;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -447,6 +449,57 @@ public class MypageControllerTest extends ApiTest {
 
             // then
             resultActions.andExpect(status().is(404));
+        }
+
+    }
+
+    @Nested
+    @DisplayName("회원 탈퇴")
+    class deleteUser {
+
+        @Test
+        @DisplayName("204")
+        void deleteUser_204() throws Exception {
+            // given
+            NormalUser normalUser = NormalUser.builder()
+                    .email("testtest@gmail.com")
+                    .password(passwordEncoder.encode("testPassword"))
+                    .build();
+            normalUser = normalUserRepository.save(normalUser);
+
+            User user = User.builder()
+                    .normalUser(normalUser)
+                    .name("가나다")
+                    .build();
+            user = userRepository.save(user);
+
+            Notification notification = Notification.builder()
+                    .toUser(user)
+                    .isRead(false)
+                    .type(NoticeType.COMMENT)
+                    .fromUser(user)
+                    .build();
+            notificationRepository.save(notification);
+
+            Portfolio portfolio = Portfolio.builder()
+                    .user(user)
+                    .title("제목제목")
+                    .introduce("나는 노를 젓는 김땡땡")
+                    .date(LocalDate.now())
+                    .isOpen(true)
+                    .build();
+            portfolioRepository.save(portfolio);
+
+            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+
+            // when
+            setToken(token);
+            ResultActions resultActions = requestMvc(delete("/user"));
+
+            // then
+            resultActions.andExpect(status().is(204));
+
+            Optional<User> userOptional = userRepository.findById(user.getPk());
         }
 
     }
