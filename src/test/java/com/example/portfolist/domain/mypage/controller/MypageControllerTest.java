@@ -285,4 +285,36 @@ public class MypageControllerTest extends ApiTest {
         }
     }
 
+    @Nested
+    @DisplayName("프로필 삭제")
+    class DeleteProfile {
+
+        @Test
+        @DisplayName("204")
+        void deleteProfile_204() throws Exception {
+            // given
+            NormalUser normalUser = NormalUser.builder()
+                    .email("testtest@gmail.com")
+                    .password(passwordEncoder.encode("testFakePassword"))
+                    .build();
+            normalUser = normalUserRepository.save(normalUser);
+
+            User user = User.builder()
+                    .normalUser(normalUser)
+                    .name("가나다")
+                    .build();
+            user = userRepository.save(user);
+
+            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+
+            // when
+            setToken(token);
+            ResultActions resultActions = requestMvc(delete("/user/profile"));
+
+            // then
+            resultActions.andExpect(status().is(204));
+        }
+
+    }
+
 }
