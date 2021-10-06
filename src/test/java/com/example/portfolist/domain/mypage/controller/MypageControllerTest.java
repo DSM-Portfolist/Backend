@@ -65,7 +65,7 @@ public class MypageControllerTest extends ApiTest {
                     .build();
             user = userRepository.save(user);
 
-            PasswordChangeRequest request = makeRequest("testPassword", "new");
+            PasswordChangeRequest request = makeRequest("testPassword", "newPassword");
             String token = jwtTokenProvider.generateAccessToken(user.getPk());
 
             // when
@@ -119,7 +119,7 @@ public class MypageControllerTest extends ApiTest {
                     .build();
             user = userRepository.save(user);
 
-            PasswordChangeRequest request = makeRequest("testPassword", "new");
+            PasswordChangeRequest request = makeRequest("testPassword", "newPassword");
             String token = jwtTokenProvider.generateAccessToken(user.getPk());
 
             // when
