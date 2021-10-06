@@ -37,8 +37,7 @@ public class EmailControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(get("/receive?token=token"));
 
             // then
-            resultActions.andExpect(status().is(302))
-                    .andDo(print());
+            resultActions.andExpect(status().is(302));
         }
 
         @Test
@@ -51,8 +50,7 @@ public class EmailControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(get("/receive?token=token"));
 
             // then
-            resultActions.andExpect(status().is(302))
-                    .andDo(print());
+            resultActions.andExpect(status().is(302));
         }
 
     }

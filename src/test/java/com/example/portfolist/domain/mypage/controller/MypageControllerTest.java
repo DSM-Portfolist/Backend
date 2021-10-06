@@ -67,8 +67,7 @@ public class MypageControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(patch("/user/password"), request);
 
             // then
-            resultActions.andExpect(status().is(200))
-                    .andDo(print());
+            resultActions.andExpect(status().is(200));
         }
 
         @Test
@@ -95,8 +94,7 @@ public class MypageControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(patch("/user/password"), request);
 
             // then
-            resultActions.andExpect(status().is(400))
-                    .andDo(print());
+            resultActions.andExpect(status().is(400));
         }
 
         @Test
@@ -123,8 +121,7 @@ public class MypageControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(patch("/user/password"), request);
 
             // then
-            resultActions.andExpect(status().is(401))
-                    .andDo(print());
+            resultActions.andExpect(status().is(401));
         }
 
     }
@@ -163,8 +160,7 @@ public class MypageControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(post("/user/password"), request);
 
             // then
-            resultActions.andExpect(status().is(200))
-                    .andDo(print());
+            resultActions.andExpect(status().is(200));
         }
 
         @Test
@@ -191,8 +187,7 @@ public class MypageControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(post("/user/password"), request);
 
             // then
-            resultActions.andExpect(status().is(400))
-                    .andDo(print());
+            resultActions.andExpect(status().is(400));
         }
 
         @Test
@@ -219,8 +214,7 @@ public class MypageControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(post("/user/password"), request);
 
             // then
-            resultActions.andExpect(status().is(401))
-                    .andDo(print());
+            resultActions.andExpect(status().is(401));
         }
 
     }
@@ -253,8 +247,7 @@ public class MypageControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(multipart("/user/profile").file(file));
 
             // then
-            resultActions.andExpect(status().is(200))
-                    .andDo(print());
+            resultActions.andExpect(status().is(200));
         }
 
         @Test
@@ -280,8 +273,7 @@ public class MypageControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(post("/user/profile"));
 
             // then
-            resultActions.andExpect(status().is(400))
-                    .andDo(print());
+            resultActions.andExpect(status().is(400));
         }
     }
 
