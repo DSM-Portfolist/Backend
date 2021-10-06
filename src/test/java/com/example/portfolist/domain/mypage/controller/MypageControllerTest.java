@@ -19,7 +19,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.nio.charset.StandardCharsets;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class MypageControllerTest extends ApiTest {
@@ -229,7 +228,7 @@ public class MypageControllerTest extends ApiTest {
             // given
             NormalUser normalUser = NormalUser.builder()
                     .email("testtest@gmail.com")
-                    .password(passwordEncoder.encode("testFakePassword"))
+                    .password(passwordEncoder.encode("testPassword"))
                     .build();
             normalUser = normalUserRepository.save(normalUser);
 
@@ -256,7 +255,7 @@ public class MypageControllerTest extends ApiTest {
             // given
             NormalUser normalUser = NormalUser.builder()
                     .email("testtest@gmail.com")
-                    .password(passwordEncoder.encode("testFakePassword"))
+                    .password(passwordEncoder.encode("testPassword"))
                     .build();
             normalUser = normalUserRepository.save(normalUser);
 
@@ -287,7 +286,7 @@ public class MypageControllerTest extends ApiTest {
             // given
             NormalUser normalUser = NormalUser.builder()
                     .email("testtest@gmail.com")
-                    .password(passwordEncoder.encode("testFakePassword"))
+                    .password(passwordEncoder.encode("testPassword"))
                     .build();
             normalUser = normalUserRepository.save(normalUser);
 
@@ -305,6 +304,38 @@ public class MypageControllerTest extends ApiTest {
 
             // then
             resultActions.andExpect(status().is(204));
+        }
+
+    }
+
+    @Nested
+    @DisplayName("유저 정보 얻기")
+    class GetUserInfo {
+
+        @Test
+        @DisplayName("200")
+        void getUserInfo_200() throws Exception {
+            // given
+            NormalUser normalUser = NormalUser.builder()
+                    .email("testtest@gmail.com")
+                    .password(passwordEncoder.encode("testPassword"))
+                    .build();
+            normalUser = normalUserRepository.save(normalUser);
+
+            User user = User.builder()
+                    .normalUser(normalUser)
+                    .name("가나다")
+                    .build();
+            user = userRepository.save(user);
+
+            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+
+            // when
+            setToken(token);
+            ResultActions resultActions = requestMvc(get("/user/info"));
+
+            // then
+            resultActions.andExpect(status().is(200));
         }
 
     }
