@@ -73,8 +73,7 @@ public class AuthControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(post("/login/normal"), request);
 
             // then
-            resultActions.andExpect(status().is(201))
-                    .andDo(print());
+            resultActions.andExpect(status().is(201));
         }
 
         @Test
@@ -87,8 +86,7 @@ public class AuthControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(post("/login/normal"), request);
 
             // then
-            resultActions.andExpect(status().is(400))
-                    .andDo(print());
+            resultActions.andExpect(status().is(400));
         }
 
         @Test
@@ -113,8 +111,7 @@ public class AuthControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(post("/login/normal"), request);
 
             // then
-            resultActions.andExpect(status().is(401))
-                    .andDo(print());
+            resultActions.andExpect(status().is(401));
         }
 
         @Test
@@ -127,8 +124,7 @@ public class AuthControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(post("/login/normal"), request);
 
             // then
-            resultActions.andExpect(status().is(404))
-                    .andDo(print());
+            resultActions.andExpect(status().is(404));
         }
 
     }
@@ -159,8 +155,7 @@ public class AuthControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(post("/login/github"), request);
 
             // then
-            resultActions.andExpect(status().is(201))
-                    .andDo(print());
+            resultActions.andExpect(status().is(201));
         }
 
         @Test
@@ -185,8 +180,7 @@ public class AuthControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(post("/login/github"), request);
 
             // then
-            resultActions.andExpect(status().is(201))
-                    .andDo(print());
+            resultActions.andExpect(status().is(201));
         }
 
         @Test
@@ -199,8 +193,7 @@ public class AuthControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(post("/login/github"), request);
 
             // then
-            resultActions.andExpect(status().is(400))
-                    .andDo(print());
+            resultActions.andExpect(status().is(400));
         }
 
         @Test
@@ -215,8 +208,7 @@ public class AuthControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(post("/login/github"), request);
 
             // then
-            resultActions.andExpect(status().is(401))
-                    .andDo(print());
+            resultActions.andExpect(status().is(401));
         }
 
     }
@@ -241,8 +233,7 @@ public class AuthControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(post("/email"), request);
 
             // then
-            resultActions.andExpect(status().is(200))
-                    .andDo(print());
+            resultActions.andExpect(status().is(200));
         }
 
         @Test
@@ -255,8 +246,7 @@ public class AuthControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(post("/email"), request);
 
             // then
-            resultActions.andExpect(status().is(400))
-                    .andDo(print());
+            resultActions.andExpect(status().is(400));
         }
 
         @Test
@@ -281,8 +271,7 @@ public class AuthControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(post("/email"), request);
 
             // then
-            resultActions.andExpect(status().is(409))
-                    .andDo(print());
+            resultActions.andExpect(status().is(409));
         }
 
     }
@@ -327,8 +316,7 @@ public class AuthControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(post("/join"), request);
 
             // then
-            resultActions.andExpect(status().is(201))
-                    .andDo(print());
+            resultActions.andExpect(status().is(201));
         }
 
         @Test
@@ -341,8 +329,7 @@ public class AuthControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(post("/join"), request);
 
             // then
-            resultActions.andExpect(status().is(400))
-                    .andDo(print());
+            resultActions.andExpect(status().is(400));
         }
 
         @Test
@@ -360,8 +347,7 @@ public class AuthControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(post("/join"), request);
 
             // then
-            resultActions.andExpect(status().is(401))
-                    .andDo(print());
+            resultActions.andExpect(status().is(401));
         }
 
         @Test
@@ -386,8 +372,7 @@ public class AuthControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(post("/join"), request);
 
             // then
-            resultActions.andExpect(status().is(404))
-                    .andDo(print());
+            resultActions.andExpect(status().is(404));
         }
 
     }
@@ -415,8 +400,7 @@ public class AuthControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(post("/token-refresh"), request);
 
             // then
-            resultActions.andExpect(status().is(201))
-                    .andDo(print());
+            resultActions.andExpect(status().is(201));
         }
 
         @Test
@@ -429,8 +413,7 @@ public class AuthControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(post("/token-refresh"), request);
 
             // then
-            resultActions.andExpect(status().is(400))
-                    .andDo(print());
+            resultActions.andExpect(status().is(400));
         }
 
         @Test
@@ -446,8 +429,7 @@ public class AuthControllerTest extends ApiTest {
             ResultActions resultActions = requestMvc(post("/token-refresh"), request);
 
             // then
-            resultActions.andExpect(status().is(401))
-                    .andDo(print());
+            resultActions.andExpect(status().is(401));
         }
 
     }
