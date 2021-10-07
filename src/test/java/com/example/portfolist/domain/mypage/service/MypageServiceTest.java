@@ -2,6 +2,7 @@ package com.example.portfolist.domain.mypage.service;
 
 import com.example.portfolist.ServiceTest;
 import com.example.portfolist.domain.auth.entity.NormalUser;
+import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.auth.exception.PasswordNotMatchedException;
 import com.example.portfolist.domain.auth.repository.AuthCheckFacade;
 import com.example.portfolist.domain.auth.repository.AuthFacade;
@@ -16,12 +17,15 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.nio.charset.StandardCharsets;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class MypageServiceTest extends ServiceTest {
 
@@ -134,6 +138,114 @@ public class MypageServiceTest extends ServiceTest {
 
             // when -> then
             Assertions.assertThrows(PasswordNotMatchedException.class, () -> mypageService.checkPassword(request, normalUser));
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Register Profile")
+    class registerProfile {
+
+        @Test
+        @DisplayName("None Profile Success")
+        void registerProfile_noneProfile_Success() {
+            // given
+            User user = User.builder()
+                    .name("가나다")
+                    .build();
+
+            NormalUser normalUser = NormalUser.builder()
+                    .email("testtest@gmail.com")
+                    .password(passwordEncoder.encode("testPassword"))
+                    .user(user)
+                    .build();
+
+            MockMultipartFile file =
+                    new MockMultipartFile("file", "hello.png", "png", "hello".getBytes(StandardCharsets.UTF_8));
+
+            given(fileUploadProvider.uploadFile(any(MultipartFile.class))).willReturn("url");
+
+            // when
+            mypageService.registerProfile(file, normalUser);
+
+            // then
+            verify(fileUploadProvider, never()).deleteFile(any());
+        }
+
+        @Test
+        @DisplayName("Exists Profile Success")
+        void registerProfile_existsProfile_Success() {
+            // given
+            User user = User.builder()
+                    .name("가나다")
+                    .url("url")
+                    .build();
+
+            NormalUser normalUser = NormalUser.builder()
+                    .email("testtest@gmail.com")
+                    .password(passwordEncoder.encode("testPassword"))
+                    .user(user)
+                    .build();
+
+            MockMultipartFile file =
+                    new MockMultipartFile("file", "hello.png", "png", "hello".getBytes(StandardCharsets.UTF_8));
+
+            given(fileUploadProvider.uploadFile(any(MultipartFile.class))).willReturn("url");
+
+            // when
+            mypageService.registerProfile(file, normalUser);
+
+            // then
+            verify(fileUploadProvider, times(1)).deleteFile(any());
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Delete Profile")
+    class deleteProfile {
+
+        @Test
+        @DisplayName("None Profile Success")
+        void deleteProfile_noneProfile_Success() {
+            // given
+            User user = User.builder()
+                    .name("가나다")
+                    .build();
+
+            NormalUser normalUser = NormalUser.builder()
+                    .email("testtest@gmail.com")
+                    .password(passwordEncoder.encode("testPassword"))
+                    .user(user)
+                    .build();
+
+            // when
+            mypageService.deleteProfile(normalUser);
+
+            // then
+            verify(fileUploadProvider, never()).deleteFile(any());
+        }
+
+        @Test
+        @DisplayName("Exists Profile Success")
+        void deleteProfile_existsProfile_Success() {
+            // given
+            User user = User.builder()
+                    .name("가나다")
+                    .url("url")
+                    .build();
+
+            NormalUser normalUser = NormalUser.builder()
+                    .email("testtest@gmail.com")
+                    .password(passwordEncoder.encode("testPassword"))
+                    .user(user)
+                    .build();
+
+            // when
+            mypageService.deleteProfile(normalUser);
+
+            // then
+            verify(fileUploadProvider, times(1)).deleteFile("url");
         }
 
     }
