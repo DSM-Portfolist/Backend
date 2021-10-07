@@ -64,7 +64,6 @@ public class MypageService {
         user.updateProfile(fileUrl);
     }
 
-    @Async
     public void deleteProfile(NormalUser normalUser) {
         User user = normalUser.getUser();
         String url = user.getUrl();
