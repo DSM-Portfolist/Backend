@@ -228,13 +228,8 @@ public class MypageServiceTest extends ServiceTest {
         @DisplayName("Success")
         void getUserInfo_Success() {
             // given
-            NormalUser normalUser = NormalUser.builder()
-                    .email("testtest@gmail.com")
-                    .password(passwordEncoder.encode("testPassword"))
-                    .build();
-
             User user = User.builder()
-                    .normalUser(normalUser)
+                    .githubId("githubUser")
                     .name("가나다")
                     .build();
 
@@ -266,13 +261,8 @@ public class MypageServiceTest extends ServiceTest {
         @DisplayName("Success")
         void changeUserInfoSuccess() throws NoSuchFieldException, IllegalAccessException {
             // given
-            NormalUser normalUser = NormalUser.builder()
-                    .email("testtest@gmail.com")
-                    .password(passwordEncoder.encode("testPassword"))
-                    .build();
-
             User user = User.builder()
-                    .normalUser(normalUser)
+                    .githubId("githubUser")
                     .name("가나다")
                     .build();
 
@@ -298,6 +288,44 @@ public class MypageServiceTest extends ServiceTest {
             // then
             verify(authFacade, times(1)).delete(any(List.class));
             verify(authFacade, times(1)).save(any(List.class));
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Delete User")
+    class DeleteUser {
+
+        @Test
+        @DisplayName("Success")
+        void deleteUser_Success() {
+            // given
+            User user = User.builder()
+                    .githubId("githubUser")
+                    .name("가나다")
+                    .build();
+
+            // when
+            mypageService.deleteUser(user);
+
+            // then
+            verify(portfolioFacade, times(1)).deleteMoreInfoByUser(any());
+            verify(portfolioFacade, times(1)).deleteBoxImageByUser(any());
+            verify(portfolioFacade, times(1)).deleteBoxTextByUser(any());
+            verify(portfolioFacade, times(1)).deleteBoxByUser(any());
+            verify(portfolioFacade, times(1)).deleteContainerByUser(any());
+            verify(portfolioFacade, times(1)).deleteCertificateByUser(any());
+            verify(portfolioFacade, times(1)).deleteTouchingByUser(any());
+            verify(portfolioFacade, times(1)).deletePortfolioFieldByUser(any());
+            verify(portfolioFacade, times(1)).deleteReCommentByUser(any());
+            verify(portfolioFacade, times(1)).deleteCommentByUser(any());
+            verify(portfolioFacade, times(1)).deletePortfolioByUser(any());
+
+            verify(mypageFacade, times(1)).deleteNotificationByUser(any());
+
+            verify(authFacade, times(1)).deleteFieldByUser(any());
+            verify(authFacade, times(1)).deleteUser(any());
+            verify(authFacade, times(1)).deleteNormalByUser(any());
         }
 
     }
