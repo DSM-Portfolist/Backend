@@ -131,7 +131,7 @@ public class MypageService {
     }
 
     public TouchingPortfolioGetRes.Response getTouchingPortfolio(int page, int size, User user) {
-        return TouchingPortfolioGetRes.Response.from(portfolioFacade.findTouchingAll(page, size));
+        return TouchingPortfolioGetRes.Response.from(portfolioFacade.findTouchingAll(page, size, user));
     }
 
     public List<UserPortfolioGetResponse> getUserPortfolio(User user) {

@@ -11,10 +11,17 @@ import com.example.portfolist.domain.auth.repository.AuthFacade;
 import com.example.portfolist.domain.mypage.dto.request.PasswordChangeRequest;
 import com.example.portfolist.domain.mypage.dto.request.PasswordCheckRequest;
 import com.example.portfolist.domain.mypage.dto.request.UserInfoChangeRequest;
+import com.example.portfolist.domain.mypage.dto.response.TouchingPortfolioGetRes;
 import com.example.portfolist.domain.mypage.dto.response.UserInfoGetResponse;
 import com.example.portfolist.domain.mypage.repository.MypageFacade;
+import com.example.portfolist.domain.portfolio.entity.portfolio.Portfolio;
+import com.example.portfolist.domain.portfolio.entity.touching.Touching;
+import com.example.portfolist.domain.portfolio.entity.touching.TouchingId;
 import com.example.portfolist.domain.portfolio.repository.PortfolioFacade;
 import com.example.portfolist.global.file.FileUploadProvider;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -24,11 +31,15 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -326,6 +337,49 @@ public class MypageServiceTest extends ServiceTest {
             verify(authFacade, times(1)).deleteFieldByUser(any());
             verify(authFacade, times(1)).deleteUser(any());
             verify(authFacade, times(1)).deleteNormalByUser(any());
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Get Touching Portfolio")
+    class getTouchingPortfolio {
+
+        @Test
+        @DisplayName("Success")
+        void getTouchingPortfolio_Success() throws JsonProcessingException {
+            // given
+            User user = User.builder()
+                    .pk(1L)
+                    .githubId("githubUser")
+                    .name("가나다")
+                    .build();
+
+            Portfolio portfolio = Portfolio.builder()
+                    .user(user)
+                    .title("제목제목")
+                    .introduce("나는 노를 젓는 김땡땡")
+                    .date(LocalDate.now())
+                    .isOpen(true)
+                    .build();
+
+            Touching touching = Touching.builder()
+                    .id(new TouchingId(user.getPk(), portfolio.getPk()))
+                    .user(user)
+                    .portfolio(portfolio)
+                    .build();
+
+            List<Touching> touchingList = new ArrayList<>();
+            touchingList.add(touching);
+            Page<Touching> touchings = new PageImpl<Touching>(touchingList, PageRequest.of(0, 1), 1);
+
+            given(portfolioFacade.findTouchingAll(eq(0), eq(1), any())).willReturn(touchings);
+
+            // when
+            mypageService.getTouchingPortfolio(0, 1, user);
+
+            // then
+            verify(portfolioFacade, times(1)).findTouchingAll(eq(0), eq(1), any());
         }
 
     }

@@ -34,8 +34,8 @@ public class PortfolioFacade {
     private final PortfolioFieldRepository portfolioFieldRepository;
     private final TouchingRepository touchingRepository;
 
-    public Page<Touching> findTouchingAll(int page, int size) {
-        return touchingRepository.findAll(PageRequest.of(page, size));
+    public Page<Touching> findTouchingAll(int page, int size, User user) {
+        return touchingRepository.findByUser(PageRequest.of(page, size), user);
     }
 
     public void deleteMoreInfoByUser(User user) {

@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TouchingRepository extends JpaRepository<Touching, TouchingId> {
 
-    Page<Touching> findAll(Pageable pageable);
+    Page<Touching> findByUser(Pageable pageable, User user);
     void deleteByPortfolioUser(User user);
     void deleteByUser(User user);
 
