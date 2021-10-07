@@ -21,17 +21,17 @@ public class Notification {
     private long pk;
 
     @ManyToOne
-    @JoinColumn(name = "toUser_pk")
+    @JoinColumn(name = "toUser_pk", nullable = false)
     private User toUser;
 
-    @Column(name = "is_read")
+    @Column(name = "is_read", nullable = false)
     private boolean isRead;
 
-    @Column(name = "type")
+    @Column(name = "type", nullable = false)
     private NoticeType type;
 
     @ManyToOne
-    @JoinColumn(name = "fromUser_pk")
+    @JoinColumn(name = "fromUser_pk", nullable = false)
     private User fromUser;
 
 }

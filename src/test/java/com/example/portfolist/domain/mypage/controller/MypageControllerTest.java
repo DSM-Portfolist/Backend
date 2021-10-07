@@ -618,4 +618,44 @@ public class MypageControllerTest extends ApiTest {
 
     }
 
+    @Nested
+    @DisplayName("알림 가져오기")
+    class getNotification {
+
+        @Test
+        @DisplayName("200")
+        void getNotification_200() throws Exception {
+            // given
+            NormalUser normalUser = NormalUser.builder()
+                    .email("testtest@gmail.com")
+                    .password(passwordEncoder.encode("testPassword"))
+                    .build();
+            normalUser = normalUserRepository.save(normalUser);
+
+            User user = User.builder()
+                    .normalUser(normalUser)
+                    .name("가나다")
+                    .build();
+            user = userRepository.save(user);
+
+            Notification notification = Notification.builder()
+                    .toUser(user)
+                    .isRead(false)
+                    .type(NoticeType.COMMENT)
+                    .fromUser(user)
+                    .build();
+            notificationRepository.save(notification);
+
+            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+
+            // when
+            setToken(token);
+            ResultActions resultActions = requestMvc(get("/user/notification"));
+
+            // then
+            resultActions.andExpect(status().is(200));
+        }
+
+    }
+
 }

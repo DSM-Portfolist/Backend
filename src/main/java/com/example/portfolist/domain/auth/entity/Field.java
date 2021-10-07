@@ -20,11 +20,11 @@ public class Field {
     private Long pk;
 
     @ManyToOne
-    @JoinColumn(name = "user_pk")
+    @JoinColumn(name = "user_pk", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "fieldKind_pk")
+    @JoinColumn(name = "fieldKind_pk", nullable = false)
     private FieldKind fieldKind;
 
 }
