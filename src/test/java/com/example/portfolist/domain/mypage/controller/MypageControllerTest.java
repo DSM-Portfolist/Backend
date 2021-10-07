@@ -577,4 +577,45 @@ public class MypageControllerTest extends ApiTest {
 
     }
 
+    @Nested
+    @DisplayName("나의 포트폴리오 가져오기")
+    class getMyPortfolio {
+
+        @Test
+        @DisplayName("200")
+        void getMyPortfolio_200() throws Exception {
+            // given
+            NormalUser normalUser = NormalUser.builder()
+                    .email("testtest@gmail.com")
+                    .password(passwordEncoder.encode("testPassword"))
+                    .build();
+            normalUser = normalUserRepository.save(normalUser);
+
+            User user = User.builder()
+                    .normalUser(normalUser)
+                    .name("가나다")
+                    .build();
+            user = userRepository.save(user);
+
+            Portfolio portfolio = Portfolio.builder()
+                    .user(user)
+                    .title("제목제목")
+                    .introduce("나는 노를 젓는 김땡땡")
+                    .date(LocalDate.now())
+                    .isOpen(true)
+                    .build();
+            portfolioRepository.save(portfolio);
+
+            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+
+            // when
+            setToken(token);
+            ResultActions resultActions = requestMvc(get("/user/portfolio"));
+
+            // then
+            resultActions.andExpect(status().is(200));
+        }
+
+    }
+
 }
