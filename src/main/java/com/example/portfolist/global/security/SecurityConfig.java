@@ -28,6 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .cors().disable()
                 .formLogin().disable()
                 .authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/field").permitAll()
                 .antMatchers(HttpMethod.POST, "/login/*", "/email", "/join", "/token-refresh").permitAll()
                 .antMatchers("/receive").permitAll()
                 .anyRequest().hasAuthority("USER")
