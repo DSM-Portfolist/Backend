@@ -19,7 +19,6 @@ import com.example.portfolist.domain.mypage.repository.MypageFacade;
 import com.example.portfolist.domain.portfolio.repository.PortfolioFacade;
 import com.example.portfolist.global.file.FileUploadProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

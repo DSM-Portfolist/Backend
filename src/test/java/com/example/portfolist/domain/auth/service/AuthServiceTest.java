@@ -240,7 +240,7 @@ public class AuthServiceTest extends ServiceTest {
     @DisplayName("Certify Email")
     class CertifyEmail {
 
-        @ParameterizedTest(name = "{argumentsWithNames}")
+        @ParameterizedTest(name = "Success {argumentsWithNames}")
         @ValueSource(strings = { "token" })
         @NullSource
         void certifyEmail(String token) throws NoSuchFieldException, IllegalAccessException {

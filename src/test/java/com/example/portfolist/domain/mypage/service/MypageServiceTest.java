@@ -1,6 +1,8 @@
 package com.example.portfolist.domain.mypage.service;
 
 import com.example.portfolist.ServiceTest;
+import com.example.portfolist.domain.auth.entity.Field;
+import com.example.portfolist.domain.auth.entity.FieldKind;
 import com.example.portfolist.domain.auth.entity.NormalUser;
 import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.auth.exception.PasswordNotMatchedException;
@@ -8,6 +10,8 @@ import com.example.portfolist.domain.auth.repository.AuthCheckFacade;
 import com.example.portfolist.domain.auth.repository.AuthFacade;
 import com.example.portfolist.domain.mypage.dto.request.PasswordChangeRequest;
 import com.example.portfolist.domain.mypage.dto.request.PasswordCheckRequest;
+import com.example.portfolist.domain.mypage.dto.request.UserInfoChangeRequest;
+import com.example.portfolist.domain.mypage.dto.response.UserInfoGetResponse;
 import com.example.portfolist.domain.mypage.repository.MypageFacade;
 import com.example.portfolist.domain.portfolio.repository.PortfolioFacade;
 import com.example.portfolist.global.file.FileUploadProvider;
@@ -15,6 +19,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.mock.web.MockMultipartFile;
@@ -22,6 +29,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -144,14 +153,16 @@ public class MypageServiceTest extends ServiceTest {
 
     @Nested
     @DisplayName("Register Profile")
-    class registerProfile {
+    class RegisterProfile {
 
-        @Test
-        @DisplayName("None Profile Success")
-        void registerProfile_noneProfile_Success() {
+        @ParameterizedTest(name = "Success {argumentsWithNames}")
+        @ValueSource(strings = { "url" })
+        @NullSource
+        void registerProfile_Success(String url) {
             // given
             User user = User.builder()
                     .name("가나다")
+                    .url(url)
                     .build();
 
             NormalUser normalUser = NormalUser.builder()
@@ -169,48 +180,26 @@ public class MypageServiceTest extends ServiceTest {
             mypageService.registerProfile(file, normalUser);
 
             // then
-            verify(fileUploadProvider, never()).deleteFile(any());
-        }
-
-        @Test
-        @DisplayName("Exists Profile Success")
-        void registerProfile_existsProfile_Success() {
-            // given
-            User user = User.builder()
-                    .name("가나다")
-                    .url("url")
-                    .build();
-
-            NormalUser normalUser = NormalUser.builder()
-                    .email("testtest@gmail.com")
-                    .password(passwordEncoder.encode("testPassword"))
-                    .user(user)
-                    .build();
-
-            MockMultipartFile file =
-                    new MockMultipartFile("file", "hello.png", "png", "hello".getBytes(StandardCharsets.UTF_8));
-
-            given(fileUploadProvider.uploadFile(any(MultipartFile.class))).willReturn("url");
-
-            // when
-            mypageService.registerProfile(file, normalUser);
-
-            // then
-            verify(fileUploadProvider, times(1)).deleteFile(any());
+            if(url == null)
+                verify(fileUploadProvider, never()).deleteFile(any());
+            else
+                verify(fileUploadProvider, times(1)).deleteFile("url");
         }
 
     }
 
     @Nested
     @DisplayName("Delete Profile")
-    class deleteProfile {
+    class DeleteProfile {
 
-        @Test
-        @DisplayName("None Profile Success")
-        void deleteProfile_noneProfile_Success() {
+        @ParameterizedTest(name = "Success {argumentsWithNames}")
+        @ValueSource(strings = { "url" })
+        @NullSource
+        void deleteProfile_Success(String url) {
             // given
             User user = User.builder()
                     .name("가나다")
+                    .url(url)
                     .build();
 
             NormalUser normalUser = NormalUser.builder()
@@ -223,29 +212,92 @@ public class MypageServiceTest extends ServiceTest {
             mypageService.deleteProfile(normalUser);
 
             // then
-            verify(fileUploadProvider, never()).deleteFile(any());
+            if(url == null)
+                verify(fileUploadProvider, never()).deleteFile(any());
+            else
+                verify(fileUploadProvider, times(1)).deleteFile("url");
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Get User Info")
+    class GetUserInfo {
+
+        @Test
+        @DisplayName("Success")
+        void getUserInfo_Success() {
+            // given
+            NormalUser normalUser = NormalUser.builder()
+                    .email("testtest@gmail.com")
+                    .password(passwordEncoder.encode("testPassword"))
+                    .build();
+
+            User user = User.builder()
+                    .normalUser(normalUser)
+                    .name("가나다")
+                    .build();
+
+            // when
+            UserInfoGetResponse response = mypageService.getUserInfo(user);
+
+            // then
+            Assertions.assertEquals(response.getName(), "가나다");
+            Assertions.assertNull(response.getField());
+            Assertions.assertNull(response.getIntroduce());
+
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Change User Info")
+    class ChangeUserInfo {
+
+        private UserInfoChangeRequest makeRequest(List<Integer> field, String introduce, String name) throws NoSuchFieldException, IllegalAccessException {
+            UserInfoChangeRequest request = new UserInfoChangeRequest();
+            inputField(request, "field", field);
+            inputField(request, "introduce", introduce);
+            inputField(request, "name", name);
+            return request;
         }
 
         @Test
-        @DisplayName("Exists Profile Success")
-        void deleteProfile_existsProfile_Success() {
+        @DisplayName("Success")
+        void changeUserInfoSuccess() throws NoSuchFieldException, IllegalAccessException {
             // given
-            User user = User.builder()
-                    .name("가나다")
-                    .url("url")
-                    .build();
-
             NormalUser normalUser = NormalUser.builder()
                     .email("testtest@gmail.com")
                     .password(passwordEncoder.encode("testPassword"))
-                    .user(user)
                     .build();
 
+            User user = User.builder()
+                    .normalUser(normalUser)
+                    .name("가나다")
+                    .build();
+
+            FieldKind fieldKind = FieldKind.builder()
+                    .pk(1)
+                    .content("백엔드")
+                    .build();
+
+            List<Field> fieldList = new ArrayList<>();
+            fieldList.add(
+                    new com.example.portfolist.domain.auth.entity.Field(1L, user, fieldKind)
+            );
+
+            List<Integer> field = new ArrayList<>();
+            field.add(2);
+            UserInfoChangeRequest request = makeRequest(field, "바람이 불지 않으면 노를 저어라", "김땡땡");
+
+            given(authFacade.findFieldByUser(any())).willReturn(fieldList);
+
             // when
-            mypageService.deleteProfile(normalUser);
+            mypageService.changeUserInfo(request, user);
 
             // then
-            verify(fileUploadProvider, times(1)).deleteFile("url");
+            verify(authFacade, times(1)).delete(any(List.class));
+            verify(authFacade, times(1)).save(any(List.class));
         }
 
     }
