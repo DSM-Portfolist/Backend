@@ -63,8 +63,8 @@ public class MypageController {
     }
 
     @GetMapping("/touching")
-    public TouchingPortfolioGetRes.Response getTouchingPortfolio(@PathVariable(value = "page") int page,
-                                                                 @PathVariable(value = "size") int size) {
+    public TouchingPortfolioGetRes.Response getTouchingPortfolio(@RequestParam(value = "page") int page,
+                                                                 @RequestParam(value = "size") int size) {
         return mypageService.getTouchingPortfolio(page, size, authenticationFacade.getUser());
     }
 

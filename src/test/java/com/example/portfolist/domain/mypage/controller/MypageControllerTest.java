@@ -10,6 +10,8 @@ import com.example.portfolist.domain.mypage.dto.request.UserInfoChangeRequest;
 import com.example.portfolist.domain.mypage.entity.NoticeType;
 import com.example.portfolist.domain.mypage.entity.Notification;
 import com.example.portfolist.domain.portfolio.entity.portfolio.Portfolio;
+import com.example.portfolist.domain.portfolio.entity.touching.Touching;
+import com.example.portfolist.domain.portfolio.entity.touching.TouchingId;
 import com.example.portfolist.global.file.FileUploadProvider;
 import com.example.portfolist.global.security.JwtTokenProvider;
 import org.junit.jupiter.api.DisplayName;
@@ -25,7 +27,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -498,8 +499,80 @@ public class MypageControllerTest extends ApiTest {
 
             // then
             resultActions.andExpect(status().is(204));
+        }
 
-            Optional<User> userOptional = userRepository.findById(user.getPk());
+    }
+
+    @Nested
+    @DisplayName("터칭한 포트폴리오 가져오기")
+    class getTouchingPortfolio {
+
+        @Test
+        @DisplayName("200")
+        void getTouchingPortfolio_200() throws Exception {
+            // given
+            NormalUser normalUser = NormalUser.builder()
+                    .email("testtest@gmail.com")
+                    .password(passwordEncoder.encode("testPassword"))
+                    .build();
+            normalUser = normalUserRepository.save(normalUser);
+
+            User user = User.builder()
+                    .normalUser(normalUser)
+                    .name("가나다")
+                    .build();
+            user = userRepository.save(user);
+
+            Portfolio portfolio = Portfolio.builder()
+                    .user(user)
+                    .title("제목제목")
+                    .introduce("나는 노를 젓는 김땡땡")
+                    .date(LocalDate.now())
+                    .isOpen(true)
+                    .build();
+            portfolio = portfolioRepository.save(portfolio);
+
+            Touching touching = Touching.builder()
+                    .id(new TouchingId(user.getPk(), portfolio.getPk()))
+                    .user(user)
+                    .portfolio(portfolio)
+                    .build();
+            touchingRepository.save(touching);
+
+            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+
+            // when
+            setToken(token);
+            ResultActions resultActions = requestMvc(get("/user/touching?size=1&page=0"));
+
+            // then
+            resultActions.andExpect(status().is(200));
+        }
+
+        @Test
+        @DisplayName("400")
+        void getTouchingPortfolio_400() throws Exception {
+            // given
+            NormalUser normalUser = NormalUser.builder()
+                    .email("testtest@gmail.com")
+                    .password(passwordEncoder.encode("testPassword"))
+                    .build();
+            normalUser = normalUserRepository.save(normalUser);
+
+            User user = User.builder()
+                    .normalUser(normalUser)
+                    .name("가나다")
+                    .build();
+            user = userRepository.save(user);
+
+            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+
+            // when
+            setToken(token);
+            ResultActions resultActions = requestMvc(get("/user/touching"));
+
+            // then
+            resultActions.andExpect(status().is(400));
         }
 
     }
