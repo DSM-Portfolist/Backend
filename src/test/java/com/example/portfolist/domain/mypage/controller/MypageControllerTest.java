@@ -249,7 +249,8 @@ public class MypageControllerTest extends ApiTest {
             user = userRepository.save(user);
 
             String token = jwtTokenProvider.generateAccessToken(user.getPk());
-            MockMultipartFile file = new MockMultipartFile("file", "hello.png", "png", "hello".getBytes(StandardCharsets.UTF_8));
+            MockMultipartFile file =
+                    new MockMultipartFile("file", "hello.png", "png", "hello".getBytes(StandardCharsets.UTF_8));
 
             // when
             setToken(token);
@@ -326,14 +327,8 @@ public class MypageControllerTest extends ApiTest {
         @DisplayName("200")
         void getUserInfo_200() throws Exception {
             // given
-            NormalUser normalUser = NormalUser.builder()
-                    .email("testtest@gmail.com")
-                    .password(passwordEncoder.encode("testPassword"))
-                    .build();
-            normalUser = normalUserRepository.save(normalUser);
-
             User user = User.builder()
-                    .normalUser(normalUser)
+                    .githubId("githubUser")
                     .name("가나다")
                     .build();
             user = userRepository.save(user);
@@ -366,14 +361,8 @@ public class MypageControllerTest extends ApiTest {
         @DisplayName("200")
         void changeUserInfo_200() throws Exception {
             // given
-            NormalUser normalUser = NormalUser.builder()
-                    .email("testtest@gmail.com")
-                    .password(passwordEncoder.encode("testPassword"))
-                    .build();
-            normalUser = normalUserRepository.save(normalUser);
-
             User user = User.builder()
-                    .normalUser(normalUser)
+                    .githubId("githubUser")
                     .name("가나다")
                     .build();
             user = userRepository.save(user);
@@ -400,14 +389,8 @@ public class MypageControllerTest extends ApiTest {
         @DisplayName("400")
         void changeUserInfo_400() throws Exception {
             // given
-            NormalUser normalUser = NormalUser.builder()
-                    .email("testtest@gmail.com")
-                    .password(passwordEncoder.encode("testPassword"))
-                    .build();
-            normalUser = normalUserRepository.save(normalUser);
-
             User user = User.builder()
-                    .normalUser(normalUser)
+                    .githubId("githubUser")
                     .name("가나다")
                     .build();
             user = userRepository.save(user);
@@ -427,14 +410,8 @@ public class MypageControllerTest extends ApiTest {
         @DisplayName("404")
         void changeUserInfo_404() throws Exception {
             // given
-            NormalUser normalUser = NormalUser.builder()
-                    .email("testtest@gmail.com")
-                    .password(passwordEncoder.encode("testPassword"))
-                    .build();
-            normalUser = normalUserRepository.save(normalUser);
-
             User user = User.builder()
-                    .normalUser(normalUser)
+                    .githubId("githubUser")
                     .name("가나다")
                     .build();
             user = userRepository.save(user);
@@ -462,14 +439,8 @@ public class MypageControllerTest extends ApiTest {
         @DisplayName("204")
         void deleteUser_204() throws Exception {
             // given
-            NormalUser normalUser = NormalUser.builder()
-                    .email("testtest@gmail.com")
-                    .password(passwordEncoder.encode("testPassword"))
-                    .build();
-            normalUser = normalUserRepository.save(normalUser);
-
             User user = User.builder()
-                    .normalUser(normalUser)
+                    .githubId("githubUser")
                     .name("가나다")
                     .build();
             user = userRepository.save(user);
@@ -511,14 +482,8 @@ public class MypageControllerTest extends ApiTest {
         @DisplayName("200")
         void getTouchingPortfolio_200() throws Exception {
             // given
-            NormalUser normalUser = NormalUser.builder()
-                    .email("testtest@gmail.com")
-                    .password(passwordEncoder.encode("testPassword"))
-                    .build();
-            normalUser = normalUserRepository.save(normalUser);
-
             User user = User.builder()
-                    .normalUser(normalUser)
+                    .githubId("githubUser")
                     .name("가나다")
                     .build();
             user = userRepository.save(user);
@@ -553,14 +518,8 @@ public class MypageControllerTest extends ApiTest {
         @DisplayName("400")
         void getTouchingPortfolio_400() throws Exception {
             // given
-            NormalUser normalUser = NormalUser.builder()
-                    .email("testtest@gmail.com")
-                    .password(passwordEncoder.encode("testPassword"))
-                    .build();
-            normalUser = normalUserRepository.save(normalUser);
-
             User user = User.builder()
-                    .normalUser(normalUser)
+                    .githubId("githubUser")
                     .name("가나다")
                     .build();
             user = userRepository.save(user);
@@ -585,14 +544,8 @@ public class MypageControllerTest extends ApiTest {
         @DisplayName("200")
         void getMyPortfolio_200() throws Exception {
             // given
-            NormalUser normalUser = NormalUser.builder()
-                    .email("testtest@gmail.com")
-                    .password(passwordEncoder.encode("testPassword"))
-                    .build();
-            normalUser = normalUserRepository.save(normalUser);
-
             User user = User.builder()
-                    .normalUser(normalUser)
+                    .githubId("githubUser")
                     .name("가나다")
                     .build();
             user = userRepository.save(user);
@@ -626,14 +579,8 @@ public class MypageControllerTest extends ApiTest {
         @DisplayName("200")
         void getNotification_200() throws Exception {
             // given
-            NormalUser normalUser = NormalUser.builder()
-                    .email("testtest@gmail.com")
-                    .password(passwordEncoder.encode("testPassword"))
-                    .build();
-            normalUser = normalUserRepository.save(normalUser);
-
             User user = User.builder()
-                    .normalUser(normalUser)
+                    .githubId("githubUser")
                     .name("가나다")
                     .build();
             user = userRepository.save(user);

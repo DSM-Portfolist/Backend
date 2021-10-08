@@ -19,7 +19,6 @@ import com.example.portfolist.domain.mypage.repository.MypageFacade;
 import com.example.portfolist.domain.portfolio.repository.PortfolioFacade;
 import com.example.portfolist.global.file.FileUploadProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -64,7 +63,6 @@ public class MypageService {
         user.updateProfile(fileUrl);
     }
 
-    @Async
     public void deleteProfile(NormalUser normalUser) {
         User user = normalUser.getUser();
         String url = user.getUrl();
@@ -133,7 +131,7 @@ public class MypageService {
     }
 
     public TouchingPortfolioGetRes.Response getTouchingPortfolio(int page, int size, User user) {
-        return TouchingPortfolioGetRes.Response.from(portfolioFacade.findTouchingAll(page, size));
+        return TouchingPortfolioGetRes.Response.from(portfolioFacade.findTouchingAll(page, size, user));
     }
 
     public List<UserPortfolioGetResponse> getUserPortfolio(User user) {
@@ -145,7 +143,7 @@ public class MypageService {
     public List<NotificationGetResponse> getNotification(User user) {
         mypageFacade.deleteAlreadyReadNotification(user);
 
-        return mypageFacade.findByUser(user).stream()
+        return mypageFacade.findNotificationByUser(user).stream()
                 .map(NotificationGetResponse::from)
                 .collect(Collectors.toList());
     }
