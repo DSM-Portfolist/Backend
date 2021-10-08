@@ -21,8 +21,8 @@ import com.example.portfolist.domain.portfolio.entity.portfolio.Portfolio;
 import com.example.portfolist.domain.portfolio.entity.touching.Touching;
 import com.example.portfolist.domain.portfolio.entity.touching.TouchingId;
 import com.example.portfolist.domain.portfolio.repository.PortfolioFacade;
+import com.example.portfolist.global.error.exception.WrongFileException;
 import com.example.portfolist.global.file.FileUploadProvider;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -184,7 +184,7 @@ public class MypageServiceTest extends ServiceTest {
                     .build();
 
             MockMultipartFile file =
-                    new MockMultipartFile("file", "hello.png", "png", "hello".getBytes(StandardCharsets.UTF_8));
+                    new MockMultipartFile("file", "hello.png", "image/png", "hello".getBytes(StandardCharsets.UTF_8));
 
             given(fileUploadProvider.uploadFile(any(MultipartFile.class))).willReturn("url");
 
@@ -196,6 +196,29 @@ public class MypageServiceTest extends ServiceTest {
                 verify(fileUploadProvider, never()).deleteFile(any());
             else
                 verify(fileUploadProvider, times(1)).deleteFile("url");
+        }
+
+        @Test
+        @DisplayName("WrongFileException")
+        void registerProfile_WrongFileException() {
+            // given
+            User user = User.builder()
+                    .name("가나다")
+                    .build();
+
+            NormalUser normalUser = NormalUser.builder()
+                    .email("testtest@gmail.com")
+                    .password(passwordEncoder.encode("testPassword"))
+                    .user(user)
+                    .build();
+
+            MockMultipartFile file =
+                    new MockMultipartFile("file", "hello.html", "text/html", "hello".getBytes(StandardCharsets.UTF_8));
+
+            given(fileUploadProvider.uploadFile(any(MultipartFile.class))).willReturn("url");
+
+            // when
+            Assertions.assertThrows(WrongFileException.class, () -> mypageService.registerProfile(file, normalUser));
         }
 
     }
@@ -302,6 +325,60 @@ public class MypageServiceTest extends ServiceTest {
             verify(authFacade, times(1)).save(any(List.class));
         }
 
+        @Test
+        @DisplayName("None Change Success")
+        void changeUserInfo_noneChange_Success() throws NoSuchFieldException, IllegalAccessException {
+            // given
+            User user = User.builder()
+                    .githubId("githubUser")
+                    .name("가나다")
+                    .build();
+
+            List<Integer> field = new ArrayList<>();
+            UserInfoChangeRequest request = makeRequest(field, "바람이 불지 않으면 노를 저어라", "김땡땡");
+
+            // when
+            mypageService.changeUserInfo(request, user);
+
+            // then
+            verify(authFacade, never()).delete(any(List.class));
+            verify(authFacade, never()).save(any(List.class));
+        }
+
+        @Test
+        @DisplayName("Same Field Success")
+        void changeUserInfo_sameField_Success() throws NoSuchFieldException, IllegalAccessException {
+            // given
+            User user = User.builder()
+                    .githubId("githubUser")
+                    .name("가나다")
+                    .build();
+
+            FieldKind fieldKind = FieldKind.builder()
+                    .pk(1)
+                    .content("백엔드")
+                    .build();
+
+            List<Field> fieldList = new ArrayList<>();
+            fieldList.add(
+                    new com.example.portfolist.domain.auth.entity.Field(1L, user, fieldKind)
+            );
+
+            List<Integer> field = new ArrayList<>();
+            field.add(1);
+            UserInfoChangeRequest request = makeRequest(field, "바람이 불지 않으면 노를 저어라", "김땡땡");
+
+            given(authFacade.findFieldByUser(any())).willReturn(fieldList);
+
+            // when
+            mypageService.changeUserInfo(request, user);
+
+            // then
+            verify(authCheckFacade, never()).findFieldByFieldKindPk(eq(1));
+            verify(authCheckFacade, never()).findFieldKindById(eq(1));
+            verify(authFacade, times(1)).delete(any(List.class));
+            verify(authFacade, times(1)).save(any(List.class));
+        }
     }
 
     @Nested
@@ -348,7 +425,7 @@ public class MypageServiceTest extends ServiceTest {
 
         @Test
         @DisplayName("Success")
-        void getTouchingPortfolio_Success() throws JsonProcessingException {
+        void getTouchingPortfolio_Success() {
             // given
             User user = User.builder()
                     .pk(1L)
@@ -391,7 +468,7 @@ public class MypageServiceTest extends ServiceTest {
 
         @Test
         @DisplayName("Success")
-        void getMyPortfolio_Success() throws JsonProcessingException, NoSuchFieldException, IllegalAccessException {
+        void getMyPortfolio_Success() throws NoSuchFieldException, IllegalAccessException {
             // given
             User user = User.builder()
                     .pk(1L)

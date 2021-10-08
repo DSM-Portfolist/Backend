@@ -17,8 +17,10 @@ import com.example.portfolist.domain.mypage.dto.response.UserInfoGetResponse;
 import com.example.portfolist.domain.mypage.dto.response.UserPortfolioGetResponse;
 import com.example.portfolist.domain.mypage.repository.MypageFacade;
 import com.example.portfolist.domain.portfolio.repository.PortfolioFacade;
+import com.example.portfolist.global.error.exception.WrongFileException;
 import com.example.portfolist.global.file.FileUploadProvider;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,6 +56,13 @@ public class MypageService {
     }
 
     public void registerProfile(MultipartFile file, NormalUser normalUser) {
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+        String contentType = file.getContentType();
+        if (!"png".equals(extension) && !"jpeg".equals(extension) && !"jpg".equals(extension)
+                || contentType == null || !contentType.split("/")[0].equals("image")) {
+            throw new WrongFileException();
+        }
+
         User user = normalUser.getUser();
         if (user.getUrl() != null) {
             fileUploadProvider.deleteFile(user.getUrl());
