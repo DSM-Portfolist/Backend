@@ -13,6 +13,7 @@ import com.example.portfolist.domain.mypage.dto.request.PasswordCheckRequest;
 import com.example.portfolist.domain.mypage.dto.request.UserInfoChangeRequest;
 import com.example.portfolist.domain.mypage.dto.response.TouchingPortfolioGetRes;
 import com.example.portfolist.domain.mypage.dto.response.UserInfoGetResponse;
+import com.example.portfolist.domain.mypage.dto.response.UserPortfolioGetResponse;
 import com.example.portfolist.domain.mypage.repository.MypageFacade;
 import com.example.portfolist.domain.portfolio.entity.portfolio.Portfolio;
 import com.example.portfolist.domain.portfolio.entity.touching.Touching;
@@ -380,6 +381,41 @@ public class MypageServiceTest extends ServiceTest {
 
             // then
             verify(portfolioFacade, times(1)).findTouchingAll(eq(0), eq(1), any());
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Get My Portfolio")
+    class getMyPortfolio {
+
+        @Test
+        @DisplayName("Success")
+        void getMyPortfolio_Success() throws JsonProcessingException, NoSuchFieldException, IllegalAccessException {
+            // given
+            User user = User.builder()
+                    .pk(1L)
+                    .githubId("githubUser")
+                    .name("가나다")
+                    .build();
+
+            Portfolio portfolio = Portfolio.builder()
+                    .user(user)
+                    .title("제목제목")
+                    .introduce("나는 노를 젓는 김땡땡")
+                    .date(LocalDate.now())
+                    .isOpen(true)
+                    .build();
+
+            List<Portfolio> portfolioList = new ArrayList<>();
+            portfolioList.add(portfolio);
+            inputField(user, "portfolioList", portfolioList);
+
+            // when
+            List<UserPortfolioGetResponse> responses = mypageService.getUserPortfolio(user);
+
+            // then
+            Assertions.assertEquals(responses.size(), 1);
         }
 
     }
