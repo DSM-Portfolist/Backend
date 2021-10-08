@@ -143,7 +143,7 @@ public class MypageService {
     public List<NotificationGetResponse> getNotification(User user) {
         mypageFacade.deleteAlreadyReadNotification(user);
 
-        return mypageFacade.findByUser(user).stream()
+        return mypageFacade.findNotificationByUser(user).stream()
                 .map(NotificationGetResponse::from)
                 .collect(Collectors.toList());
     }

@@ -29,7 +29,7 @@ public class MypageFacade {
         notificationRepository.deleteByToUserAndIsReadIsTrue(user);
     }
 
-    public List<Notification> findByUser(User user) {
+    public List<Notification> findNotificationByUser(User user) {
         return notificationRepository.findByToUser(user);
     }
 
