@@ -302,6 +302,60 @@ public class MypageServiceTest extends ServiceTest {
             verify(authFacade, times(1)).save(any(List.class));
         }
 
+        @Test
+        @DisplayName("None Change Success")
+        void changeUserInfo_noneChange_Success() throws NoSuchFieldException, IllegalAccessException {
+            // given
+            User user = User.builder()
+                    .githubId("githubUser")
+                    .name("가나다")
+                    .build();
+
+            List<Integer> field = new ArrayList<>();
+            UserInfoChangeRequest request = makeRequest(field, "바람이 불지 않으면 노를 저어라", "김땡땡");
+
+            // when
+            mypageService.changeUserInfo(request, user);
+
+            // then
+            verify(authFacade, never()).delete(any(List.class));
+            verify(authFacade, never()).save(any(List.class));
+        }
+
+        @Test
+        @DisplayName("Same Field Success")
+        void changeUserInfo_sameField_Success() throws NoSuchFieldException, IllegalAccessException {
+            // given
+            User user = User.builder()
+                    .githubId("githubUser")
+                    .name("가나다")
+                    .build();
+
+            FieldKind fieldKind = FieldKind.builder()
+                    .pk(1)
+                    .content("백엔드")
+                    .build();
+
+            List<Field> fieldList = new ArrayList<>();
+            fieldList.add(
+                    new com.example.portfolist.domain.auth.entity.Field(1L, user, fieldKind)
+            );
+
+            List<Integer> field = new ArrayList<>();
+            field.add(1);
+            UserInfoChangeRequest request = makeRequest(field, "바람이 불지 않으면 노를 저어라", "김땡땡");
+
+            given(authFacade.findFieldByUser(any())).willReturn(fieldList);
+
+            // when
+            mypageService.changeUserInfo(request, user);
+
+            // then
+            verify(authCheckFacade, never()).findFieldByFieldKindPk(eq(1));
+            verify(authCheckFacade, never()).findFieldKindById(eq(1));
+            verify(authFacade, times(1)).delete(any(List.class));
+            verify(authFacade, times(1)).save(any(List.class));
+        }
     }
 
     @Nested
