@@ -250,7 +250,7 @@ public class MypageControllerTest extends ApiTest {
 
             String token = jwtTokenProvider.generateAccessToken(user.getPk());
             MockMultipartFile file =
-                    new MockMultipartFile("file", "hello.png", "png", "hello".getBytes(StandardCharsets.UTF_8));
+                    new MockMultipartFile("file", "hello.png", "image/png", "hello".getBytes(StandardCharsets.UTF_8));
 
             // when
             setToken(token);

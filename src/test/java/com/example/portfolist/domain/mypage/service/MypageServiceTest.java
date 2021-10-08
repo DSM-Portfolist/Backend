@@ -21,6 +21,7 @@ import com.example.portfolist.domain.portfolio.entity.portfolio.Portfolio;
 import com.example.portfolist.domain.portfolio.entity.touching.Touching;
 import com.example.portfolist.domain.portfolio.entity.touching.TouchingId;
 import com.example.portfolist.domain.portfolio.repository.PortfolioFacade;
+import com.example.portfolist.global.error.exception.WrongFileException;
 import com.example.portfolist.global.file.FileUploadProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -183,7 +184,7 @@ public class MypageServiceTest extends ServiceTest {
                     .build();
 
             MockMultipartFile file =
-                    new MockMultipartFile("file", "hello.png", "png", "hello".getBytes(StandardCharsets.UTF_8));
+                    new MockMultipartFile("file", "hello.png", "image/png", "hello".getBytes(StandardCharsets.UTF_8));
 
             given(fileUploadProvider.uploadFile(any(MultipartFile.class))).willReturn("url");
 
@@ -195,6 +196,29 @@ public class MypageServiceTest extends ServiceTest {
                 verify(fileUploadProvider, never()).deleteFile(any());
             else
                 verify(fileUploadProvider, times(1)).deleteFile("url");
+        }
+
+        @Test
+        @DisplayName("WrongFileException")
+        void registerProfile_WrongFileException() {
+            // given
+            User user = User.builder()
+                    .name("가나다")
+                    .build();
+
+            NormalUser normalUser = NormalUser.builder()
+                    .email("testtest@gmail.com")
+                    .password(passwordEncoder.encode("testPassword"))
+                    .user(user)
+                    .build();
+
+            MockMultipartFile file =
+                    new MockMultipartFile("file", "hello.html", "text/html", "hello".getBytes(StandardCharsets.UTF_8));
+
+            given(fileUploadProvider.uploadFile(any(MultipartFile.class))).willReturn("url");
+
+            // when
+            Assertions.assertThrows(WrongFileException.class, () -> mypageService.registerProfile(file, normalUser));
         }
 
     }
