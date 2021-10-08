@@ -70,9 +70,9 @@ public class TouchingPortfolioGetRes {
                     .title(portfolio.getTitle())
                     .introduce(portfolio.getIntroduce())
                     .user(ContentUser.from(portfolio.getUser()))
-                    .comment(CollectionUtils.isNullOrEmpty(portfolio.getCommentList()) ? // TODO 비효율적인 코드
+                    .comment(CollectionUtils.isNullOrEmpty(portfolio.getCommentList()) ?
                             0 : portfolio.getCommentList().size())
-                    .touching(CollectionUtils.isNullOrEmpty(portfolio.getTouchingList()) ? // TODO 비효율적인 코드
+                    .touching(CollectionUtils.isNullOrEmpty(portfolio.getTouchingList()) ?
                             0 : portfolio.getTouchingList().size())
                     .date(portfolio.getDate())
                     .build();

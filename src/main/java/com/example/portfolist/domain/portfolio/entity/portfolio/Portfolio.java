@@ -6,6 +6,8 @@ import com.example.portfolist.domain.portfolio.entity.container.Box;
 import com.example.portfolist.domain.portfolio.entity.container.Container;
 import com.example.portfolist.domain.portfolio.entity.touching.Touching;
 import lombok.*;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -48,6 +50,7 @@ public class Portfolio {
     @Column(length = 1)
     private Character mainIcon;
 
+    @LazyCollection(LazyCollectionOption.EXTRA)
     @OneToMany(mappedBy = "portfolio")
     private List<Comment> commentList;
 
@@ -60,6 +63,7 @@ public class Portfolio {
     @OneToMany(mappedBy = "portfolio")
     private List<Certificate> certificateList;
 
+    @LazyCollection(LazyCollectionOption.EXTRA)
     @OneToMany(mappedBy = "portfolio")
     private List<Touching> touchingList;
 

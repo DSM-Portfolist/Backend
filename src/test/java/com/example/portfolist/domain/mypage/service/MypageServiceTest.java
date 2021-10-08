@@ -22,7 +22,6 @@ import com.example.portfolist.domain.portfolio.entity.touching.Touching;
 import com.example.portfolist.domain.portfolio.entity.touching.TouchingId;
 import com.example.portfolist.domain.portfolio.repository.PortfolioFacade;
 import com.example.portfolist.global.file.FileUploadProvider;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -402,7 +401,7 @@ public class MypageServiceTest extends ServiceTest {
 
         @Test
         @DisplayName("Success")
-        void getTouchingPortfolio_Success() throws JsonProcessingException {
+        void getTouchingPortfolio_Success() {
             // given
             User user = User.builder()
                     .pk(1L)
@@ -445,7 +444,7 @@ public class MypageServiceTest extends ServiceTest {
 
         @Test
         @DisplayName("Success")
-        void getMyPortfolio_Success() throws JsonProcessingException, NoSuchFieldException, IllegalAccessException {
+        void getMyPortfolio_Success() throws NoSuchFieldException, IllegalAccessException {
             // given
             User user = User.builder()
                     .pk(1L)
