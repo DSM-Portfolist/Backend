@@ -1,5 +1,7 @@
 package com.example.portfolist;
 
+import com.example.portfolist.domain.auth.entity.FieldKind;
+import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.auth.repository.repository.FieldKindRepository;
 import com.example.portfolist.domain.auth.repository.repository.FieldRepository;
 import com.example.portfolist.domain.auth.repository.repository.NormalUserRepository;
@@ -7,17 +9,22 @@ import com.example.portfolist.domain.auth.repository.repository.UserRepository;
 import com.example.portfolist.domain.auth.repository.repository.redis.CertificationRepository;
 import com.example.portfolist.domain.auth.repository.repository.redis.RefreshTokenRepository;
 import com.example.portfolist.domain.mypage.repository.repository.NotificationRepository;
+import com.example.portfolist.domain.portfolio.entity.comment.Comment;
+import com.example.portfolist.domain.portfolio.entity.Portfolio;
+import com.example.portfolist.domain.portfolio.entity.PortfolioField;
+import com.example.portfolist.domain.portfolio.entity.touching.Touching;
+import com.example.portfolist.domain.portfolio.entity.touching.TouchingId;
 import com.example.portfolist.domain.portfolio.repository.Container.BoxImageRepository;
 import com.example.portfolist.domain.portfolio.repository.Container.BoxRepository;
 import com.example.portfolist.domain.portfolio.repository.Container.BoxTextRepository;
 import com.example.portfolist.domain.portfolio.repository.Container.ContainerRepository;
 import com.example.portfolist.domain.portfolio.repository.comment.CommentRepository;
 import com.example.portfolist.domain.portfolio.repository.comment.ReCommentRepository;
-import com.example.portfolist.domain.portfolio.repository.portfolio.CertificateRepository;
-import com.example.portfolist.domain.portfolio.repository.portfolio.MoreInfoRepository;
-import com.example.portfolist.domain.portfolio.repository.portfolio.PortfolioFieldRepository;
+import com.example.portfolist.domain.portfolio.repository.CertificateRepository;
+import com.example.portfolist.domain.portfolio.repository.MoreInfoRepository;
+import com.example.portfolist.domain.portfolio.repository.PortfolioFieldRepository;
 import com.example.portfolist.domain.portfolio.repository.portfolio.PortfolioRepository;
-import com.example.portfolist.domain.portfolio.repository.touching.TouchingRepository;
+import com.example.portfolist.domain.portfolio.repository.TouchingRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.AccessLevel;
@@ -31,6 +38,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import java.lang.reflect.Field;
+import java.time.LocalDate;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
@@ -140,4 +148,50 @@ public class ApiTest extends IntegrationTest{
         return request;
     }
 
+    public Portfolio createPortfolio(User user, String title, String introduce) {
+        return portfolioRepository.save(Portfolio.builder()
+                .user(user)
+                .title(title)
+                .introduce(introduce)
+                .isOpen(true)
+                .date(LocalDate.now())
+                .build());
+    }
+
+    public User registerUser(String name, String introduce) {
+        return userRepository.save(
+                User.builder()
+                        .name(name)
+                        .introduce(introduce)
+                        .build()
+        );
+    }
+
+    public FieldKind createFieldKind(String content) {
+        return fieldKindRepository.save(
+                FieldKind.builder()
+                        .content(content)
+                        .build()
+        );
+    }
+
+    public PortfolioField createPortfolioField(Portfolio portfolio, FieldKind fieldKind) {
+        return portfolioFieldRepository.save(PortfolioField.builder()
+                .portfolio(portfolio)
+                .fieldKind(fieldKind)
+                .build());
+    }
+
+    public void createTouching(User user, Portfolio portfolio) {
+        touchingRepository.save(new Touching(
+                new TouchingId(user.getPk(), portfolio.getPk()), user, portfolio));
+    }
+
+    public void createComment(User user, Portfolio portfolio, String content) {
+        commentRepository.save(Comment.builder().portfolio(portfolio)
+                .user(user)
+                .date(LocalDate.now())
+                .content(content).build()
+        );
+    }
 }

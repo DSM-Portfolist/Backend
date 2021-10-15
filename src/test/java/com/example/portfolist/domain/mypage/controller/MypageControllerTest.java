@@ -9,7 +9,7 @@ import com.example.portfolist.domain.mypage.dto.request.PasswordCheckRequest;
 import com.example.portfolist.domain.mypage.dto.request.UserInfoChangeRequest;
 import com.example.portfolist.domain.mypage.entity.NoticeType;
 import com.example.portfolist.domain.mypage.entity.Notification;
-import com.example.portfolist.domain.portfolio.entity.portfolio.Portfolio;
+import com.example.portfolist.domain.portfolio.entity.Portfolio;
 import com.example.portfolist.domain.portfolio.entity.touching.Touching;
 import com.example.portfolist.domain.portfolio.entity.touching.TouchingId;
 import com.example.portfolist.global.file.FileUploadProvider;
