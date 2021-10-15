@@ -1,7 +1,6 @@
-package com.example.portfolist.domain.portfolio.dto.portfolio.response;
+package com.example.portfolist.domain.portfolio.dto.response;
 
-import com.example.portfolist.domain.portfolio.entity.portfolio.Portfolio;
-import lombok.AllArgsConstructor;
+import com.example.portfolist.domain.portfolio.entity.Portfolio;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 

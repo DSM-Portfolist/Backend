@@ -1,6 +1,6 @@
 package com.example.portfolist.domain.auth.entity;
 
-import com.example.portfolist.domain.portfolio.entity.portfolio.PortfolioField;
+import com.example.portfolist.domain.portfolio.entity.PortfolioField;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,7 +1,7 @@
 package com.example.portfolist.domain.portfolio.entity.touching;
 
 import com.example.portfolist.domain.auth.entity.User;
-import com.example.portfolist.domain.portfolio.entity.portfolio.Portfolio;
+import com.example.portfolist.domain.portfolio.entity.Portfolio;
 import lombok.*;
 
 import javax.persistence.*;

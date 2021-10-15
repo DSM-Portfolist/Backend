@@ -1,9 +1,10 @@
 package com.example.portfolist.domain.portfolio.repository.portfolio;
 
 import com.example.portfolist.domain.auth.entity.User;
-import com.example.portfolist.domain.portfolio.dto.portfolio.response.PortfolioPreview;
-import com.example.portfolist.domain.portfolio.dto.portfolio.response.QPortfolioPreview;
-import com.example.portfolist.domain.portfolio.entity.portfolio.Portfolio;
+import com.example.portfolist.domain.portfolio.dto.response.PortfolioPreview;
+import com.example.portfolist.domain.portfolio.dto.response.QPortfolioPreview;
+import com.example.portfolist.domain.portfolio.entity.Portfolio;
+import com.example.portfolist.domain.portfolio.entity.QPortfolio;
 import com.example.portfolist.global.security.AuthenticationFacade;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -18,11 +19,12 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.portfolist.domain.auth.entity.QUser.user;
+import static com.example.portfolist.domain.auth.entity.QUser.*;
+import static com.example.portfolist.domain.portfolio.entity.QPortfolio.portfolio;
+import static com.example.portfolist.domain.portfolio.entity.QPortfolioField.portfolioField;
 import static com.example.portfolist.domain.portfolio.entity.comment.QComment.comment;
-import static com.example.portfolist.domain.portfolio.entity.portfolio.QPortfolio.portfolio;
-import static com.example.portfolist.domain.portfolio.entity.portfolio.QPortfolioField.*;
-import static com.example.portfolist.domain.portfolio.entity.touching.QTouching.touching;
+import static com.example.portfolist.domain.portfolio.entity.touching.QTouching.*;
+
 
 @RequiredArgsConstructor
 @Repository
@@ -45,7 +47,6 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                     .where(touching.user.pk.eq(loginUser.getPk()))
                     .fetch();
         }
-
         QueryResults<PortfolioPreview> results = queryFactory
                 .select(new QPortfolioPreview(
                         portfolio.pk,

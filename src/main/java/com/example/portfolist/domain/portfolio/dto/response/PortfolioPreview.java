@@ -1,4 +1,4 @@
-package com.example.portfolist.domain.portfolio.dto.portfolio.response;
+package com.example.portfolist.domain.portfolio.dto.response;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;

@@ -1,6 +1,7 @@
 package com.example.portfolist.domain.portfolio.entity.comment;
 
 import com.example.portfolist.domain.auth.entity.User;
+import com.example.portfolist.domain.portfolio.entity.comment.Comment;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

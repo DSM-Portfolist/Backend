@@ -1,4 +1,4 @@
-package com.example.portfolist.domain.portfolio.dto.user;
+package com.example.portfolist.domain.portfolio.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

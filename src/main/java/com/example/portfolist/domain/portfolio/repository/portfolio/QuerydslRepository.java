@@ -1,6 +1,6 @@
 package com.example.portfolist.domain.portfolio.repository.portfolio;
 
-import com.example.portfolist.domain.portfolio.dto.portfolio.response.PortfolioPreview;
+import com.example.portfolist.domain.portfolio.dto.response.PortfolioPreview;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

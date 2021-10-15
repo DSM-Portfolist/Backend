@@ -1,6 +1,7 @@
 package com.example.portfolist.domain.portfolio.entity.container;
 
-import com.example.portfolist.domain.portfolio.entity.portfolio.Portfolio;
+import com.example.portfolist.domain.portfolio.entity.Portfolio;
+import com.example.portfolist.domain.portfolio.entity.container.Box;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

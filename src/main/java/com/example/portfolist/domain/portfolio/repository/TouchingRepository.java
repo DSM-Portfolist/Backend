@@ -1,4 +1,4 @@
-package com.example.portfolist.domain.portfolio.repository.touching;
+package com.example.portfolist.domain.portfolio.repository;
 
 import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.portfolio.entity.touching.Touching;
