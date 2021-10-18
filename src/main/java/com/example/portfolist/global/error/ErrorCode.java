@@ -16,7 +16,9 @@ public enum ErrorCode {
     NOT_NORMAL_USER(404, "Not Normal User"),
     USER_DUPLICATED(409, "User Duplicated"),
     EMAIL_NOT_AUTHORIZED(401, "Email Not Authorized"),
-    FIELD_NOT_FOUND(404, "Field Not Found");
+    FIELD_NOT_FOUND(404, "Field Not Found"),
+    PORTFOLIO_NOT_FOUND(404, "Portfolio Not Found"),
+    COMMENT_NOT_FOUND(404, "Comment Not Found");
 
     private final int status;
     private final String message;
