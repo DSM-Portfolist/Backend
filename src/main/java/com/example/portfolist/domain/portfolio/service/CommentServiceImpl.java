@@ -9,6 +9,7 @@ import com.example.portfolist.domain.portfolio.exception.PortfolioNotFoundExcept
 import com.example.portfolist.domain.portfolio.repository.comment.CommentRepository;
 import com.example.portfolist.domain.portfolio.repository.comment.ReCommentRepository;
 import com.example.portfolist.domain.portfolio.repository.portfolio.PortfolioRepository;
+import com.example.portfolist.global.error.exception.PermissionDeniedException;
 import com.example.portfolist.global.security.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,6 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public void createComment(long portfolioId, CommentRequest request) {
-
         Portfolio portfolio = portfolioRepository.findById(portfolioId)
                 .orElseThrow(PortfolioNotFoundException::new);
 
@@ -41,7 +41,13 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public void deleteComment(long commentId) {
-        commentRepository.deleteById(commentId);
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(CommentNotFoundException::new);
+
+        if (comment.getUser().getPk() == authenticationFacade.getUser().getPk())
+            commentRepository.deleteById(commentId);
+        else
+            throw new PermissionDeniedException();
     }
 
     @Override
@@ -59,6 +65,13 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public void deleteReComment(long reCommentId) {
-        reCommentRepository.deleteById(reCommentId);
+        ReComment reComment = reCommentRepository.findById(reCommentId)
+                .orElseThrow(CommentNotFoundException::new);
+
+        if (reComment.getUser().getPk() == authenticationFacade.getUser().getPk())
+            reCommentRepository.deleteById(reCommentId);
+        else
+            throw new PermissionDeniedException();
     }
+
 }
