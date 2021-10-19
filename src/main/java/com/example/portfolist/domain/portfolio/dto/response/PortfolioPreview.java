@@ -21,9 +21,9 @@ public class PortfolioPreview {
 
     private String date;
 
-    private long totalTouching;
+    private int totalTouching;
 
-    private long totalComment;
+    private int totalComment;
 
     private boolean touched;
 
@@ -34,7 +34,7 @@ public class PortfolioPreview {
     private String profileImg;
 
     @QueryProjection
-    public PortfolioPreview(long id, String pofolImg, String title, String introduce, String date, long userId, String name, String profileImg, boolean touched) {
+    public PortfolioPreview(long id, String pofolImg, String title, String introduce, String date, long userId, String name, String profileImg, boolean touched, int totalComment, int totalTouching) {
         this.id = id;
         this.pofolImg = pofolImg;
         this.title = title;
@@ -44,5 +44,7 @@ public class PortfolioPreview {
         this.name = name;
         this.profileImg = profileImg;
         this.touched = touched;
+        this.totalComment = totalComment;
+        this.totalTouching = totalTouching;
     }
 }

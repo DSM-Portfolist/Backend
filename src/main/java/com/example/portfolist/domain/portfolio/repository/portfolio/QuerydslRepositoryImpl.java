@@ -4,7 +4,6 @@ import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.portfolio.dto.response.PortfolioPreview;
 import com.example.portfolist.domain.portfolio.dto.response.QPortfolioPreview;
 import com.example.portfolist.domain.portfolio.entity.Portfolio;
-import com.example.portfolist.domain.portfolio.entity.QPortfolio;
 import com.example.portfolist.global.security.AuthenticationFacade;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -24,6 +23,7 @@ import static com.example.portfolist.domain.portfolio.entity.QPortfolio.portfoli
 import static com.example.portfolist.domain.portfolio.entity.QPortfolioField.portfolioField;
 import static com.example.portfolist.domain.portfolio.entity.comment.QComment.comment;
 import static com.example.portfolist.domain.portfolio.entity.touching.QTouching.*;
+import static com.querydsl.core.types.ExpressionUtils.count;
 
 
 @RequiredArgsConstructor
@@ -47,6 +47,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                     .where(touching.user.pk.eq(loginUser.getPk()))
                     .fetch();
         }
+
         QueryResults<PortfolioPreview> results = queryFactory
                 .select(new QPortfolioPreview(
                         portfolio.pk,
@@ -59,13 +60,13 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                         user.url,
                         new CaseBuilder()
                                 .when(portfolio.in(touchedPortfolioList)).then(true)
-                                .otherwise(false).as("touched")
+                                .otherwise(false),
+                        portfolio.commentList.size(),
+                        portfolio.touchingList.size()
                 )).distinct()
                 .from(portfolio)
                 .join(portfolio.user, user)
                 .leftJoin(portfolio.portfolioFields, portfolioField)
-                .leftJoin(portfolio.touchingList, touching)
-                .leftJoin(portfolio.commentList, comment)
                 .where(fieldKindIn(fieldCond))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -76,20 +77,6 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
 
         content.forEach(p -> p.setField(
                 getFieldKindContentByPortfolioId(p.getId())
-        ));
-
-        content.forEach(p -> p.setTotalComment(
-                queryFactory
-                        .selectFrom(comment)
-                        .where(comment.portfolio.pk.eq(p.getId()))
-                        .fetchCount()
-        ));
-
-        content.forEach(p -> p.setTotalTouching(
-                queryFactory
-                        .selectFrom(touching)
-                        .where(touching.portfolio.pk.eq(p.getId()))
-                        .fetchCount()
         ));
 
         long total = results.getTotal();
