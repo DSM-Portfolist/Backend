@@ -1,7 +1,8 @@
 package com.example.portfolist.domain.mypage.dto.response;
 
+import com.amazonaws.util.CollectionUtils;
 import com.example.portfolist.domain.auth.entity.User;
-import com.example.portfolist.domain.portfolio.entity.portfolio.Portfolio;
+import com.example.portfolist.domain.portfolio.entity.Portfolio;
 import com.example.portfolist.domain.portfolio.entity.touching.Touching;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
@@ -54,9 +55,12 @@ public class TouchingPortfolioGetRes {
 
         public static Content from(Touching touching) {
             Portfolio portfolio = touching.getPortfolio();
-            List<String> fields = portfolio.getPortfolioFields().stream()
-                    .map(field -> field.getFieldKind().getContent())
-                    .collect(Collectors.toList());
+            List<String> fields = null;
+            if(!CollectionUtils.isNullOrEmpty(portfolio.getPortfolioFields())) {
+                fields = portfolio.getPortfolioFields().stream()
+                        .map(field -> field.getFieldKind().getContent())
+                        .collect(Collectors.toList());
+            }
 
             return Content.builder()
                     .id(portfolio.getPk())
@@ -66,8 +70,10 @@ public class TouchingPortfolioGetRes {
                     .title(portfolio.getTitle())
                     .introduce(portfolio.getIntroduce())
                     .user(ContentUser.from(portfolio.getUser()))
-                    .comment(portfolio.getCommentList().size())
-                    .touching(portfolio.getTouchingList().size())
+                    .comment(CollectionUtils.isNullOrEmpty(portfolio.getCommentList()) ?
+                            0 : portfolio.getCommentList().size())
+                    .touching(CollectionUtils.isNullOrEmpty(portfolio.getTouchingList()) ?
+                            0 : portfolio.getTouchingList().size())
                     .date(portfolio.getDate())
                     .build();
         }

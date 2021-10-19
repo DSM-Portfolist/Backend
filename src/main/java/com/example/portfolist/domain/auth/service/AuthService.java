@@ -23,11 +23,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -76,7 +74,7 @@ public class AuthService {
         GithubResponse response = githubClient.getUserInfo("token " + request.getGithubToken());
         String nickname = response.getLogin();
         String name = response.getName();
-        String url = response.getAvatar_url();
+        String url = response.getAvatarUrl();
 
         Optional<User> optionalUser = authFacade.findUserByGithubId(nickname);
         long pk;
@@ -131,19 +129,18 @@ public class AuthService {
         return successPage;
     }
 
-    @Transactional
     public void join(NormalUserJoinRequest request) {
         authCheckFacade.checkAuthorizedEmail(request.getEmail());
 
         NormalUser normalUser = NormalUser.builder()
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .build();
         normalUser = authFacade.save(normalUser);
 
         User user = User.builder()
                 .normalUser(normalUser)
-                .name(passwordEncoder.encode(request.getName()))
+                .name(request.getName())
                 .build();
         user = authFacade.save(user);
 

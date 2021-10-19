@@ -1,6 +1,7 @@
 package com.example.portfolist.domain.mypage.dto.response;
 
-import com.example.portfolist.domain.portfolio.entity.portfolio.Portfolio;
+import com.amazonaws.util.CollectionUtils;
+import com.example.portfolist.domain.portfolio.entity.Portfolio;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -29,9 +30,12 @@ public class UserPortfolioGetResponse {
     private LocalDate date;
 
     public static UserPortfolioGetResponse from(Portfolio portfolio) {
-        List<String> fields = portfolio.getPortfolioFields().stream()
-                .map(field -> field.getFieldKind().getContent())
-                .collect(Collectors.toList());
+        List<String> fields = null;
+        if (!CollectionUtils.isNullOrEmpty(portfolio.getPortfolioFields())) {
+            fields = portfolio.getPortfolioFields().stream()
+                    .map(field -> field.getFieldKind().getContent())
+                    .collect(Collectors.toList());
+        }
 
         return UserPortfolioGetResponse.builder()
                 .id(portfolio.getPk())
@@ -40,8 +44,10 @@ public class UserPortfolioGetResponse {
                 .icon(portfolio.getMainIcon())
                 .title(portfolio.getTitle())
                 .introduce(portfolio.getIntroduce())
-                .comment(portfolio.getCommentList().size())
-                .touching(portfolio.getTouchingList().size())
+                .comment(CollectionUtils.isNullOrEmpty(portfolio.getCommentList()) ?
+                        0 : portfolio.getCommentList().size())
+                .touching(CollectionUtils.isNullOrEmpty(portfolio.getTouchingList()) ?
+                        0 : portfolio.getTouchingList().size())
                 .date(portfolio.getDate())
                 .build();
     }

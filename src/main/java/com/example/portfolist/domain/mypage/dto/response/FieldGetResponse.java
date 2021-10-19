@@ -1,6 +1,5 @@
 package com.example.portfolist.domain.mypage.dto.response;
 
-import com.example.portfolist.domain.auth.entity.Field;
 import com.example.portfolist.domain.auth.entity.FieldKind;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,8 +14,7 @@ public class FieldGetResponse {
     private int id;
     private String content;
 
-    public static FieldGetResponse from(Field field) {
-        FieldKind fieldKind = field.getFieldKind();
+    public static FieldGetResponse from(FieldKind fieldKind) {
         return FieldGetResponse.builder()
                 .id(fieldKind.getPk())
                 .content(fieldKind.getContent())

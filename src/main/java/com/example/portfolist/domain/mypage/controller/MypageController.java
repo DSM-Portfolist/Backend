@@ -11,14 +11,13 @@ import com.example.portfolist.domain.mypage.service.MypageService;
 import com.example.portfolist.global.security.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
 public class MypageController {
@@ -37,7 +36,7 @@ public class MypageController {
     }
 
     @PostMapping("/profile")
-    public void registerProfile(@RequestPart(value = "file", required = false) MultipartFile file) {
+    public void registerProfile(@RequestPart(value = "file") MultipartFile file) {
         mypageService.registerProfile(file, authenticationFacade.getNormalUser());
     }
 
@@ -52,9 +51,8 @@ public class MypageController {
         return mypageService.getUserInfo(authenticationFacade.getUser());
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PatchMapping("/info")
-    public void changeUserInfo(@RequestBody UserInfoChangeRequest request) {
+    public void changeUserInfo(@Valid @RequestBody UserInfoChangeRequest request) {
         mypageService.changeUserInfo(request, authenticationFacade.getUser());
     }
 
@@ -65,8 +63,8 @@ public class MypageController {
     }
 
     @GetMapping("/touching")
-    public TouchingPortfolioGetRes.Response getTouchingPortfolio(@PathVariable(value = "page", required = false) int page,
-                                                                 @PathVariable(value = "size", required = false) int size) {
+    public TouchingPortfolioGetRes.Response getTouchingPortfolio(@RequestParam(value = "page") int page,
+                                                                 @RequestParam(value = "size") int size) {
         return mypageService.getTouchingPortfolio(page, size, authenticationFacade.getUser());
     }
 

@@ -1,17 +1,17 @@
 package com.example.portfolist.domain.portfolio.entity.comment;
 
 import com.example.portfolist.domain.auth.entity.User;
-import com.example.portfolist.domain.portfolio.entity.portfolio.Portfolio;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.example.portfolist.domain.portfolio.entity.Portfolio;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Entity
 public class Comment {
 
@@ -30,9 +30,9 @@ public class Comment {
     @Column
     private LocalDate date;
 
-    @Column(length = 300)
+    @Column(length = 300, nullable = false)
     private String content;
 
     @OneToMany(mappedBy = "comment")
-    private List<ReComment> recommentList;
+    private List<ReComment> reCommentList;
 }

@@ -4,11 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -26,8 +28,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .cors().disable()
                 .formLogin().disable()
                 .authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/field").permitAll()
                 .antMatchers(HttpMethod.POST, "/login/*", "/email", "/join", "/token-refresh").permitAll()
+                .antMatchers("/receive").permitAll()
                 .anyRequest().hasAuthority("USER")
+                .and().exceptionHandling()
+                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 .and().apply(new CorsConfigurer())
                 .and().apply(new JwtConfigure(jwtTokenProvider));
 

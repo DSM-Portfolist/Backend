@@ -1,5 +1,6 @@
 package com.example.portfolist.domain.mypage.dto.response;
 
+import com.amazonaws.util.CollectionUtils;
 import com.example.portfolist.domain.auth.entity.User;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -19,11 +20,14 @@ public class UserInfoGetResponse {
     private String name;
 
     public static UserInfoGetResponse from(User user) {
-        List<String> fields = user.getFieldList().stream()
-                .map(field -> {
-                    return field.getFieldKind().getContent();
-                })
-                .collect(Collectors.toList());
+        List<String> fields = null;
+        if(!CollectionUtils.isNullOrEmpty(user.getFieldList())) {
+             fields = user.getFieldList().stream()
+                    .map(field -> {
+                        return field.getFieldKind().getContent();
+                    })
+                    .collect(Collectors.toList());
+        }
 
         return UserInfoGetResponse.builder()
                 .field(fields)

@@ -8,11 +8,7 @@ import com.example.portfolist.domain.portfolio.repository.Container.BoxTextRepos
 import com.example.portfolist.domain.portfolio.repository.Container.ContainerRepository;
 import com.example.portfolist.domain.portfolio.repository.comment.CommentRepository;
 import com.example.portfolist.domain.portfolio.repository.comment.ReCommentRepository;
-import com.example.portfolist.domain.portfolio.repository.portfolio.CertificateRepository;
-import com.example.portfolist.domain.portfolio.repository.portfolio.MoreInfoRepository;
-import com.example.portfolist.domain.portfolio.repository.portfolio.PortfolioFieldRepository;
 import com.example.portfolist.domain.portfolio.repository.portfolio.PortfolioRepository;
-import com.example.portfolist.domain.portfolio.repository.touching.TouchingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,8 +30,8 @@ public class PortfolioFacade {
     private final PortfolioFieldRepository portfolioFieldRepository;
     private final TouchingRepository touchingRepository;
 
-    public Page<Touching> findTouchingAll(int page, int size) {
-        return touchingRepository.findAll(PageRequest.of(page, size));
+    public Page<Touching> findTouchingAll(int page, int size, User user) {
+        return touchingRepository.findByUser(PageRequest.of(page, size), user);
     }
 
     public void deleteMoreInfoByUser(User user) {

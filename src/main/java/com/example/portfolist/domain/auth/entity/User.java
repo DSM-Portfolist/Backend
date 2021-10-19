@@ -3,7 +3,7 @@ package com.example.portfolist.domain.auth.entity;
 import com.example.portfolist.domain.mypage.entity.Notification;
 import com.example.portfolist.domain.portfolio.entity.comment.Comment;
 import com.example.portfolist.domain.portfolio.entity.comment.ReComment;
-import com.example.portfolist.domain.portfolio.entity.portfolio.Portfolio;
+import com.example.portfolist.domain.portfolio.entity.Portfolio;
 import com.example.portfolist.domain.portfolio.entity.touching.Touching;
 import io.netty.util.internal.StringUtil;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,7 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long pk;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -52,7 +52,7 @@ public class User {
     private List<Comment> commentList;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<ReComment>  recommentList;
+    private List<ReComment>  reCommentList;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Field> fieldList;

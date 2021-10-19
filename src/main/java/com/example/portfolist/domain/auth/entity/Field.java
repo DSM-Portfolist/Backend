@@ -16,15 +16,15 @@ import javax.persistence.*;
 public class Field {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pk;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_pk")
+    @ManyToOne
+    @JoinColumn(name = "user_pk", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fieldKind_pk")
+    @ManyToOne
+    @JoinColumn(name = "fieldKind_pk", nullable = false)
     private FieldKind fieldKind;
 
 }

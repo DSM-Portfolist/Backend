@@ -1,21 +1,22 @@
-package com.example.portfolist.domain.portfolio.entity.portfolio;
+package com.example.portfolist.domain.portfolio.entity;
 
 import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.portfolio.entity.comment.Comment;
-import com.example.portfolist.domain.portfolio.entity.container.Box;
 import com.example.portfolist.domain.portfolio.entity.container.Container;
 import com.example.portfolist.domain.portfolio.entity.touching.Touching;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
+
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 @Entity
 public class Portfolio {
 
@@ -48,6 +49,7 @@ public class Portfolio {
     @Column(length = 1)
     private Character mainIcon;
 
+    @LazyCollection(LazyCollectionOption.EXTRA)
     @OneToMany(mappedBy = "portfolio")
     private List<Comment> commentList;
 
@@ -60,6 +62,7 @@ public class Portfolio {
     @OneToMany(mappedBy = "portfolio")
     private List<Certificate> certificateList;
 
+    @LazyCollection(LazyCollectionOption.EXTRA)
     @OneToMany(mappedBy = "portfolio")
     private List<Touching> touchingList;
 

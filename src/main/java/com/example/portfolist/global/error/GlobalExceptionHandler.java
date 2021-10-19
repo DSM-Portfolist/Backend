@@ -5,14 +5,18 @@ import com.example.portfolist.global.error.exception.GlobalException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.multipart.MultipartException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
+    @ExceptionHandler({MethodArgumentNotValidException.class, MissingServletRequestPartException.class,
+            MissingServletRequestParameterException.class, MultipartException.class})
+    protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(final Exception e) {
         e.printStackTrace();
         final ErrorResponse response = new ErrorResponse(ErrorCode.INVALID_INPUT_VALUE);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));

@@ -17,9 +17,10 @@ import com.example.portfolist.domain.mypage.dto.response.UserInfoGetResponse;
 import com.example.portfolist.domain.mypage.dto.response.UserPortfolioGetResponse;
 import com.example.portfolist.domain.mypage.repository.MypageFacade;
 import com.example.portfolist.domain.portfolio.repository.PortfolioFacade;
+import com.example.portfolist.global.error.exception.WrongFileException;
 import com.example.portfolist.global.file.FileUploadProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Async;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,7 +32,6 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class MypageService {
 
     private final PasswordEncoder passwordEncoder;
@@ -56,6 +56,13 @@ public class MypageService {
     }
 
     public void registerProfile(MultipartFile file, NormalUser normalUser) {
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+        String contentType = file.getContentType();
+        if (!"png".equals(extension) && !"jpeg".equals(extension) && !"jpg".equals(extension)
+                || contentType == null || !contentType.split("/")[0].equals("image")) {
+            throw new WrongFileException();
+        }
+
         User user = normalUser.getUser();
         if (user.getUrl() != null) {
             fileUploadProvider.deleteFile(user.getUrl());
@@ -65,7 +72,6 @@ public class MypageService {
         user.updateProfile(fileUrl);
     }
 
-    @Async
     public void deleteProfile(NormalUser normalUser) {
         User user = normalUser.getUser();
         String url = user.getUrl();
@@ -79,7 +85,6 @@ public class MypageService {
         return UserInfoGetResponse.from(user);
     }
 
-    @Async
     public void changeUserInfo(UserInfoChangeRequest request, User user) {
         user.updateUserInfo(request.getName(), request.getIntroduce());
 
@@ -104,7 +109,7 @@ public class MypageService {
                             .user(user)
                             .fieldKind(fieldKind)
                             .build();
-                    deleteField.add(field);
+                    saveField.add(field);
                 }
             }
 
@@ -113,11 +118,12 @@ public class MypageService {
         }
     }
 
-    @Async
+    @Transactional
     public void deleteUser(User user) {
         portfolioFacade.deleteMoreInfoByUser(user);
         portfolioFacade.deleteBoxImageByUser(user);
         portfolioFacade.deleteBoxTextByUser(user);
+        portfolioFacade.deleteBoxByUser(user);
         portfolioFacade.deleteContainerByUser(user);
         portfolioFacade.deleteCertificateByUser(user);
         portfolioFacade.deleteTouchingByUser(user);
@@ -129,12 +135,12 @@ public class MypageService {
         mypageFacade.deleteNotificationByUser(user);
 
         authFacade.deleteFieldByUser(user);
-        authFacade.deleteNormalByUser(user);
         authFacade.deleteUser(user);
+        authFacade.deleteNormalByUser(user);
     }
 
     public TouchingPortfolioGetRes.Response getTouchingPortfolio(int page, int size, User user) {
-        return TouchingPortfolioGetRes.Response.from(portfolioFacade.findTouchingAll(page, size));
+        return TouchingPortfolioGetRes.Response.from(portfolioFacade.findTouchingAll(page, size, user));
     }
 
     public List<UserPortfolioGetResponse> getUserPortfolio(User user) {
@@ -146,7 +152,7 @@ public class MypageService {
     public List<NotificationGetResponse> getNotification(User user) {
         mypageFacade.deleteAlreadyReadNotification(user);
 
-        return mypageFacade.findByUser(user).stream()
+        return mypageFacade.findNotificationByUser(user).stream()
                 .map(NotificationGetResponse::from)
                 .collect(Collectors.toList());
     }

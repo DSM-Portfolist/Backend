@@ -1,14 +1,14 @@
-package com.example.portfolist.domain.portfolio.entity.portfolio;
+package com.example.portfolist.domain.portfolio.entity;
 
 import com.example.portfolist.domain.auth.entity.FieldKind;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Entity
 public class PortfolioField {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
