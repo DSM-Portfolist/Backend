@@ -30,8 +30,8 @@ class PortfolioControllerTest extends ApiTest {
     @BeforeEach
     public void before() {
 
-        User user1 = registerUser("곽도현", "곽도현입니다");
-        User user2 = registerUser("곽도현", "곽도현입니다");
+        User user1 = createUser("곽도현", "곽도현입니다", null);
+        User user2 = createUser("곽도현", "곽도현입니다", null);
 
         Portfolio portfolio1 = createPortfolio(user1, "포트폴리오 제목1", "소개1");
         Portfolio portfolio2 = createPortfolio(user1, "포트폴리오 제목1", "소개1");
