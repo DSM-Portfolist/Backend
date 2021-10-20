@@ -65,7 +65,7 @@ jobs:
   deploy:
     needs: build
     name: Deploy
-    runs-on: [self-hosted, label-go]
+    runs-on: [self-hosted, label-java]
     steps:
       - name: Login to ghcr
         uses: docker/login-action@v1
