@@ -17,6 +17,7 @@ import javax.transaction.Transactional;
 public class AuthenticationFacade {
 
     private final UserRepository userRepository;
+    private final NormalUserRepository normalUserRepository;
 
     public Authentication getAuthentication() {
         return SecurityContextHolder.getContext().getAuthentication();
@@ -35,7 +36,7 @@ public class AuthenticationFacade {
         if(normalUser == null) {
             throw new NotNormalUserException();
         }
-        return normalUser;
+        return normalUserRepository.save(normalUser);
     }
 
 }

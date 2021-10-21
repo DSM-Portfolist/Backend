@@ -1,6 +1,7 @@
 package com.example.portfolist.domain.portfolio.repository;
 
 import com.example.portfolist.ApiTest;
+import com.example.portfolist.domain.auth.entity.FieldKind;
 import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.portfolio.dto.response.PortfolioPreview;
 import com.example.portfolist.domain.portfolio.entity.Portfolio;
@@ -21,12 +22,17 @@ class PortfolioRepositoryTest extends ApiTest {
     @Autowired
     JwtTokenProvider jwtTokenProvider;
 
+    FieldKind fieldKind1;
+    FieldKind fieldKind2;
+    FieldKind fieldKind3;
+    FieldKind fieldKind4;
+
     @BeforeEach
     public void before() {
-        createFieldKind("서버");
-        createFieldKind("앱");
-        createFieldKind("프론트");
-        createFieldKind("빅데이터");
+        fieldKind1 = createFieldKind("서버");
+        fieldKind2 = createFieldKind("앱");
+        fieldKind3 = createFieldKind("프론트");
+        fieldKind4 = createFieldKind("빅데이터");
     }
 
     @Test
@@ -41,16 +47,16 @@ class PortfolioRepositoryTest extends ApiTest {
 
         Portfolio portfolio1 = createPortfolio(user1, "포트폴리오 제목1", "소개1");
 
-        createPortfolioField(portfolio1, fieldKindRepository.getById(1));
-        createPortfolioField(portfolio1, fieldKindRepository.getById(2));
+        createPortfolioField(portfolio1, fieldKind1);
+        createPortfolioField(portfolio1, fieldKind2);
         createTouching(user1, portfolio1);
         createTouching(user2, portfolio1);
         createComment(user1, portfolio1, "댓글1");
 
         Portfolio portfolio2 = createPortfolio(user1, "포트폴리오 제목2", "소개2");
 
-        createPortfolioField(portfolio2, fieldKindRepository.getById(3));
-        createPortfolioField(portfolio2, fieldKindRepository.getById(4));
+        createPortfolioField(portfolio2, fieldKind3);
+        createPortfolioField(portfolio2, fieldKind4);
         createTouching(user1, portfolio2);
         createTouching(user2, portfolio2);
         createTouching(user3, portfolio2);
