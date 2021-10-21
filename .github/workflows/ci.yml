@@ -1,11 +1,6 @@
 name: CI
 
-on: 
-  push:
-    branches: [main]
-env:
-  DOCKER_IMAGE: ghcr.io/kwakdh25/portfolist
-  VERSION: ${{ github.sha }}
+on: push
 
 jobs:
   build:
@@ -36,7 +31,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Test
-        run: ./gradlew build
+        run: ./gradlew --info test
 
       - name: code coverage
         run: ./gradlew jacocoTestReport
