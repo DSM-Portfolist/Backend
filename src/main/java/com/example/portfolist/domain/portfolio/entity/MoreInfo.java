@@ -19,8 +19,8 @@ public class MoreInfo {
     private Portfolio portfolio;
 
     @Column(length = 10)
-    private String key;
+    private String name;
 
     @Column(length = 45)
-    private String value;
+    private String content;
 }
