@@ -92,4 +92,15 @@ public class AuthFacade {
         return fieldKindRepository.findAll();
     }
 
+    public void changeCertification(Certification certification) {
+        certificationRepository.delete(certification);
+        certification = Certification.builder()
+                .email(certification.getEmail())
+                .token(certification.getToken())
+                .certification(true)
+                .exp(300000L)
+                .build();
+        certificationRepository.save(certification);
+    }
+
 }

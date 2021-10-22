@@ -125,7 +125,7 @@ public class AuthService {
         if (certification.isEmpty()) {
             return failPage;
         }
-        certification.get().setCertificationTrue();
+        authFacade.changeCertification(certification.get());
         return successPage;
     }
 

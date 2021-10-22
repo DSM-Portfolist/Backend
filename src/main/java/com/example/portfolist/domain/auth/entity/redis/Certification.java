@@ -34,7 +34,4 @@ public class Certification implements Serializable {
     @TimeToLive
     private Long exp;
 
-    public void setCertificationTrue() {
-        this.certification = true;
-    }
 }
