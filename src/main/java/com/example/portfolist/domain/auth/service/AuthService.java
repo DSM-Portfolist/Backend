@@ -115,7 +115,7 @@ public class AuthService {
     private String makeToken() {
         StringBuilder token = new StringBuilder();
         for (int i=0; i<=3; i++) {
-            token.append(Math.random() * 9);
+            token.append(Math.round(Math.random() * 9));
         }
         return String.valueOf(token);
     }
