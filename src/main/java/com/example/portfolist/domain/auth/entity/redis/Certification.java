@@ -27,6 +27,7 @@ public class Certification implements Serializable {
     @Indexed
     private String email;
 
+    @Indexed
     private String token;
 
     private boolean certification;
