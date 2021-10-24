@@ -21,7 +21,7 @@ public class PortfolioController {
     private final PortfolioService portfolioService;
 
     @GetMapping("/list")
-    public PortfolioListResponse getPortfolioList(@RequestParam Pageable pageable, @RequestParam(required = false)List<String> fieldList) {
+    public PortfolioListResponse getPortfolioList(Pageable pageable, @RequestParam(required = false)List<String> fieldList) {
         return portfolioService.getPortfolioList(pageable, fieldList);
     }
 
