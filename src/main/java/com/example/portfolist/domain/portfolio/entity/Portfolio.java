@@ -43,7 +43,7 @@ public class Portfolio {
     @Column(nullable = false)
     private LocalDate date;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "tinyint(1) default true")
     private boolean isOpen;
 
     @Column(length = 1)
