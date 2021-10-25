@@ -10,11 +10,13 @@ import com.example.portfolist.domain.portfolio.entity.container.Box;
 import com.example.portfolist.domain.portfolio.entity.container.BoxImage;
 import com.example.portfolist.domain.portfolio.entity.container.BoxText;
 import com.example.portfolist.domain.portfolio.entity.container.Container;
+import com.example.portfolist.domain.portfolio.exception.PortfolioNotFoundException;
 import com.example.portfolist.domain.portfolio.repository.Container.BoxImageRepository;
 import com.example.portfolist.domain.portfolio.repository.Container.BoxRepository;
 import com.example.portfolist.domain.portfolio.repository.Container.BoxTextRepository;
 import com.example.portfolist.domain.portfolio.repository.Container.ContainerRepository;
 import com.example.portfolist.domain.portfolio.repository.portfolio.PortfolioRepository;
+import com.example.portfolist.global.error.exception.PermissionDeniedException;
 import com.example.portfolist.global.file.FileUploadProvider;
 import com.example.portfolist.global.security.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
@@ -80,13 +82,20 @@ public class PortfolioServiceImpl implements PortfolioService{
     }
 
     @Override
-    public void deletePortfolio(long projectId) {
+    public void deletePortfolio(long portfolioId) {
+        if (checkPermission(portfolioId, authenticationFacade.getUser())) throw new PermissionDeniedException();
 
+        portfolioRepository.deleteById(portfolioId);
     }
 
     @Override
-    public void updatePortfolio(long projectId) {
+    public void updatePortfolio(long portfolioId) {
 
+    }
+
+    private boolean checkPermission(long portfolioId, User user) {
+        Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(PortfolioNotFoundException::new);
+        return portfolio.getUser().getPk() != user.getPk();
     }
 
     @Override

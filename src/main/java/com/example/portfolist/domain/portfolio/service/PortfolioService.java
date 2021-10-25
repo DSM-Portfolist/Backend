@@ -11,10 +11,10 @@ import java.util.List;
 
 public interface PortfolioService {
     PortfolioListResponse getPortfolioList(Pageable pageable, List<String> fieldList);
-    PortfolioResponse getPortfolio(long projectId);
+    PortfolioResponse getPortfolio(long portfolioId);
     void createPortfolio(PortfolioRequest request);
-    void deletePortfolio(long projectId);
-    void updatePortfolio(long projectId);
+    void deletePortfolio(long portfolioId);
+    void updatePortfolio(long portfolioId);
     RecentPortfolioResponse getRecentPortfolio(int size);
     ThisMonthPortfolioResponse getThisMonthPortfolio();
     PortfolioListResponse getPortfolioByUser(long userId);
