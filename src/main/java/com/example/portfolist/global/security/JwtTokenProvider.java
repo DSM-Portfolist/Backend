@@ -91,7 +91,7 @@ public class JwtTokenProvider {
 
     private String makingToken(String id, String type, Long time){
         return Jwts.builder()
-                .setExpiration(new Date(System.currentTimeMillis() + (time)))
+                .setExpiration(new Date(System.currentTimeMillis() + (time)*1000))
                 .signWith(SignatureAlgorithm.HS512, encodingSecretKey())
                 .setIssuedAt(new Date())
                 .setSubject(id)
