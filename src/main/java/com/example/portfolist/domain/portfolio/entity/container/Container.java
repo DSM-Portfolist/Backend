@@ -21,7 +21,7 @@ public class Container {
     @Column(length = 45)
     private String title;
 
-    @OneToMany(mappedBy = "container")
+    @OneToMany(mappedBy = "container", cascade = CascadeType.REMOVE)
     private List<Box> boxList;
 
     @ManyToOne

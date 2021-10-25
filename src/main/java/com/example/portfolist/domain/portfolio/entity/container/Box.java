@@ -20,10 +20,10 @@ public class Box {
     @JoinColumn(name = "container_id", nullable = false)
     private Container container;
 
-    @OneToMany(mappedBy = "box")
+    @OneToMany(mappedBy = "box", cascade = CascadeType.REMOVE)
     private List<BoxImage> boxImageList;
 
-    @OneToMany(mappedBy = "box")
+    @OneToMany(mappedBy = "box", cascade = CascadeType.REMOVE)
     private List<BoxText> boxTextList;
 
     public static Box of(Container container) {

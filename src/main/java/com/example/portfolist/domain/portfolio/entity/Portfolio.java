@@ -56,7 +56,7 @@ public class Portfolio {
     @OneToMany(mappedBy = "portfolio")
     private List<MoreInfo> moreInfoList;
 
-    @OneToMany(mappedBy = "portfolio")
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.REMOVE)
     private List<Container> containerList;
 
     @OneToMany(mappedBy = "portfolio")
