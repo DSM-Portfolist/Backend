@@ -9,6 +9,7 @@ import com.example.portfolist.domain.portfolio.service.PortfolioService;
 import com.example.portfolist.global.file.FileUploadProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,16 +25,19 @@ public class PortfolioController {
     private final FileUploadProvider fileUploadProvider;
 
     @GetMapping("/list")
+    @ResponseStatus(HttpStatus.OK)
     public PortfolioListResponse getPortfolioList(Pageable pageable, @RequestParam(required = false)List<String> fieldList) {
         return portfolioService.getPortfolioList(pageable, fieldList);
     }
 
-    @GetMapping("/{id}")
-    public PortfolioResponse getPortfolio(@PathVariable long projectId) {
+    @GetMapping("/{portfolioId}")
+    @ResponseStatus(HttpStatus.OK)
+    public PortfolioResponse getPortfolio(@PathVariable long portfolioId) {
         return null;
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public void createPortfolio(@RequestPart(value = "portfolioRequest") PortfolioRequest request,
                                 @RequestPart(value = "file", required = false) MultipartFile file,
                                 @RequestPart(value = "boxImgList", required = false) List<MultipartFile> boxImgList) {
@@ -45,12 +49,14 @@ public class PortfolioController {
         portfolioService.createPortfolio(request);
     }
 
-    @DeleteMapping
-    public void deletePortfolio(long projectId) {
+    @DeleteMapping("/{portfolioId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePortfolio(@PathVariable long portfolioId) {
+        portfolioService.deletePortfolio(portfolioId);
     }
 
     @PutMapping
-    public void updatePortfolio(long projectId) {
+    public void updatePortfolio(long portfolioId) {
     }
 
     @GetMapping("/recent")
