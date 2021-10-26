@@ -20,19 +20,29 @@ public class Comment {
     private long pk;
 
     @ManyToOne
-    @JoinColumn(name = "portfolio_id", nullable = false)
+    @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column
     private LocalDate date;
 
-    @Column(length = 300, nullable = false)
+    @Column(length = 300)
     private String content;
+
+    @Column(nullable = false, columnDefinition = "char(1) default 'N'")
+    private Character deleteYN;
 
     @OneToMany(mappedBy = "comment")
     private List<ReComment> reCommentList;
+
+    public void deleteComment() {
+        this.deleteYN = 'Y';
+        this.user = null;
+        this.date = null;
+        this.content = null;
+    }
 }

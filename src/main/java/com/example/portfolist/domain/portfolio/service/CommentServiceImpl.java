@@ -1,5 +1,6 @@
 package com.example.portfolist.domain.portfolio.service;
 
+import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.portfolio.dto.request.CommentRequest;
 import com.example.portfolist.domain.portfolio.entity.Portfolio;
 import com.example.portfolist.domain.portfolio.entity.comment.Comment;
@@ -13,6 +14,7 @@ import com.example.portfolist.global.error.exception.PermissionDeniedException;
 import com.example.portfolist.global.security.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
@@ -33,19 +35,21 @@ public class CommentServiceImpl implements CommentService{
 
         commentRepository.save(Comment.builder()
                 .portfolio(portfolio)
-                .user(authenticationFacade.getUser())
+                .user(getCurrentUser())
                 .date(LocalDate.now())
+                .deleteYN('N')
                 .content(request.getContent())
                 .build());
     }
 
     @Override
+    @Transactional
     public void deleteComment(long commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFoundException::new);
 
-        if (comment.getUser().getPk() == authenticationFacade.getUser().getPk())
-            commentRepository.deleteById(commentId);
+        if (comment.getUser().getPk() == getCurrentUser().getPk())
+            comment.deleteComment();
         else
             throw new PermissionDeniedException();
     }
@@ -56,7 +60,7 @@ public class CommentServiceImpl implements CommentService{
                 .orElseThrow(CommentNotFoundException::new);
 
         reCommentRepository.save(ReComment.builder()
-                .user(authenticationFacade.getUser())
+                .user(getCurrentUser())
                 .comment(comment)
                 .date(LocalDate.now())
                 .content(request.getContent())
@@ -68,10 +72,14 @@ public class CommentServiceImpl implements CommentService{
         ReComment reComment = reCommentRepository.findById(reCommentId)
                 .orElseThrow(CommentNotFoundException::new);
 
-        if (reComment.getUser().getPk() == authenticationFacade.getUser().getPk())
+        if (reComment.getUser().getPk() == getCurrentUser().getPk())
             reCommentRepository.deleteById(reCommentId);
         else
             throw new PermissionDeniedException();
+    }
+
+    private User getCurrentUser() {
+        return authenticationFacade.getUser();
     }
 
 }
