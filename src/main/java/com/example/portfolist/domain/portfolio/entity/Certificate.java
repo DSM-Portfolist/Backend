@@ -1,13 +1,13 @@
 package com.example.portfolist.domain.portfolio.entity;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor
 @Entity
 public class Certificate {
 
@@ -21,4 +21,11 @@ public class Certificate {
 
     @Column(length = 45)
     private String content;
+
+    public static Certificate of(Portfolio portfolio, String certificate) {
+        return Certificate.builder()
+                .portfolio(portfolio)
+                .content(certificate)
+                .build();
+    }
 }
