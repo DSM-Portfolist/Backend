@@ -26,6 +26,8 @@ public class PortfolioRequest implements Serializable {
 
     private List<String> certificate;
 
+    private List<MoreInfoRequest> moreInfoRequestList;
+
     private String content;
 
     private String name;
