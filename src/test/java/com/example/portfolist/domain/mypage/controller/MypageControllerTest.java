@@ -234,7 +234,7 @@ public class MypageControllerTest extends ApiTest {
 
         @Test
         @DisplayName("200")
-        void changProfile_200() throws Exception {
+        void changeProfile_200() throws Exception {
             // given
             NormalUser normalUser = NormalUser.builder()
                     .email("testtest@gmail.com")
@@ -262,7 +262,7 @@ public class MypageControllerTest extends ApiTest {
 
         @Test
         @DisplayName("400")
-        void changProfile_400() throws Exception {
+        void changeProfile_400() throws Exception {
             // given
             NormalUser normalUser = NormalUser.builder()
                     .email("testtest@gmail.com")
