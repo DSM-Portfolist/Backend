@@ -21,4 +21,11 @@ public class PortfolioField {
     @ManyToOne
     @JoinColumn(name = "kind", nullable = false)
     private FieldKind fieldKind;
+
+    public static PortfolioField of(Portfolio portfolio, FieldKind fieldKind) {
+        return PortfolioField.builder()
+                .portfolio(portfolio)
+                .fieldKind(fieldKind)
+                .build();
+    }
 }

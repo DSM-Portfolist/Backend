@@ -1,20 +1,28 @@
 package com.example.portfolist.domain.portfolio.service;
 
+import com.example.portfolist.domain.auth.entity.FieldKind;
 import com.example.portfolist.domain.auth.entity.User;
-import com.example.portfolist.domain.portfolio.dto.request.BoxRequest;
+import com.example.portfolist.domain.auth.exception.FieldNotFoundException;
+import com.example.portfolist.domain.auth.repository.repository.FieldKindRepository;
 import com.example.portfolist.domain.portfolio.dto.request.ContainerRequest;
 import com.example.portfolist.domain.portfolio.dto.request.PortfolioRequest;
 import com.example.portfolist.domain.portfolio.dto.response.*;
+import com.example.portfolist.domain.portfolio.entity.Certificate;
+import com.example.portfolist.domain.portfolio.entity.MoreInfo;
 import com.example.portfolist.domain.portfolio.entity.Portfolio;
+import com.example.portfolist.domain.portfolio.entity.PortfolioField;
 import com.example.portfolist.domain.portfolio.entity.container.Box;
 import com.example.portfolist.domain.portfolio.entity.container.BoxImage;
 import com.example.portfolist.domain.portfolio.entity.container.BoxText;
 import com.example.portfolist.domain.portfolio.entity.container.Container;
 import com.example.portfolist.domain.portfolio.exception.PortfolioNotFoundException;
+import com.example.portfolist.domain.portfolio.repository.CertificateRepository;
 import com.example.portfolist.domain.portfolio.repository.Container.BoxImageRepository;
 import com.example.portfolist.domain.portfolio.repository.Container.BoxRepository;
 import com.example.portfolist.domain.portfolio.repository.Container.BoxTextRepository;
 import com.example.portfolist.domain.portfolio.repository.Container.ContainerRepository;
+import com.example.portfolist.domain.portfolio.repository.MoreInfoRepository;
+import com.example.portfolist.domain.portfolio.repository.PortfolioFieldRepository;
 import com.example.portfolist.domain.portfolio.repository.portfolio.PortfolioRepository;
 import com.example.portfolist.global.error.exception.PermissionDeniedException;
 import com.example.portfolist.global.file.FileUploadProvider;
@@ -37,6 +45,10 @@ public class PortfolioServiceImpl implements PortfolioService{
     private final BoxRepository boxRepository;
     private final BoxImageRepository boxImageRepository;
     private final BoxTextRepository boxTextRepository;
+    private final PortfolioFieldRepository portfolioFieldRepository;
+    private final FieldKindRepository fieldKindRepository;
+    private final MoreInfoRepository moreInfoRepository;
+    private final CertificateRepository certificateRepository;
 
     private final FileUploadProvider fileUploadProvider;
 
@@ -60,25 +72,28 @@ public class PortfolioServiceImpl implements PortfolioService{
 
     @Override
     @Transactional
-    public void createPortfolio(PortfolioRequest request) {
+    public void createPortfolio(PortfolioRequest request, List<List<MultipartFile>> boxImgListList) {
         User user = authenticationFacade.getUser();
         Portfolio portfolio = portfolioRepository.save(PortfolioRequest.of(request, user));
 
-        for (ContainerRequest containerRequest : request.getContainerList()) {
+        for (int i = 0; i < request.getContainerList().size(); i++) {
+            ContainerRequest containerRequest = request.getContainerList().get(i);
+
             Container container = containerRepository.save(Container.of(containerRequest, portfolio));
 
             Box box = boxRepository.save(Box.of(container));
 
-            if (containerRequest.getBoxImgList() != null)
-            for (MultipartFile file : containerRequest.getBoxImgList()) {
-                String boxImgName = fileUploadProvider.uploadFile(file);
-                boxImageRepository.save(BoxImage.of(box, boxImgName));
-            }
-
-            for ( BoxRequest boxRequest : containerRequest.getBoxList()) {
-                boxTextRepository.save(BoxText.of(box, boxRequest));
-            }
+            boxImgListList.get(i).forEach(boxImage -> boxImageRepository.save(BoxImage.of(box, fileUploadProvider.uploadFile(boxImage))));
+            containerRequest.getBoxList().forEach(boxRequest -> boxTextRepository.save(BoxText.of(box, boxRequest)));
         }
+
+        request.getField().forEach(fieldKindId -> portfolioFieldRepository.save(PortfolioField.of(portfolio, getFieldKind(fieldKindId))));
+        request.getMoreInfoRequestList().forEach(moreInfoRequest -> moreInfoRepository.save(MoreInfo.of(portfolio, moreInfoRequest)));
+        request.getCertificate().forEach(certificate -> certificateRepository.save(Certificate.of(portfolio, certificate)));
+    }
+
+    private FieldKind getFieldKind(Integer fieldKindId) {
+        return fieldKindRepository.findById(fieldKindId).orElseThrow(FieldNotFoundException::new);
     }
 
     @Override

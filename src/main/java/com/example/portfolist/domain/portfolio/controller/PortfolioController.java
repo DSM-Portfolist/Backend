@@ -26,8 +26,8 @@ public class PortfolioController {
 
     @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
-    public PortfolioListResponse getPortfolioList(Pageable pageable, @RequestParam(required = false)List<String> fieldList) {
-        return portfolioService.getPortfolioList(pageable, fieldList);
+    public PortfolioListResponse getPortfolioList(Pageable pageable, @RequestParam(required = false)List<String> field) {
+        return portfolioService.getPortfolioList(pageable, field);
     }
 
     @GetMapping("/{portfolioId}")
@@ -40,13 +40,13 @@ public class PortfolioController {
     @ResponseStatus(HttpStatus.CREATED)
     public void createPortfolio(@RequestPart(value = "portfolioRequest") PortfolioRequest request,
                                 @RequestPart(value = "file", required = false) MultipartFile file,
-                                @RequestPart(value = "boxImgList", required = false) List<MultipartFile> boxImgList) {
+                                @RequestPart(value = "boxImgList", required = false) List<List<MultipartFile>> boxImgListList) {
         if (file != null) {
             String fileName = fileUploadProvider.uploadFile(file);
             System.out.println("file is null");
             request.setFileName(fileName);
         }
-        portfolioService.createPortfolio(request);
+        portfolioService.createPortfolio(request, boxImgListList);
     }
 
     @DeleteMapping("/{portfolioId}")
