@@ -23,6 +23,8 @@ import com.example.portfolist.domain.portfolio.repository.Container.BoxTextRepos
 import com.example.portfolist.domain.portfolio.repository.Container.ContainerRepository;
 import com.example.portfolist.domain.portfolio.repository.MoreInfoRepository;
 import com.example.portfolist.domain.portfolio.repository.PortfolioFieldRepository;
+import com.example.portfolist.domain.portfolio.repository.comment.CommentRepository;
+import com.example.portfolist.domain.portfolio.repository.comment.ReCommentRepository;
 import com.example.portfolist.domain.portfolio.repository.portfolio.PortfolioRepository;
 import com.example.portfolist.global.error.exception.PermissionDeniedException;
 import com.example.portfolist.global.file.FileUploadProvider;
@@ -35,6 +37,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -49,6 +53,7 @@ public class PortfolioServiceImpl implements PortfolioService{
     private final FieldKindRepository fieldKindRepository;
     private final MoreInfoRepository moreInfoRepository;
     private final CertificateRepository certificateRepository;
+    private final CommentRepository commentRepository;
 
     private final FileUploadProvider fileUploadProvider;
 
@@ -66,8 +71,27 @@ public class PortfolioServiceImpl implements PortfolioService{
     }
 
     @Override
-    public PortfolioResponse getPortfolio(long projectId) {
-        return null;
+    @Transactional
+    public PortfolioResponse getPortfolio(long portfolioId) {
+        Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(PortfolioNotFoundException::new);
+
+        List<ContainerResponse> containerResponseList = containerRepository.findAllByPortfolio(portfolio).stream()
+                .map(container ->
+                ContainerResponse.builder()
+                        .containerTitle(container.getTitle())
+                        .boxImg(boxImageRepository.findAllByBox(boxRepository.findById(container.getId()).orElseThrow()).stream()
+                                .map(BoxImage::getUrl)
+                                .collect(Collectors.toList()))
+                        .boxList(boxTextRepository.findAllByBox(boxRepository.findById(container.getId()).orElseThrow()).stream()
+                                .map(BoxResponse::toDto)
+                                .collect(Collectors.toList()))
+                        .build()
+        ).collect(Collectors.toList());
+
+        List<CommentResponse> commentResponseList = commentRepository.findAllByPortfolio(portfolio).stream().map(CommentResponse::toDto)
+                .collect(Collectors.toList());
+
+        return PortfolioResponse.of(portfolio, containerResponseList, commentResponseList);
     }
 
     @Override
@@ -83,12 +107,15 @@ public class PortfolioServiceImpl implements PortfolioService{
 
             Box box = boxRepository.save(Box.of(container));
 
-            boxImgListList.get(i).forEach(boxImage -> boxImageRepository.save(BoxImage.of(box, fileUploadProvider.uploadFile(boxImage))));
-            containerRequest.getBoxList().forEach(boxRequest -> boxTextRepository.save(BoxText.of(box, boxRequest)));
+            if (boxImgListList != null)
+                boxImgListList.get(i).forEach(boxImage -> boxImageRepository.save(BoxImage.of(box, fileUploadProvider.uploadFile(boxImage))));
+
+            if (containerRequest.getBoxList() != null)
+                containerRequest.getBoxList().forEach(boxRequest -> boxTextRepository.save(BoxText.of(box, boxRequest)));
         }
 
         request.getField().forEach(fieldKindId -> portfolioFieldRepository.save(PortfolioField.of(portfolio, getFieldKind(fieldKindId))));
-        request.getMoreInfoRequestList().forEach(moreInfoRequest -> moreInfoRepository.save(MoreInfo.of(portfolio, moreInfoRequest)));
+        request.getMoreInfo().forEach(moreInfoRequest -> moreInfoRepository.save(MoreInfo.of(portfolio, moreInfoRequest)));
         request.getCertificate().forEach(certificate -> certificateRepository.save(Certificate.of(portfolio, certificate)));
     }
 

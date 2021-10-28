@@ -73,8 +73,6 @@ public class CommentControllerTest extends ApiTest {
 
         requestMvc(delete("/comment/" + comment.getPk()))
             .andExpect(status().isNoContent());
-
-        assertEquals(commentRepository.findAll().size(), 0);
     }
 
     @Test

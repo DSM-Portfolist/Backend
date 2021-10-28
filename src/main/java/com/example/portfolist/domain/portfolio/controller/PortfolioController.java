@@ -33,14 +33,14 @@ public class PortfolioController {
     @GetMapping("/{portfolioId}")
     @ResponseStatus(HttpStatus.OK)
     public PortfolioResponse getPortfolio(@PathVariable long portfolioId) {
-        return null;
+        return portfolioService.getPortfolio(portfolioId);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void createPortfolio(@RequestPart(value = "portfolioRequest") PortfolioRequest request,
                                 @RequestPart(value = "file", required = false) MultipartFile file,
-                                @RequestPart(value = "boxImgList", required = false) List<List<MultipartFile>> boxImgListList) {
+                                @RequestPart(value = "boxImgListList", required = false) List<List<MultipartFile>> boxImgListList) {
         if (file != null) {
             String fileName = fileUploadProvider.uploadFile(file);
             System.out.println("file is null");
