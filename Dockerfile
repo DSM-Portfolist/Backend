@@ -1,4 +1,4 @@
-FROM openjdk:11-jdk-slim
+FROM openjdk:11-jdk-slim AS builder
 
 VOLUME /rms-backend-springboot
 
