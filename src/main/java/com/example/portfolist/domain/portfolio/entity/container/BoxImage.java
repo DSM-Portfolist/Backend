@@ -1,13 +1,13 @@
 package com.example.portfolist.domain.portfolio.entity.container;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Entity
 public class BoxImage {
 
@@ -21,4 +21,11 @@ public class BoxImage {
 
     @Column(length = 100, nullable = false)
     private String url;
+
+    public static BoxImage of(Box box, String boxImgName) {
+        return BoxImage.builder()
+                .box(box)
+                .url(boxImgName)
+                .build();
+    }
 }

@@ -24,9 +24,9 @@ public class FieldKind {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @OneToMany(mappedBy = "fieldKind", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "fieldKind", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Field> field;
 
-    @OneToMany(mappedBy = "fieldKind", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "fieldKind", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<PortfolioField> portfolioFieldList;
 }

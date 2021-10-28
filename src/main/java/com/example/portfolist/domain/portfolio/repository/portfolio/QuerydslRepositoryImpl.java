@@ -54,7 +54,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                         portfolio.url,
                         portfolio.title,
                         portfolio.introduce,
-                        portfolio.date.stringValue(),
+                        portfolio.date,
                         user.pk,
                         user.name,
                         user.url,
@@ -70,14 +70,11 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                 .where(fieldKindIn(fieldCond))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(portfolio.date.stringValue().desc())
+                .orderBy(portfolio.pk.desc())
                 .fetchResults();
 
         List<PortfolioPreview> content = results.getResults();
-
-        content.forEach(p -> p.setField(
-                getFieldKindContentByPortfolioId(p.getId())
-        ));
+        content.forEach(p -> p.setField(getFieldKindContentByPortfolioId(p.getId())));
 
         long total = results.getTotal();
 

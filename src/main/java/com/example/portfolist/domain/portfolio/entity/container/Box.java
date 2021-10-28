@@ -1,14 +1,14 @@
 package com.example.portfolist.domain.portfolio.entity.container;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Entity
 public class Box {
 
@@ -20,9 +20,15 @@ public class Box {
     @JoinColumn(name = "container_id", nullable = false)
     private Container container;
 
-    @OneToMany(mappedBy = "box")
+    @OneToMany(mappedBy = "box", cascade = CascadeType.REMOVE)
     private List<BoxImage> boxImageList;
 
-    @OneToMany(mappedBy = "box")
+    @OneToMany(mappedBy = "box", cascade = CascadeType.REMOVE)
     private List<BoxText> boxTextList;
+
+    public static Box of(Container container) {
+        return Box.builder()
+                .container(container)
+                .build();
+    }
 }

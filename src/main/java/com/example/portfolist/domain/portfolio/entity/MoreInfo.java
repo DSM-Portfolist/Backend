@@ -1,14 +1,15 @@
 package com.example.portfolist.domain.portfolio.entity;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.example.portfolist.domain.portfolio.dto.request.MoreInfoRequest;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Getter
+@Builder
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class MoreInfo {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,8 +20,16 @@ public class MoreInfo {
     private Portfolio portfolio;
 
     @Column(length = 10)
-    private String key;
+    private String name;
 
     @Column(length = 45)
-    private String value;
+    private String content;
+
+    public static MoreInfo of(Portfolio portfolio, MoreInfoRequest moreInfoRequest) {
+        return MoreInfo.builder()
+                .name(moreInfoRequest.getName())
+                .content(moreInfoRequest.getContent())
+                .portfolio(portfolio)
+                .build();
+    }
 }

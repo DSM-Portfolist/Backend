@@ -6,9 +6,12 @@ import com.example.portfolist.domain.portfolio.dto.response.PortfolioResponse;
 import com.example.portfolist.domain.portfolio.dto.response.RecentPortfolioResponse;
 import com.example.portfolist.domain.portfolio.dto.response.ThisMonthPortfolioResponse;
 import com.example.portfolist.domain.portfolio.service.PortfolioService;
+import com.example.portfolist.global.file.FileUploadProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -19,27 +22,41 @@ import java.util.List;
 public class PortfolioController {
 
     private final PortfolioService portfolioService;
+    private final FileUploadProvider fileUploadProvider;
 
     @GetMapping("/list")
-    public PortfolioListResponse getPortfolioList(@RequestParam Pageable pageable, @RequestParam(required = false)List<String> fieldList) {
-        return portfolioService.getPortfolioList(pageable, fieldList);
+    @ResponseStatus(HttpStatus.OK)
+    public PortfolioListResponse getPortfolioList(Pageable pageable, @RequestParam(required = false)List<String> field) {
+        return portfolioService.getPortfolioList(pageable, field);
     }
 
-    @GetMapping("/{id}")
-    public PortfolioResponse getPortfolio(@PathVariable long projectId) {
-        return null;
+    @GetMapping("/{portfolioId}")
+    @ResponseStatus(HttpStatus.OK)
+    public PortfolioResponse getPortfolio(@PathVariable long portfolioId) {
+        return portfolioService.getPortfolio(portfolioId);
     }
 
     @PostMapping
-    public void createPortfolio(@RequestBody PortfolioRequest request) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createPortfolio(@RequestPart(value = "portfolioRequest") PortfolioRequest request,
+                                @RequestPart(value = "file", required = false) MultipartFile file,
+                                @RequestPart(value = "boxImgListList", required = false) List<List<MultipartFile>> boxImgListList) {
+        if (file != null) {
+            String fileName = fileUploadProvider.uploadFile(file);
+            System.out.println("file is null");
+            request.setFileName(fileName);
+        }
+        portfolioService.createPortfolio(request, boxImgListList);
     }
 
-    @DeleteMapping
-    public void deletePortfolio(long projectId) {
+    @DeleteMapping("/{portfolioId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePortfolio(@PathVariable long portfolioId) {
+        portfolioService.deletePortfolio(portfolioId);
     }
 
     @PutMapping
-    public void updatePortfolio(long projectId) {
+    public void updatePortfolio(long portfolioId) {
     }
 
     @GetMapping("/recent")

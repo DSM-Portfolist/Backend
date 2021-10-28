@@ -214,7 +214,9 @@ public class ApiTest extends IntegrationTest{
         return commentRepository.save(Comment.builder().portfolio(portfolio)
                 .user(user)
                 .date(LocalDate.now())
-                .content(content).build()
+                .content(content)
+                .deleteYN('N')
+                .build()
         );
     }
 

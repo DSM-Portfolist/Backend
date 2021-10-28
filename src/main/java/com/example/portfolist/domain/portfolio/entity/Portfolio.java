@@ -43,7 +43,7 @@ public class Portfolio {
     @Column(nullable = false)
     private LocalDate date;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "tinyint(1) default true")
     private boolean isOpen;
 
     @Column(length = 1)
@@ -56,7 +56,7 @@ public class Portfolio {
     @OneToMany(mappedBy = "portfolio")
     private List<MoreInfo> moreInfoList;
 
-    @OneToMany(mappedBy = "portfolio")
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.REMOVE)
     private List<Container> containerList;
 
     @OneToMany(mappedBy = "portfolio")

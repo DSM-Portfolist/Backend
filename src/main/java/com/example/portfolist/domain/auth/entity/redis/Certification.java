@@ -27,6 +27,7 @@ public class Certification implements Serializable {
     @Indexed
     private String email;
 
+    @Indexed
     private String token;
 
     private boolean certification;
@@ -34,7 +35,4 @@ public class Certification implements Serializable {
     @TimeToLive
     private Long exp;
 
-    public void setCertificationTrue() {
-        this.certification = true;
-    }
 }
