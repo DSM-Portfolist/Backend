@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -26,7 +25,7 @@ public class PortfolioRequest implements Serializable {
 
     private List<String> certificate;
 
-    private List<MoreInfoRequest> moreInfoRequestList;
+    private List<MoreInfoRequest> moreInfo;
 
     private String content;
 
