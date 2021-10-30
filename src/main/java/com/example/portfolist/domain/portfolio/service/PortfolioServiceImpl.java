@@ -66,6 +66,7 @@ public class PortfolioServiceImpl implements PortfolioService{
     public PortfolioResponse getPortfolioInfo(long portfolioId) {
         Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(PortfolioNotFoundException::new);
         Boolean touched = touchingRepository.findById(new TouchingId(getCurrentUser().getPk(), portfolioId)).isPresent();
+
         return PortfolioResponse.of(portfolio, isItMine(portfolioId), touched);
     }
 
@@ -109,6 +110,13 @@ public class PortfolioServiceImpl implements PortfolioService{
     public void deletePortfolio(long portfolioId) {
         if (!isItMine(portfolioId)) throw new PermissionDeniedException();
 
+        Portfolio portfolio = getPortfolio(portfolioId);
+
+        fileUploadProvider.deleteFile(portfolio.getUrl());
+        portfolio.getContainerList()
+                .forEach(container -> container.getContainerImageList()
+                        .forEach(containerImage -> fileUploadProvider.deleteFile(containerImage.getUrl())));
+
         portfolioRepository.deleteById(portfolioId);
     }
 
@@ -120,10 +128,6 @@ public class PortfolioServiceImpl implements PortfolioService{
     private boolean isItMine(long portfolioId) {
         Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(PortfolioNotFoundException::new);
         return portfolio.getUser().getPk() == getCurrentUser().getPk();
-    }
-
-    private User getCurrentUser() {
-        return authenticationFacade.getUser();
     }
 
     @Override
@@ -139,5 +143,13 @@ public class PortfolioServiceImpl implements PortfolioService{
     @Override
     public PortfolioListResponse getPortfolioByUser(long userId) {
         return null;
+    }
+
+    private User getCurrentUser() {
+        return authenticationFacade.getUser();
+    }
+
+    private Portfolio getPortfolio(long portfolioId) {
+        return portfolioRepository.findById(portfolioId).orElseThrow(PortfolioNotFoundException::new);
     }
 }
