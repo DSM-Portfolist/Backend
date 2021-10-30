@@ -41,12 +41,7 @@ public class PortfolioController {
     public void createPortfolio(@RequestPart(value = "portfolioRequest") PortfolioRequest request,
                                 @RequestPart(value = "file", required = false) MultipartFile file,
                                 @RequestPart(value = "boxImgListList", required = false) List<List<MultipartFile>> boxImgListList) {
-        if (file != null) {
-            String fileName = fileUploadProvider.uploadFile(file);
-            System.out.println("file is null");
-            request.setFileName(fileName);
-        }
-        portfolioService.createPortfolio(request, boxImgListList);
+        portfolioService.createPortfolio(request, file, boxImgListList);
     }
 
     @DeleteMapping("/{portfolioId}")

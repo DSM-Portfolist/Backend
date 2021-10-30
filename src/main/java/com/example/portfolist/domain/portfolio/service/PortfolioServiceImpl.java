@@ -72,9 +72,14 @@ public class PortfolioServiceImpl implements PortfolioService{
 
     @Override
     @Transactional
-    public void createPortfolio(PortfolioRequest request, List<List<MultipartFile>> boxImgListList) {
+    public void createPortfolio(PortfolioRequest request, MultipartFile file, List<List<MultipartFile>> boxImgListList) {
         User user = getCurrentUser();
         Portfolio portfolio = portfolioRepository.save(PortfolioRequest.of(request, user));
+
+        if (file != null) {
+            String fileName = fileUploadProvider.uploadFile(file);
+            request.setFileName(fileName);
+        }
 
         for (int i = 0; i < request.getContainerList().size(); i++) {
             ContainerRequest containerRequest = request.getContainerList().get(i);
