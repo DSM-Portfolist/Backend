@@ -15,15 +15,15 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PortfolioRequest implements Serializable {
+public class PortfolioRequest {
 
-    private Character icon;
+    private String icon;
 
     private String link;
 
     private List<Integer> field;
 
-    private List<String> certificate;
+    private List<CertificateRequest> certificateContainerList;
 
     private List<MoreInfoRequest> moreInfo;
 

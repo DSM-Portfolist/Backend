@@ -1,6 +1,6 @@
 package com.example.portfolist.domain.portfolio.dto.response;
 
-import com.example.portfolist.domain.portfolio.entity.container.BoxText;
+import com.example.portfolist.domain.portfolio.entity.container.ContainerText;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,14 +10,14 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoxResponse {
+public class ContainerTextResponse {
 
     private String boxTitle;
 
     private String boxContent;
 
-    public static BoxResponse toDto(BoxText boxText) {
-        return BoxResponse.builder()
+    public static ContainerTextResponse of(ContainerText boxText) {
+        return ContainerTextResponse.builder()
                 .boxTitle(boxText.getTitle())
                 .boxContent(boxText.getContent())
                 .build();

@@ -27,9 +27,11 @@ public class PortfolioResponse {
 
     private Boolean touched;
 
+    private Boolean isMine;
+
     private int totalTouching;
 
-    private Character icon;
+    private String icon;
 
     private String title;
 
@@ -41,21 +43,20 @@ public class PortfolioResponse {
 
     private List<ContainerResponse> containerList;
 
-    private List<String> certificate;
+    private List<CertificateContainerResponse> certificateContainerList;
 
     private String link;
 
     private String file;
 
-    private List<CommentResponse> commentList;
-
-    public static PortfolioResponse of(Portfolio portfolio, List<ContainerResponse> containerList, List<CommentResponse> commentList) {
+    public static PortfolioResponse of(Portfolio portfolio, Boolean isMine, Boolean touched) {
         return PortfolioResponse.builder()
                 .userId(portfolio.getUser().getPk())
                 .name(portfolio.getUser().getName())
                 .profileImg(portfolio.getUser().getUrl())
                 .createDate(portfolio.getDate())
-                .touched(false)
+                .touched(touched)
+                .isMine(isMine)
                 .totalTouching(portfolio.getTouchingList().size())
                 .icon(portfolio.getMainIcon())
                 .title(portfolio.getTitle())
@@ -66,13 +67,18 @@ public class PortfolioResponse {
                 .moreInfoList(portfolio.getMoreInfoList().stream()
                         .map(MoreInfoResponse::of)
                         .collect(Collectors.toList()))
-                .containerList(containerList)
-                .certificate(portfolio.getCertificateList().stream()
-                        .map(Certificate::getContent)
+                .containerList(portfolio.getContainerList().stream()
+                        .map(ContainerResponse::of)
+                        .collect(Collectors.toList()))
+                .certificateContainerList(portfolio.getCertificateContainerList().stream()
+                        .map(certificateContainer -> CertificateContainerResponse.builder()
+                                .title(certificateContainer.getTitle())
+                                .certificateList(certificateContainer.getCertificateList().stream()
+                                        .map(Certificate::getContent)
+                                        .collect(Collectors.toList())).build())
                         .collect(Collectors.toList()))
                 .link(portfolio.getLink())
                 .file(portfolio.getUrl())
-                .commentList(commentList)
                 .build();
     }
 }

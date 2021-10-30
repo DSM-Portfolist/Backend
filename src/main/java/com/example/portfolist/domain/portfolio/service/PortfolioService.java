@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface PortfolioService {
     PortfolioListResponse getPortfolioList(Pageable pageable, List<String> fieldList);
-    PortfolioResponse getPortfolio(long portfolioId);
+    PortfolioResponse getPortfolioInfo(long portfolioId);
     void createPortfolio(PortfolioRequest request, List<List<MultipartFile>> boxImgListList);
     void deletePortfolio(long portfolioId);
     void updatePortfolio(long portfolioId);

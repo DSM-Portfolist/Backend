@@ -121,9 +121,8 @@ public class MypageService {
     @Transactional
     public void deleteUser(User user) {
         portfolioFacade.deleteMoreInfoByUser(user);
-        portfolioFacade.deleteBoxImageByUser(user);
-        portfolioFacade.deleteBoxTextByUser(user);
-        portfolioFacade.deleteBoxByUser(user);
+        portfolioFacade.deleteContainerImageByUser(user);
+        portfolioFacade.deleteContainerTextByUser(user);
         portfolioFacade.deleteContainerByUser(user);
         portfolioFacade.deleteCertificateByUser(user);
         portfolioFacade.deleteTouchingByUser(user);

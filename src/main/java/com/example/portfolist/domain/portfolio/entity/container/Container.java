@@ -2,7 +2,6 @@ package com.example.portfolist.domain.portfolio.entity.container;
 
 import com.example.portfolist.domain.portfolio.dto.request.ContainerRequest;
 import com.example.portfolist.domain.portfolio.entity.Portfolio;
-import com.example.portfolist.domain.portfolio.entity.container.Box;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,7 +21,10 @@ public class Container {
     private String title;
 
     @OneToMany(mappedBy = "container", cascade = CascadeType.REMOVE)
-    private List<Box> boxList;
+    private List<ContainerImage> containerImageList;
+
+    @OneToMany(mappedBy = "container", cascade = CascadeType.REMOVE)
+    private List<ContainerText> containerTextList;
 
     @ManyToOne
     @JoinColumn(name = "portfolio_id")

@@ -10,15 +10,15 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
-public class BoxText {
+public class ContainerText {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long pk;
 
     @ManyToOne
-    @JoinColumn(name = "box_id", nullable = false)
-    private Box box;
+    @JoinColumn(name = "container_id", nullable = false)
+    private Container container;
 
     @Column(length = 45, nullable = false)
     private String title;
@@ -26,9 +26,9 @@ public class BoxText {
     @Column(length = 1500, nullable = false)
     private String content;
 
-    public static BoxText of(Box box, BoxRequest boxRequest) {
-        return BoxText.builder()
-                .box(box)
+    public static ContainerText of(Container container, BoxRequest boxRequest) {
+        return ContainerText.builder()
+                .container(container)
                 .title(boxRequest.getBoxTitle())
                 .content(boxRequest.getBoxContent())
                 .build();
