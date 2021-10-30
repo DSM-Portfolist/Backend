@@ -33,7 +33,7 @@ public class PortfolioController {
     @GetMapping("/{portfolioId}")
     @ResponseStatus(HttpStatus.OK)
     public PortfolioResponse getPortfolio(@PathVariable long portfolioId) {
-        return portfolioService.getPortfolio(portfolioId);
+        return portfolioService.getPortfolioInfo(portfolioId);
     }
 
     @PostMapping

@@ -16,15 +16,15 @@ public class Certificate {
     private long pk;
 
     @ManyToOne
-    @JoinColumn(name = "portfolio_id", nullable = false)
-    private Portfolio portfolio;
+    @JoinColumn(name = "certificateContainer_id", nullable = false)
+    private CertificateContainer certificateContainer;
 
     @Column(length = 45)
     private String content;
 
-    public static Certificate of(Portfolio portfolio, String certificate) {
+    public static Certificate of(CertificateContainer certificateContainer, String certificate) {
         return Certificate.builder()
-                .portfolio(portfolio)
+                .certificateContainer(certificateContainer)
                 .content(certificate)
                 .build();
     }

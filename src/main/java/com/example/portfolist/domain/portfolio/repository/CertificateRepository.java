@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CertificateRepository extends JpaRepository<Certificate, Long> {
 
-    void deleteByPortfolioUser(User user);
+    void deleteByCertificateContainerPortfolioUser(User user);
 
 }

@@ -36,13 +36,12 @@ public class Comment {
     @Column(nullable = false, columnDefinition = "char(1) default 'N'")
     private Character deleteYN;
 
-    @OneToMany(mappedBy = "comment")
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
     private List<ReComment> reCommentList;
 
     public void deleteComment() {
         this.deleteYN = 'Y';
-        this.user = null;
-        this.date = null;
         this.content = null;
+        this.user = null;
     }
 }

@@ -43,7 +43,7 @@ public class TouchingPortfolioGetRes {
         private long id;
         private String url;
         private List<String> field;
-        private Character icon;
+        private String icon;
         private String title;
         private String introduce;
         private ContentUser user;

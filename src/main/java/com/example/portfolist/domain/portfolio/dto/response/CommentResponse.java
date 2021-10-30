@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -16,7 +15,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class CommentResponse {
 
-    private long userId;
+    private Long userId;
 
     private String name;
 
@@ -32,18 +31,28 @@ public class CommentResponse {
 
     private List<ReCommentResponse> reCommentList;
 
-    public static CommentResponse toDto(Comment comment) {
+    public static CommentResponse of(Comment comment, Boolean isMine, List<ReCommentResponse> reCommentList) {
+        if (comment.getDeleteYN().equals('Y')) {
+            return CommentResponse.builder()
+                    .userId(null)
+                    .name(null)
+                    .profileImg(null)
+                    .isMine(null)
+                    .commentId(comment.getPk())
+                    .commentContent(null)
+                    .cDate(comment.getDate())
+                    .reCommentList(reCommentList)
+                    .build();
+        }
         return CommentResponse.builder()
                 .userId(comment.getUser().getPk())
                 .name(comment.getUser().getName())
                 .profileImg(comment.getUser().getUrl())
-                .isMine(false)
+                .isMine(isMine)
                 .commentId(comment.getPk())
                 .commentContent(comment.getContent())
                 .cDate(comment.getDate())
-                .reCommentList(comment.getReCommentList().stream()
-                        .map(ReCommentResponse::of)
-                        .collect(Collectors.toList()))
+                .reCommentList(reCommentList)
                 .build();
     }
 }

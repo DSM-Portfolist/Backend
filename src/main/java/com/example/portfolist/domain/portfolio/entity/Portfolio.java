@@ -47,25 +47,25 @@ public class Portfolio {
     private boolean isOpen;
 
     @Column(length = 1)
-    private Character mainIcon;
+    private String mainIcon;
 
     @LazyCollection(LazyCollectionOption.EXTRA)
-    @OneToMany(mappedBy = "portfolio")
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.REMOVE)
     private List<Comment> commentList;
 
-    @OneToMany(mappedBy = "portfolio")
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.REMOVE)
     private List<MoreInfo> moreInfoList;
 
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.REMOVE)
     private List<Container> containerList;
 
-    @OneToMany(mappedBy = "portfolio")
-    private List<Certificate> certificateList;
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.REMOVE)
+    private List<CertificateContainer> certificateContainerList;
 
     @LazyCollection(LazyCollectionOption.EXTRA)
-    @OneToMany(mappedBy = "portfolio")
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.REMOVE)
     private List<Touching> touchingList;
 
-    @OneToMany(mappedBy = "portfolio")
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.REMOVE)
     private List<PortfolioField> portfolioFields;
 }

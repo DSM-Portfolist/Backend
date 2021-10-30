@@ -399,9 +399,8 @@ public class MypageServiceTest extends ServiceTest {
 
             // then
             verify(portfolioFacade, times(1)).deleteMoreInfoByUser(any());
-            verify(portfolioFacade, times(1)).deleteBoxImageByUser(any());
-            verify(portfolioFacade, times(1)).deleteBoxTextByUser(any());
-            verify(portfolioFacade, times(1)).deleteBoxByUser(any());
+            verify(portfolioFacade, times(1)).deleteContainerImageByUser(any());
+            verify(portfolioFacade, times(1)).deleteContainerTextByUser(any());
             verify(portfolioFacade, times(1)).deleteContainerByUser(any());
             verify(portfolioFacade, times(1)).deleteCertificateByUser(any());
             verify(portfolioFacade, times(1)).deleteTouchingByUser(any());

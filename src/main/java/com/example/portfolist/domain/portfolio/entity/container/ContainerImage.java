@@ -9,22 +9,22 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
-public class BoxImage {
+public class ContainerImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long pk;
 
     @ManyToOne
-    @JoinColumn(name = "box_id", nullable = false)
-    private Box box;
+    @JoinColumn(name = "container_id", nullable = false)
+    private Container container;
 
     @Column(length = 100, nullable = false)
     private String url;
 
-    public static BoxImage of(Box box, String boxImgName) {
-        return BoxImage.builder()
-                .box(box)
+    public static ContainerImage of(Container container, String boxImgName) {
+        return ContainerImage.builder()
+                .container(container)
                 .url(boxImgName)
                 .build();
     }

@@ -2,9 +2,8 @@ package com.example.portfolist.domain.portfolio.repository;
 
 import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.portfolio.entity.touching.Touching;
-import com.example.portfolist.domain.portfolio.repository.Container.BoxImageRepository;
-import com.example.portfolist.domain.portfolio.repository.Container.BoxRepository;
-import com.example.portfolist.domain.portfolio.repository.Container.BoxTextRepository;
+import com.example.portfolist.domain.portfolio.repository.Container.ContainerImageRepository;
+import com.example.portfolist.domain.portfolio.repository.Container.ContainerTextRepository;
 import com.example.portfolist.domain.portfolio.repository.Container.ContainerRepository;
 import com.example.portfolist.domain.portfolio.repository.comment.CommentRepository;
 import com.example.portfolist.domain.portfolio.repository.comment.ReCommentRepository;
@@ -20,9 +19,8 @@ public class PortfolioFacade {
 
     private final CommentRepository commentRepository;
     private final ReCommentRepository reCommentRepository;
-    private final BoxImageRepository boxImageRepository;
-    private final BoxRepository boxRepository;
-    private final BoxTextRepository boxTextRepository;
+    private final ContainerImageRepository boxImageRepository;
+    private final ContainerTextRepository boxTextRepository;
     private final ContainerRepository containerRepository;
     private final CertificateRepository certificateRepository;
     private final MoreInfoRepository moreInfoRepository;
@@ -38,16 +36,12 @@ public class PortfolioFacade {
         moreInfoRepository.deleteByPortfolioUser(user);
     }
 
-    public void deleteBoxImageByUser(User user) {
-        boxImageRepository.deleteByBoxContainerPortfolioUser(user);
+    public void deleteContainerImageByUser(User user) {
+        boxImageRepository.deleteByContainerPortfolioUser(user);
     }
 
-    public void deleteBoxTextByUser(User user) {
-        boxTextRepository.deleteByBoxContainerPortfolioUser(user);
-    }
-
-    public void deleteBoxByUser(User user) {
-        boxRepository.deleteByContainerPortfolioUser(user);
+    public void deleteContainerTextByUser(User user) {
+        boxTextRepository.deleteByContainerPortfolioUser(user);
     }
 
     public void deleteContainerByUser(User user) {
@@ -55,7 +49,7 @@ public class PortfolioFacade {
     }
 
     public void deleteCertificateByUser(User user) {
-        certificateRepository.deleteByPortfolioUser(user);
+        certificateRepository.deleteByCertificateContainerPortfolioUser(user);
     }
 
     public void deletePortfolioByUser(User user) {
