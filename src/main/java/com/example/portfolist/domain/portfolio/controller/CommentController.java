@@ -1,8 +1,10 @@
 package com.example.portfolist.domain.portfolio.controller;
 
 import com.example.portfolist.domain.portfolio.dto.request.CommentRequest;
+import com.example.portfolist.domain.portfolio.dto.response.CommentListResponse;
 import com.example.portfolist.domain.portfolio.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +13,12 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController {
 
     private final CommentService commentService;
+
+    @GetMapping("/comment/{portfolioId}")
+    @ResponseStatus(HttpStatus.OK)
+    public CommentListResponse getCommentList(@PathVariable long portfolioId) {
+        return commentService.getCommentList(portfolioId);
+    }
 
     @PostMapping("/comment/{portfolioId}")
     @ResponseStatus(HttpStatus.CREATED)

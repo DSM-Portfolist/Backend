@@ -29,12 +29,12 @@ public class ReCommentResponse {
 
     private LocalDate rcDate;
 
-    public static ReCommentResponse of(ReComment reComment) {
+    public static ReCommentResponse of(ReComment reComment, Boolean isMine) {
         return ReCommentResponse.builder()
                 .userId(reComment.getUser().getPk())
                 .name(reComment.getUser().getName())
                 .profileImg(reComment.getUser().getUrl())
-                .isMine(false)
+                .isMine(isMine)
                 .reCommentId(reComment.getPk())
                 .reCommentContent(reComment.getContent())
                 .rcDate(reComment.getDate())

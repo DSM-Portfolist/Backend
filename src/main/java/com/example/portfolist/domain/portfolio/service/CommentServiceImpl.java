@@ -2,6 +2,9 @@ package com.example.portfolist.domain.portfolio.service;
 
 import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.portfolio.dto.request.CommentRequest;
+import com.example.portfolist.domain.portfolio.dto.response.CommentListResponse;
+import com.example.portfolist.domain.portfolio.dto.response.CommentResponse;
+import com.example.portfolist.domain.portfolio.dto.response.ReCommentResponse;
 import com.example.portfolist.domain.portfolio.entity.Portfolio;
 import com.example.portfolist.domain.portfolio.entity.comment.Comment;
 import com.example.portfolist.domain.portfolio.entity.comment.ReComment;
@@ -17,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,12 +34,31 @@ public class CommentServiceImpl implements CommentService{
     private final AuthenticationFacade authenticationFacade;
 
     @Override
-    public void createComment(long portfolioId, CommentRequest request) {
-        Portfolio portfolio = portfolioRepository.findById(portfolioId)
-                .orElseThrow(PortfolioNotFoundException::new);
+    public CommentListResponse getCommentList(long portfolioId) {
+        List<CommentResponse> comments = commentRepository.findAllByPortfolio(getPortfolio(portfolioId)).stream()
+                .map(comment -> CommentResponse.of(comment, isItMine(comment),
+                        comment.getReCommentList().stream()
+                                .map(reComment -> ReCommentResponse.of(reComment, isItMine(reComment)))
+                                .collect(Collectors.toList())))
+                .collect(Collectors.toList());
 
+        return new CommentListResponse(comments);
+    }
+
+    private Boolean isItMine(Comment comment) {
+        if(comment.getUser() == null)
+            return false;
+        return getCurrentUser().getPk() == comment.getUser().getPk();
+    }
+
+    private Boolean isItMine(ReComment comment) {
+        return getCurrentUser().getPk() == comment.getUser().getPk();
+    }
+
+    @Override
+    public void createComment(long portfolioId, CommentRequest request) {
         commentRepository.save(Comment.builder()
-                .portfolio(portfolio)
+                .portfolio(getPortfolio(portfolioId))
                 .user(getCurrentUser())
                 .date(LocalDate.now())
                 .deleteYN('N')
@@ -45,23 +69,23 @@ public class CommentServiceImpl implements CommentService{
     @Override
     @Transactional
     public void deleteComment(long commentId) {
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(CommentNotFoundException::new);
+        Comment comment = getComment(commentId);
 
-        if (comment.getUser().getPk() == getCurrentUser().getPk())
-            comment.deleteComment();
+        if (comment.getUser().getPk() == getCurrentUser().getPk()) {
+            if (comment.getReCommentList().size() == 0)
+                commentRepository.deleteById(commentId);
+            else
+                comment.deleteComment();
+        }
         else
             throw new PermissionDeniedException();
     }
 
     @Override
     public void createReComment(long commentId, CommentRequest request) {
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(CommentNotFoundException::new);
-
         reCommentRepository.save(ReComment.builder()
                 .user(getCurrentUser())
-                .comment(comment)
+                .comment(getComment(commentId))
                 .date(LocalDate.now())
                 .content(request.getContent())
                 .build());
@@ -82,4 +106,12 @@ public class CommentServiceImpl implements CommentService{
         return authenticationFacade.getUser();
     }
 
+    private Portfolio getPortfolio(long portfolioId) {
+        return portfolioRepository.findById(portfolioId).orElseThrow(PortfolioNotFoundException::new);
+    }
+
+    private Comment getComment(long commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(CommentNotFoundException::new);
+    }
 }
