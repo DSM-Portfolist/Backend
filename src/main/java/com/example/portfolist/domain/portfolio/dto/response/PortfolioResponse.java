@@ -25,6 +25,8 @@ public class PortfolioResponse {
 
     private LocalDate createDate;
 
+    private long portfolioId;
+
     private Boolean touched;
 
     private Boolean isMine;
@@ -55,6 +57,7 @@ public class PortfolioResponse {
                 .name(portfolio.getUser().getName())
                 .profileImg(portfolio.getUser().getUrl())
                 .createDate(portfolio.getDate())
+                .portfolioId(portfolio.getPk())
                 .touched(touched)
                 .isMine(isMine)
                 .totalTouching(portfolio.getTouchingList().size())
