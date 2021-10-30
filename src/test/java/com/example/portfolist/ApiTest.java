@@ -16,9 +16,8 @@ import com.example.portfolist.domain.portfolio.entity.PortfolioField;
 import com.example.portfolist.domain.portfolio.entity.comment.ReComment;
 import com.example.portfolist.domain.portfolio.entity.touching.Touching;
 import com.example.portfolist.domain.portfolio.entity.touching.TouchingId;
-import com.example.portfolist.domain.portfolio.repository.Container.BoxImageRepository;
-import com.example.portfolist.domain.portfolio.repository.Container.BoxRepository;
-import com.example.portfolist.domain.portfolio.repository.Container.BoxTextRepository;
+import com.example.portfolist.domain.portfolio.repository.Container.ContainerImageRepository;
+import com.example.portfolist.domain.portfolio.repository.Container.ContainerTextRepository;
 import com.example.portfolist.domain.portfolio.repository.Container.ContainerRepository;
 import com.example.portfolist.domain.portfolio.repository.comment.CommentRepository;
 import com.example.portfolist.domain.portfolio.repository.comment.ReCommentRepository;
@@ -71,11 +70,9 @@ public class ApiTest extends IntegrationTest{
     @Autowired
     protected ReCommentRepository reCommentRepository;
     @Autowired
-    protected BoxImageRepository boxImageRepository;
+    protected ContainerImageRepository boxImageRepository;
     @Autowired
-    protected BoxRepository boxRepository;
-    @Autowired
-    protected BoxTextRepository boxTextRepository;
+    protected ContainerTextRepository boxTextRepository;
     @Autowired
     protected ContainerRepository containerRepository;
     @Autowired
@@ -102,7 +99,6 @@ public class ApiTest extends IntegrationTest{
         moreInfoRepository.deleteAll();
         boxImageRepository.deleteAll();
         boxTextRepository.deleteAll();
-        boxRepository.deleteAll();
         containerRepository.deleteAll();
         certificateRepository.deleteAll();
         touchingRepository.deleteAll();
