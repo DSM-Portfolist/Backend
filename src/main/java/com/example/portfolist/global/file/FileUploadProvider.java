@@ -37,7 +37,7 @@ public class FileUploadProvider {
 
     @Async
     public void deleteFile(String fileUrl) {
-        String fileName = fileUrl.substring(fileUrl.lastIndexOf("/"));
+        String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
         s3UploadService.deleteFile(fileName);
     }
 
