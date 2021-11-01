@@ -25,7 +25,7 @@ public class PortfolioPreview {
 
     private int totalComment;
 
-    private boolean touched;
+    private Boolean touched;
 
     private long userId;
 
