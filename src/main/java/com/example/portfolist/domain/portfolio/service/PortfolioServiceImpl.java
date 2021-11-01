@@ -3,7 +3,9 @@ package com.example.portfolist.domain.portfolio.service;
 import com.example.portfolist.domain.auth.entity.FieldKind;
 import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.auth.exception.FieldNotFoundException;
+import com.example.portfolist.domain.auth.exception.UserNotFoundException;
 import com.example.portfolist.domain.auth.repository.repository.FieldKindRepository;
+import com.example.portfolist.domain.auth.repository.repository.UserRepository;
 import com.example.portfolist.domain.portfolio.dto.request.CertificateRequest;
 import com.example.portfolist.domain.portfolio.dto.request.ContainerRequest;
 import com.example.portfolist.domain.portfolio.dto.request.PortfolioRequest;
@@ -30,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -45,6 +48,7 @@ public class PortfolioServiceImpl implements PortfolioService{
     private final CertificateContainerRepository certificateContainerRepository;
     private final CertificateRepository certificateRepository;
     private final TouchingRepository touchingRepository;
+    private final UserRepository userRepository;
 
     private final FileUploadProvider fileUploadProvider;
 
@@ -136,18 +140,32 @@ public class PortfolioServiceImpl implements PortfolioService{
     }
 
     @Override
-    public RecentPortfolioResponse getRecentPortfolio(int size) {
-        return null;
+    public List<RecentPortfolioResponse> getRecentPortfolio(Pageable pageable) {
+        return portfolioRepository.findAllByOrderByDateDesc(pageable).getContent().stream()
+                .map(RecentPortfolioResponse::of)
+                .collect(Collectors.toList());
     }
 
     @Override
     public ThisMonthPortfolioResponse getThisMonthPortfolio() {
-        return null;
+        Portfolio thisMonthPortfolio = portfolioRepository.findThisMonthPortfolio();
+
+        return thisMonthPortfolio != null ? ThisMonthPortfolioResponse.of(thisMonthPortfolio) : null;
     }
 
     @Override
-    public PortfolioListResponse getPortfolioByUser(long userId) {
-        return null;
+    @Transactional
+    public List<PortfolioPreview> getPortfolioByUser(long userId) {
+        return portfolioRepository.findAllByUser(getUserById(userId));
+    }
+
+    @Override
+    public List<PortfolioPreview> getMyTouchingPortfolio(Pageable pageable, long userId) {
+        return portfolioRepository.findMyTouchingPortfolio(pageable, getUserById(userId));
+    }
+
+    private User getUserById(long userId) {
+        return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
     }
 
     private User getCurrentUser() {

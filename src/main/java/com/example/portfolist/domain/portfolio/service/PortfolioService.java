@@ -1,10 +1,7 @@
 package com.example.portfolist.domain.portfolio.service;
 
 import com.example.portfolist.domain.portfolio.dto.request.PortfolioRequest;
-import com.example.portfolist.domain.portfolio.dto.response.PortfolioListResponse;
-import com.example.portfolist.domain.portfolio.dto.response.PortfolioResponse;
-import com.example.portfolist.domain.portfolio.dto.response.RecentPortfolioResponse;
-import com.example.portfolist.domain.portfolio.dto.response.ThisMonthPortfolioResponse;
+import com.example.portfolist.domain.portfolio.dto.response.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,7 +13,8 @@ public interface PortfolioService {
     void createPortfolio(PortfolioRequest request, MultipartFile file, List<List<MultipartFile>> boxImgListList);
     void deletePortfolio(long portfolioId);
     void updatePortfolio(long portfolioId);
-    RecentPortfolioResponse getRecentPortfolio(int size);
+    List<RecentPortfolioResponse> getRecentPortfolio(Pageable pageable);
     ThisMonthPortfolioResponse getThisMonthPortfolio();
-    PortfolioListResponse getPortfolioByUser(long userId);
+    List<PortfolioPreview> getPortfolioByUser(long userId);
+    List<PortfolioPreview> getMyTouchingPortfolio(Pageable pageable, long userId);
 }

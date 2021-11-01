@@ -10,6 +10,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -51,7 +52,7 @@ public class Portfolio {
 
     @LazyCollection(LazyCollectionOption.EXTRA)
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.REMOVE)
-    private List<Comment> commentList;
+    private final List<Comment> commentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.REMOVE)
     private List<MoreInfo> moreInfoList;
@@ -64,7 +65,7 @@ public class Portfolio {
 
     @LazyCollection(LazyCollectionOption.EXTRA)
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.REMOVE)
-    private List<Touching> touchingList;
+    private final List<Touching> touchingList = new ArrayList<>();
 
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.REMOVE)
     private List<PortfolioField> portfolioFields;
