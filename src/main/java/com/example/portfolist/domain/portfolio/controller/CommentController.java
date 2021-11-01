@@ -2,11 +2,13 @@ package com.example.portfolist.domain.portfolio.controller;
 
 import com.example.portfolist.domain.portfolio.dto.request.CommentRequest;
 import com.example.portfolist.domain.portfolio.dto.response.CommentListResponse;
+import com.example.portfolist.domain.portfolio.dto.response.ReCommentResponse;
 import com.example.portfolist.domain.portfolio.service.CommentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,6 +32,12 @@ public class CommentController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteComment(@PathVariable long commentId) {
         commentService.deleteComment(commentId);
+    }
+
+    @GetMapping("/re-comment/{commentId}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ReCommentResponse> getReCommentList(@PathVariable long commentId) {
+        return commentService.getReCommentList(commentId);
     }
 
     @PostMapping("/re-comment/{commentId}")

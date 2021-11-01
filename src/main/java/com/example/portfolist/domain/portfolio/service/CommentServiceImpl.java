@@ -34,12 +34,11 @@ public class CommentServiceImpl implements CommentService{
     private final AuthenticationFacade authenticationFacade;
 
     @Override
+    @Transactional
     public CommentListResponse getCommentList(long portfolioId) {
+
         List<CommentResponse> comments = commentRepository.findAllByPortfolio(getPortfolio(portfolioId)).stream()
-                .map(comment -> CommentResponse.of(comment, isItMine(comment),
-                        comment.getReCommentList().stream()
-                                .map(reComment -> ReCommentResponse.of(reComment, isItMine(reComment)))
-                                .collect(Collectors.toList())))
+                .map(comment -> CommentResponse.of(comment, isItMine(comment)))
                 .collect(Collectors.toList());
 
         return new CommentListResponse(comments);
@@ -79,6 +78,15 @@ public class CommentServiceImpl implements CommentService{
         }
         else
             throw new PermissionDeniedException();
+    }
+
+    @Override
+    public List<ReCommentResponse> getReCommentList(long commentId) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+
+        return reCommentRepository.findAllByComment(comment).stream()
+                .map(reComment -> ReCommentResponse.of(reComment, isItMine(reComment)))
+                .collect(Collectors.toList());
     }
 
     @Override
