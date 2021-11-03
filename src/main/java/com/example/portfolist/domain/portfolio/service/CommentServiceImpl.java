@@ -1,7 +1,7 @@
 package com.example.portfolist.domain.portfolio.service;
 
 import com.example.portfolist.domain.auth.entity.User;
-import com.example.portfolist.domain.portfolio.dto.request.CommentRequest;
+import com.example.portfolist.domain.portfolio.dto.request.ContentRequest;
 import com.example.portfolist.domain.portfolio.dto.response.CommentListResponse;
 import com.example.portfolist.domain.portfolio.dto.response.CommentResponse;
 import com.example.portfolist.domain.portfolio.dto.response.ReCommentResponse;
@@ -34,28 +34,17 @@ public class CommentServiceImpl implements CommentService{
     private final AuthenticationFacade authenticationFacade;
 
     @Override
-    @Transactional
     public CommentListResponse getCommentList(long portfolioId) {
 
-        List<CommentResponse> comments = commentRepository.findAllByPortfolio(getPortfolio(portfolioId)).stream()
-                .map(comment -> CommentResponse.of(comment, isItMine(comment)))
+        List<CommentResponse> comments = commentRepository.findByPortfolioPk(portfolioId).stream()
+                .map(comment -> CommentResponse.of(comment, comment.getUser() != null && getCurrentUser().getPk() == comment.getUser().getPk()))
                 .collect(Collectors.toList());
 
         return new CommentListResponse(comments);
     }
 
-    private Boolean isItMine(Comment comment) {
-        if(comment.getUser() == null)
-            return false;
-        return getCurrentUser().getPk() == comment.getUser().getPk();
-    }
-
-    private Boolean isItMine(ReComment comment) {
-        return getCurrentUser().getPk() == comment.getUser().getPk();
-    }
-
     @Override
-    public void createComment(long portfolioId, CommentRequest request) {
+    public void createComment(long portfolioId, ContentRequest request) {
         commentRepository.save(Comment.builder()
                 .portfolio(getPortfolio(portfolioId))
                 .user(getCurrentUser())
@@ -85,12 +74,12 @@ public class CommentServiceImpl implements CommentService{
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
 
         return reCommentRepository.findAllByComment(comment).stream()
-                .map(reComment -> ReCommentResponse.of(reComment, isItMine(reComment)))
+                .map(reComment -> ReCommentResponse.of(reComment, getCurrentUser().getPk() == comment.getUser().getPk()))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public void createReComment(long commentId, CommentRequest request) {
+    public void createReComment(long commentId, ContentRequest request) {
         reCommentRepository.save(ReComment.builder()
                 .user(getCurrentUser())
                 .comment(getComment(commentId))

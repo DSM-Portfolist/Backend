@@ -1,6 +1,6 @@
 package com.example.portfolist.domain.portfolio.controller;
 
-import com.example.portfolist.domain.portfolio.dto.request.CommentRequest;
+import com.example.portfolist.domain.portfolio.dto.request.ContentRequest;
 import com.example.portfolist.domain.portfolio.dto.response.CommentListResponse;
 import com.example.portfolist.domain.portfolio.dto.response.ReCommentResponse;
 import com.example.portfolist.domain.portfolio.service.CommentService;
@@ -24,7 +24,7 @@ public class CommentController {
 
     @PostMapping("/comment/{portfolioId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createComment(@PathVariable long portfolioId, @RequestBody CommentRequest request) {
+    public void createComment(@PathVariable long portfolioId, @RequestBody ContentRequest request) {
         commentService.createComment(portfolioId, request);
     }
 
@@ -42,7 +42,7 @@ public class CommentController {
 
     @PostMapping("/re-comment/{commentId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createReComment(@PathVariable long commentId, @RequestBody CommentRequest request) {
+    public void createReComment(@PathVariable long commentId, @RequestBody ContentRequest request) {
         commentService.createReComment(commentId, request);
     }
 
