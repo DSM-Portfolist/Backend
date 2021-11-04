@@ -3,10 +3,7 @@ package com.example.portfolist.domain.mypage.controller;
 import com.example.portfolist.domain.mypage.dto.request.PasswordChangeRequest;
 import com.example.portfolist.domain.mypage.dto.request.PasswordCheckRequest;
 import com.example.portfolist.domain.mypage.dto.request.UserInfoChangeRequest;
-import com.example.portfolist.domain.mypage.dto.response.NotificationGetResponse;
-import com.example.portfolist.domain.mypage.dto.response.TouchingPortfolioGetRes;
-import com.example.portfolist.domain.mypage.dto.response.UserInfoGetResponse;
-import com.example.portfolist.domain.mypage.dto.response.UserPortfolioGetResponse;
+import com.example.portfolist.domain.mypage.dto.response.*;
 import com.example.portfolist.domain.mypage.service.MypageService;
 import com.example.portfolist.global.security.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +30,11 @@ public class MypageController {
     @PostMapping("/password")
     public void checkPassword(@Valid @RequestBody PasswordCheckRequest request) {
         mypageService.checkPassword(request, authenticationFacade.getNormalUser());
+    }
+
+    @GetMapping("/profile")
+    public ProfileGetResponse getProfile() {
+        return mypageService.getProfile(authenticationFacade.getUser());
     }
 
     @PostMapping("/profile")

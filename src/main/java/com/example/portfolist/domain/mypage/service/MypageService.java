@@ -11,10 +11,7 @@ import com.example.portfolist.domain.auth.repository.AuthFacade;
 import com.example.portfolist.domain.mypage.dto.request.PasswordChangeRequest;
 import com.example.portfolist.domain.mypage.dto.request.PasswordCheckRequest;
 import com.example.portfolist.domain.mypage.dto.request.UserInfoChangeRequest;
-import com.example.portfolist.domain.mypage.dto.response.NotificationGetResponse;
-import com.example.portfolist.domain.mypage.dto.response.TouchingPortfolioGetRes;
-import com.example.portfolist.domain.mypage.dto.response.UserInfoGetResponse;
-import com.example.portfolist.domain.mypage.dto.response.UserPortfolioGetResponse;
+import com.example.portfolist.domain.mypage.dto.response.*;
 import com.example.portfolist.domain.mypage.repository.MypageFacade;
 import com.example.portfolist.domain.portfolio.repository.PortfolioFacade;
 import com.example.portfolist.global.error.exception.WrongFileException;
@@ -53,6 +50,12 @@ public class MypageService {
         if (!passwordEncoder.matches(request.getNowPassword(), normalUser.getPassword())) {
             throw new PasswordNotMatchedException();
         }
+    }
+
+    public ProfileGetResponse getProfile(User user) {
+        String profile = user.getUrl();
+        boolean githubUser = user.getNormalUser()!=null;
+        return new ProfileGetResponse(profile, githubUser);
     }
 
     public void registerProfile(MultipartFile file, NormalUser normalUser) {
