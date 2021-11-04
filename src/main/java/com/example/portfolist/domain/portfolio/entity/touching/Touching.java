@@ -27,7 +27,7 @@ public class Touching {
     @JoinColumn(name = "portfolio_id", nullable = false)
     private Portfolio portfolio;
 
-    public static Touching of(User user, Portfolio portfolio) {
+    public static Touching toEntity(User user, Portfolio portfolio) {
         return Touching.builder()
                 .id(new TouchingId(user.getPk(), portfolio.getPk()))
                 .user(user)

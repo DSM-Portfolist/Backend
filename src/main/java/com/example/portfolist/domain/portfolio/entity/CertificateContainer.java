@@ -1,5 +1,6 @@
 package com.example.portfolist.domain.portfolio.entity;
 
+import com.example.portfolist.domain.portfolio.dto.request.CertificateRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,4 +27,12 @@ public class CertificateContainer {
 
     @OneToMany(mappedBy = "certificateContainer", cascade = CascadeType.REMOVE)
     private List<Certificate> certificateList;
+
+
+    public static CertificateContainer toEntity(CertificateRequest request, Portfolio portfolio) {
+        return CertificateContainer.builder()
+                .title(request.getTitle())
+                .portfolio(portfolio)
+                .build();
+    }
 }

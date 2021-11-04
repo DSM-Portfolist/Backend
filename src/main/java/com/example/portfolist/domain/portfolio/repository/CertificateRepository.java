@@ -8,4 +8,6 @@ public interface CertificateRepository extends JpaRepository<Certificate, Long> 
 
     void deleteByCertificateContainerPortfolioUser(User user);
 
+    void deleteByCertificateContainerPortfolioPk(long portfolioId);
+
 }

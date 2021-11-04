@@ -1,6 +1,7 @@
 package com.example.portfolist.domain.portfolio.entity;
 
 import com.example.portfolist.domain.auth.entity.User;
+import com.example.portfolist.domain.portfolio.dto.request.PortfolioRequest;
 import com.example.portfolist.domain.portfolio.entity.comment.Comment;
 import com.example.portfolist.domain.portfolio.entity.container.Container;
 import com.example.portfolist.domain.portfolio.entity.touching.Touching;
@@ -55,18 +56,40 @@ public class Portfolio {
     private final List<Comment> commentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.REMOVE)
-    private List<MoreInfo> moreInfoList;
+    private final List<MoreInfo> moreInfoList = new ArrayList<>();
 
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.REMOVE)
-    private List<Container> containerList;
+    private final List<Container> containerList = new ArrayList<>();
 
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.REMOVE)
-    private List<CertificateContainer> certificateContainerList;
+    private final List<CertificateContainer> certificateContainerList = new ArrayList<>();
 
     @LazyCollection(LazyCollectionOption.EXTRA)
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.REMOVE)
     private final List<Touching> touchingList = new ArrayList<>();
 
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.REMOVE)
-    private List<PortfolioField> portfolioFields;
+    private final List<PortfolioField> portfolioFields = new ArrayList<>();
+
+    public void update(PortfolioRequest request) {
+        this.title = request.getTitle();
+        this.introduce = request.getIntroduce();
+        this.link = request.getLink();
+        this.url = request.getFileName();
+        this.mainIcon = request.getIcon();
+        this.isOpen = request.getIsOpen();
+    }
+
+    public static Portfolio toEntity(PortfolioRequest request, User user) {
+        return Portfolio.builder()
+                .user(user)
+                .title(request.getTitle())
+                .introduce(request.getIntroduce())
+                .link(request.getLink())
+                .url(request.getFileName())
+                .date(LocalDate.now())
+                .isOpen(request.getIsOpen())
+                .mainIcon(request.getIcon())
+                .build();
+    }
 }

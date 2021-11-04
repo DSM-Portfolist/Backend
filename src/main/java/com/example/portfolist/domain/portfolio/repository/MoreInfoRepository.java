@@ -8,4 +8,6 @@ public interface MoreInfoRepository extends JpaRepository<MoreInfo, Long> {
 
     void deleteByPortfolioUser(User user);
 
+    void deleteByPortfolioPk(long portfolioId);
+
 }

@@ -26,7 +26,7 @@ public class ContainerText {
     @Column(length = 1500, nullable = false)
     private String content;
 
-    public static ContainerText of(Container container, BoxRequest boxRequest) {
+    public static ContainerText toEntity(Container container, BoxRequest boxRequest) {
         return ContainerText.builder()
                 .container(container)
                 .title(boxRequest.getBoxTitle())

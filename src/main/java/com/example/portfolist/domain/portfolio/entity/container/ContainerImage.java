@@ -22,7 +22,7 @@ public class ContainerImage {
     @Column(length = 100, nullable = false)
     private String url;
 
-    public static ContainerImage of(Container container, String boxImgName) {
+    public static ContainerImage toEntity(Container container, String boxImgName) {
         return ContainerImage.builder()
                 .container(container)
                 .url(boxImgName)

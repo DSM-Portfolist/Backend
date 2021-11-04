@@ -25,7 +25,7 @@ public class MoreInfo {
     @Column(length = 45)
     private String content;
 
-    public static MoreInfo of(Portfolio portfolio, MoreInfoRequest moreInfoRequest) {
+    public static MoreInfo toEntity(Portfolio portfolio, MoreInfoRequest moreInfoRequest) {
         return MoreInfo.builder()
                 .name(moreInfoRequest.getName())
                 .content(moreInfoRequest.getContent())

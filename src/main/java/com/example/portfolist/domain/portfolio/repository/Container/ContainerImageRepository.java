@@ -8,4 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ContainerImageRepository extends JpaRepository<ContainerImage,Long> {
 
     void deleteByContainerPortfolioUser(User user);
+    void deleteByContainerPortfolioPk(long portfolioId);
 }

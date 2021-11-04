@@ -22,7 +22,7 @@ public class PortfolioField {
     @JoinColumn(name = "kind", nullable = false)
     private FieldKind fieldKind;
 
-    public static PortfolioField of(Portfolio portfolio, FieldKind fieldKind) {
+    public static PortfolioField toEntity(Portfolio portfolio, FieldKind fieldKind) {
         return PortfolioField.builder()
                 .portfolio(portfolio)
                 .fieldKind(fieldKind)
