@@ -612,4 +612,44 @@ public class MypageServiceTest extends ServiceTest {
 
     }
 
+    @Nested
+    @DisplayName("Change Notification Status")
+    class ChangeNotificationStatus {
+
+        @Test
+        @DisplayName("notification on")
+        void changeNotification_On() {
+            // given
+            User user = User.builder()
+                    .githubId("githubUser")
+                    .name("가나다")
+                    .notificationStatus(false)
+                    .build();
+
+            // when
+            mypageService.changeNotificationStatus(user, true);
+
+            // then
+            Assertions.assertEquals(user.isNotificationStatus(), true);
+        }
+
+        @Test
+        @DisplayName("notification off")
+        void changeNotification_Off() {
+            // given
+            User user = User.builder()
+                    .githubId("githubUser")
+                    .name("가나다")
+                    .notificationStatus(true)
+                    .build();
+
+            // when
+            mypageService.changeNotificationStatus(user, false);
+
+            // then
+            Assertions.assertEquals(user.isNotificationStatus(), false);
+        }
+
+    }
+
 }

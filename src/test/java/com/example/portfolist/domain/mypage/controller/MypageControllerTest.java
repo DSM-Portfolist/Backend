@@ -4,6 +4,7 @@ import com.example.portfolist.ApiTest;
 import com.example.portfolist.domain.auth.entity.FieldKind;
 import com.example.portfolist.domain.auth.entity.NormalUser;
 import com.example.portfolist.domain.auth.entity.User;
+import com.example.portfolist.domain.mypage.dto.request.NotificationStatusChangeRequest;
 import com.example.portfolist.domain.mypage.dto.request.PasswordChangeRequest;
 import com.example.portfolist.domain.mypage.dto.request.PasswordCheckRequest;
 import com.example.portfolist.domain.mypage.dto.request.UserInfoChangeRequest;
@@ -658,6 +659,40 @@ public class MypageControllerTest extends ApiTest {
             // when
             setToken(token);
             ResultActions resultActions = requestMvc(get("/user/notification/status"));
+
+            // then
+            resultActions.andExpect(status().is(200));
+        }
+
+    }
+
+    @Nested
+    @DisplayName("알림 on/off 바꾸기")
+    class changeNotificationStatus {
+
+        private NotificationStatusChangeRequest makeRequest(boolean status) throws NoSuchFieldException, IllegalAccessException {
+            NotificationStatusChangeRequest request = new NotificationStatusChangeRequest();
+            inputField(request, "notification", status);
+            return request;
+        }
+
+        @Test
+        @DisplayName("200")
+        void changeNotificationStatus_200() throws Exception {
+            // given
+            User user = User.builder()
+                    .githubId("githubUser")
+                    .name("가나다")
+                    .notificationStatus(false)
+                    .build();
+            user = userRepository.save(user);
+
+            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+            NotificationStatusChangeRequest request = makeRequest(true);
+
+            // when
+            setToken(token);
+            ResultActions resultActions = requestMvc(put("/user/notification"), request);
 
             // then
             resultActions.andExpect(status().is(200));
