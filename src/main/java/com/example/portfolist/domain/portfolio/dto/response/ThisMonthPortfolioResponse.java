@@ -16,16 +16,22 @@ public class ThisMonthPortfolioResponse {
 
     private String img;
 
+    private String title;
+
     private String name;
 
     private String introduce;
 
+    private long totalTouching;
+
     public static ThisMonthPortfolioResponse of(Portfolio thisMonthPortfolio) {
         return ThisMonthPortfolioResponse.builder()
                 .id(thisMonthPortfolio.getPk())
+                .title(thisMonthPortfolio.getTitle())
                 .img(thisMonthPortfolio.getUrl())
                 .name(thisMonthPortfolio.getUser().getName())
                 .introduce(thisMonthPortfolio.getIntroduce())
+                .totalTouching(thisMonthPortfolio.getTouchingList().size())
                 .build();
     }
 }
