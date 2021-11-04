@@ -1,12 +1,10 @@
 package com.example.portfolist.domain.mypage.controller;
 
+import com.example.portfolist.domain.mypage.dto.request.NotificationStatusChangeRequest;
 import com.example.portfolist.domain.mypage.dto.request.PasswordChangeRequest;
 import com.example.portfolist.domain.mypage.dto.request.PasswordCheckRequest;
 import com.example.portfolist.domain.mypage.dto.request.UserInfoChangeRequest;
-import com.example.portfolist.domain.mypage.dto.response.NotificationGetResponse;
-import com.example.portfolist.domain.mypage.dto.response.TouchingPortfolioGetRes;
-import com.example.portfolist.domain.mypage.dto.response.UserInfoGetResponse;
-import com.example.portfolist.domain.mypage.dto.response.UserPortfolioGetResponse;
+import com.example.portfolist.domain.mypage.dto.response.*;
 import com.example.portfolist.domain.mypage.service.MypageService;
 import com.example.portfolist.global.security.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +31,11 @@ public class MypageController {
     @PostMapping("/password")
     public void checkPassword(@Valid @RequestBody PasswordCheckRequest request) {
         mypageService.checkPassword(request, authenticationFacade.getNormalUser());
+    }
+
+    @GetMapping("/profile")
+    public ProfileGetResponse getProfile() {
+        return mypageService.getProfile(authenticationFacade.getUser());
     }
 
     @PostMapping("/profile")
@@ -76,6 +79,16 @@ public class MypageController {
     @GetMapping("/notification")
     public List<NotificationGetResponse> getNotification() {
         return mypageService.getNotification(authenticationFacade.getUser());
+    }
+
+    @GetMapping("/notification/status")
+    public NotificationStatusGetResponse getNotificationStatus() {
+        return mypageService.getNotificationStatus(authenticationFacade.getUser());
+    }
+
+    @PutMapping("/notification")
+    public void changeNotificationStatus(@Valid @RequestBody NotificationStatusChangeRequest request) {
+        mypageService.changeNotificationStatus(authenticationFacade.getUser(), request.getNotification());
     }
 
 }

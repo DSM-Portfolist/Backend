@@ -83,6 +83,7 @@ public class AuthService {
             User user = User.builder()
                     .githubId(nickname)
                     .name(name==null ? nickname : name)
+                    .notificationStatus(true)
                     .url(url)
                     .build();
             user = authFacade.save(user);
@@ -141,6 +142,7 @@ public class AuthService {
         User user = User.builder()
                 .normalUser(normalUser)
                 .name(request.getName())
+                .notificationStatus(true)
                 .build();
         user = authFacade.save(user);
 

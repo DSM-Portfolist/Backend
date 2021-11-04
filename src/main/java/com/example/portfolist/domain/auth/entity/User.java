@@ -42,6 +42,9 @@ public class User {
     @Column(name = "url")
     private String url;
 
+    @Column(name = "notification_status")
+    private boolean notificationStatus;
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Portfolio> portfolioList;
 
@@ -76,6 +79,10 @@ public class User {
     public void updateChange(String name, String url) {
         this.name = name;
         this.url = url;
+    }
+
+    public void updateNotificationStatus(boolean status) {
+        this.notificationStatus = status;
     }
 
 }
