@@ -22,7 +22,7 @@ public class TouchingServiceImpl implements TouchingService{
 
     @Override
     public void createTouching(long portfolioId) {
-        touchingRepository.save(Touching.of(getCurrentUser(), getPortfolio(portfolioId)));
+        touchingRepository.save(Touching.toEntity(getCurrentUser(), getPortfolio(portfolioId)));
     }
 
     @Override
