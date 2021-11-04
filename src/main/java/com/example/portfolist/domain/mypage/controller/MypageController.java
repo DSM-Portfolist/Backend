@@ -1,5 +1,6 @@
 package com.example.portfolist.domain.mypage.controller;
 
+import com.example.portfolist.domain.mypage.dto.request.NotificationStatusChangeRequest;
 import com.example.portfolist.domain.mypage.dto.request.PasswordChangeRequest;
 import com.example.portfolist.domain.mypage.dto.request.PasswordCheckRequest;
 import com.example.portfolist.domain.mypage.dto.request.UserInfoChangeRequest;
@@ -83,6 +84,11 @@ public class MypageController {
     @GetMapping("/notification/status")
     public NotificationStatusGetResponse getNotificationStatus() {
         return mypageService.getNotificationStatus(authenticationFacade.getUser());
+    }
+
+    @PutMapping("/notification")
+    public void changeNotificationStatus(@Valid @RequestBody NotificationStatusChangeRequest request) {
+        mypageService.changeNotificationStatus(authenticationFacade.getUser(), request.getNotification());
     }
 
 }

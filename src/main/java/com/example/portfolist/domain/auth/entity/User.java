@@ -81,4 +81,8 @@ public class User {
         this.url = url;
     }
 
+    public void updateNotificationStatus(boolean status) {
+        this.notificationStatus = status;
+    }
+
 }

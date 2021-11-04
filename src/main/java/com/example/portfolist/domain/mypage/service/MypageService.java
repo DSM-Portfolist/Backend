@@ -163,4 +163,8 @@ public class MypageService {
         return new NotificationStatusGetResponse(user.isNotificationStatus());
     }
 
+    public void changeNotificationStatus(User user, boolean status) {
+        user.updateNotificationStatus(status);
+    }
+
 }
