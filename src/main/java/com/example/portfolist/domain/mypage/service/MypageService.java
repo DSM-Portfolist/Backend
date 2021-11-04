@@ -54,7 +54,7 @@ public class MypageService {
 
     public ProfileGetResponse getProfile(User user) {
         String profile = user.getUrl();
-        boolean githubUser = user.getNormalUser()!=null;
+        boolean githubUser = user.getGithubId()!=null;
         return new ProfileGetResponse(profile, githubUser);
     }
 

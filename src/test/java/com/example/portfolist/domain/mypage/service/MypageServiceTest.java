@@ -12,6 +12,7 @@ import com.example.portfolist.domain.mypage.dto.request.PasswordChangeRequest;
 import com.example.portfolist.domain.mypage.dto.request.PasswordCheckRequest;
 import com.example.portfolist.domain.mypage.dto.request.UserInfoChangeRequest;
 import com.example.portfolist.domain.mypage.dto.response.NotificationGetResponse;
+import com.example.portfolist.domain.mypage.dto.response.ProfileGetResponse;
 import com.example.portfolist.domain.mypage.dto.response.UserInfoGetResponse;
 import com.example.portfolist.domain.mypage.dto.response.UserPortfolioGetResponse;
 import com.example.portfolist.domain.mypage.entity.NoticeType;
@@ -159,6 +160,47 @@ public class MypageServiceTest extends ServiceTest {
 
             // when -> then
             Assertions.assertThrows(PasswordNotMatchedException.class, () -> mypageService.checkPassword(request, normalUser));
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Get Profile")
+    class GetProfile {
+
+        @Test
+        @DisplayName("Github User")
+        void getProfile_githubUser() {
+            // given
+            User user = User.builder()
+                    .name("가나다")
+                    .url("profileUrl")
+                    .githubId("githubId")
+                    .build();
+
+            // when
+            ProfileGetResponse response = mypageService.getProfile(user);
+
+            // then
+            Assertions.assertEquals(response.getProfile(), "profileUrl");
+            Assertions.assertEquals(response.isGithubUser(), true);
+        }
+
+        @Test
+        @DisplayName("Normal User")
+        void getProfile_normalUser() {
+            //given
+            User user = User.builder()
+                    .name("가나다")
+                    .url("profileUrl")
+                    .build();
+
+            // when
+            ProfileGetResponse response = mypageService.getProfile(user);
+
+            // then
+            Assertions.assertEquals(response.getProfile(), "profileUrl");
+            Assertions.assertEquals(response.isGithubUser(), false);
         }
 
     }
