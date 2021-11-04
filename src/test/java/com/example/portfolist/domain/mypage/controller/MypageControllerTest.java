@@ -638,4 +638,31 @@ public class MypageControllerTest extends ApiTest {
 
     }
 
+    @Nested
+    @DisplayName("알림 on/off 가져오기")
+    class getNotificationStatus {
+
+        @Test
+        @DisplayName("200")
+        void getNotificationStatus_200() throws Exception {
+            // given
+            User user = User.builder()
+                    .githubId("githubUser")
+                    .name("가나다")
+                    .notificationStatus(false)
+                    .build();
+            user = userRepository.save(user);
+
+            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+
+            // when
+            setToken(token);
+            ResultActions resultActions = requestMvc(get("/user/notification/status"));
+
+            // then
+            resultActions.andExpect(status().is(200));
+        }
+
+    }
+
 }

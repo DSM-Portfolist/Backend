@@ -11,10 +11,7 @@ import com.example.portfolist.domain.auth.repository.AuthFacade;
 import com.example.portfolist.domain.mypage.dto.request.PasswordChangeRequest;
 import com.example.portfolist.domain.mypage.dto.request.PasswordCheckRequest;
 import com.example.portfolist.domain.mypage.dto.request.UserInfoChangeRequest;
-import com.example.portfolist.domain.mypage.dto.response.NotificationGetResponse;
-import com.example.portfolist.domain.mypage.dto.response.ProfileGetResponse;
-import com.example.portfolist.domain.mypage.dto.response.UserInfoGetResponse;
-import com.example.portfolist.domain.mypage.dto.response.UserPortfolioGetResponse;
+import com.example.portfolist.domain.mypage.dto.response.*;
 import com.example.portfolist.domain.mypage.entity.NoticeType;
 import com.example.portfolist.domain.mypage.entity.Notification;
 import com.example.portfolist.domain.mypage.repository.MypageFacade;
@@ -569,6 +566,48 @@ public class MypageServiceTest extends ServiceTest {
             // then
             verify(mypageFacade, times(1)).deleteAlreadyReadNotification(any());
             Assertions.assertEquals(responses.size(), 1);
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Get Notification Status")
+    class GetNotificationStatus {
+
+        @Test
+        @DisplayName("notification on")
+        void getNotification_On() {
+            // given
+            User user = User.builder()
+                    .githubId("githubUser")
+                    .notificationStatus(true)
+                    .name("가나다")
+                    .build();
+
+            // when
+            NotificationStatusGetResponse response = mypageService.getNotificationStatus(user);
+
+            // then
+            Assertions.assertEquals(response.isNotification(), true);
+
+        }
+
+        @Test
+        @DisplayName("notification off")
+        void getNotification_Off() {
+            // given
+            User user = User.builder()
+                    .githubId("githubUser")
+                    .name("가나다")
+                    .notificationStatus(false)
+                    .build();
+
+            // when
+            NotificationStatusGetResponse response = mypageService.getNotificationStatus(user);
+
+            // then
+            Assertions.assertEquals(response.isNotification(), false);
+
         }
 
     }
