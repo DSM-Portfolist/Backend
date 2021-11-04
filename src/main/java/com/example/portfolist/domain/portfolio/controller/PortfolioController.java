@@ -1,5 +1,6 @@
 package com.example.portfolist.domain.portfolio.controller;
 
+import com.example.portfolist.domain.portfolio.dto.request.ContainerRequest;
 import com.example.portfolist.domain.portfolio.dto.request.PortfolioRequest;
 import com.example.portfolist.domain.portfolio.dto.response.*;
 import com.example.portfolist.domain.portfolio.service.PortfolioService;
@@ -33,10 +34,31 @@ public class PortfolioController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createPortfolio(@RequestPart(value = "portfolioRequest") PortfolioRequest request,
-                                @RequestPart(value = "file", required = false) MultipartFile file,
-                                @RequestPart(value = "boxImgListList", required = false) List<List<MultipartFile>> boxImgListList) {
-        portfolioService.createPortfolio(request, file, boxImgListList);
+    public Long createPortfolio(@RequestPart(value = "request") PortfolioRequest request,
+                                @RequestPart(value = "file", required = false) MultipartFile file) {
+        return portfolioService.createPortfolio(request, file);
+    }
+
+    @PostMapping("/container")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createContainer(@RequestPart(value = "request") ContainerRequest request, @RequestPart(value = "containerImgList", required = false) List<MultipartFile> containerImgList) {
+        portfolioService.createContainer(request, containerImgList);
+    }
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void updatePortfolio(long portfolioId,
+                                @RequestPart(value = "request") PortfolioRequest request,
+                                @RequestPart(value = "file", required = false) MultipartFile file) {
+        portfolioService.updatePortfolio(portfolioId, request, file);
+    }
+
+    @PutMapping("/container")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void updateContainer(long portfolioId,
+                                @RequestPart(value = "request") ContainerRequest request,
+                                @RequestPart(value = "file", required = false) MultipartFile file) {
+        portfolioService.updateContainer(portfolioId, request, file);
     }
 
     @DeleteMapping("/{portfolioId}")
@@ -45,9 +67,6 @@ public class PortfolioController {
         portfolioService.deletePortfolio(portfolioId);
     }
 
-    @PutMapping
-    public void updatePortfolio(long portfolioId) {
-    }
 
     @GetMapping("/recent")
     public List<RecentPortfolioResponse> getRecentPortfolio(Pageable pageable) {
