@@ -159,4 +159,8 @@ public class MypageService {
                 .collect(Collectors.toList());
     }
 
+    public NotificationStatusGetResponse getNotificationStatus(User user) {
+        return new NotificationStatusGetResponse(user.isNotificationStatus());
+    }
+
 }

@@ -80,4 +80,9 @@ public class MypageController {
         return mypageService.getNotification(authenticationFacade.getUser());
     }
 
+    @GetMapping("/notification/status")
+    public NotificationStatusGetResponse getNotificationStatus() {
+        return mypageService.getNotificationStatus(authenticationFacade.getUser());
+    }
+
 }
