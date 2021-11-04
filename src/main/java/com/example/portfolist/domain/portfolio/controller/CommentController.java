@@ -52,4 +52,10 @@ public class CommentController {
         commentService.deleteReComment(reCommentId);
     }
 
+    @PostMapping("/comment/{commentId}/report")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void reportComment(@PathVariable long commentId, @RequestBody ContentRequest request) {
+        commentService.reportComment(commentId, request);
+    }
+
 }

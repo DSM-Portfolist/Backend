@@ -3,7 +3,7 @@ package com.example.portfolist.domain.portfolio.controller;
 import com.example.portfolist.ApiTest;
 import com.example.portfolist.domain.auth.entity.NormalUser;
 import com.example.portfolist.domain.auth.entity.User;
-import com.example.portfolist.domain.portfolio.dto.request.CommentRequest;
+import com.example.portfolist.domain.portfolio.dto.request.ContentRequest;
 import com.example.portfolist.domain.portfolio.entity.Portfolio;
 import com.example.portfolist.domain.portfolio.entity.comment.Comment;
 import com.example.portfolist.domain.portfolio.entity.comment.ReComment;
@@ -47,7 +47,7 @@ public class CommentControllerTest extends ApiTest {
         setToken(jwtTokenProvider.generateAccessToken(user.getPk()));
 
         requestMvc(post("/comment/" + portfolio.getPk())
-                , new CommentRequest("와 포트폴리오가 너무 멋져요"))
+                , new ContentRequest("와 포트폴리오가 너무 멋져요"))
                 .andExpect(status().isCreated());
 
         assertEquals(commentRepository.findAll().size(), 1);
@@ -59,7 +59,7 @@ public class CommentControllerTest extends ApiTest {
         Portfolio portfolio = createPortfolio(user, "testTitle", "testIntroduce");
 
         requestMvc(post("/comment/" + portfolio.getPk())
-                , new CommentRequest("와 포트폴리오가 너무 멋져요"))
+                , new ContentRequest("와 포트폴리오가 너무 멋져요"))
                 .andExpect(status().isUnauthorized());
 
         assertEquals(commentRepository.findAll().size(), 0);
@@ -97,7 +97,7 @@ public class CommentControllerTest extends ApiTest {
         setToken(jwtTokenProvider.generateAccessToken(user.getPk()));
 
         requestMvc(post("/re-comment/" + comment.getPk())
-                , new CommentRequest("와 포트폴리오가 너무 멋져요"))
+                , new ContentRequest("와 포트폴리오가 너무 멋져요"))
                 .andExpect(status().isCreated());
 
         assertEquals(reCommentRepository.findAll().size(), 1);
@@ -111,7 +111,7 @@ public class CommentControllerTest extends ApiTest {
         Comment comment = createComment(user, portfolio, "test Content");
 
         requestMvc(post("/re-comment/" + comment.getPk())
-                , new CommentRequest("와 포트폴리오가 너무 멋져요"))
+                , new ContentRequest("와 포트폴리오가 너무 멋져요"))
                 .andExpect(status().isUnauthorized());
 
         assertEquals(reCommentRepository.findAll().size(), 0);

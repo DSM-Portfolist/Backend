@@ -19,4 +19,5 @@ public interface CommentService {
 
     List<ReCommentResponse> getReCommentList(long commentId);
 
+    void reportComment(long commentId, ContentRequest request);
 }

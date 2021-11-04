@@ -99,6 +99,11 @@ public class CommentServiceImpl implements CommentService{
             throw new PermissionDeniedException();
     }
 
+    @Override
+    public void reportComment(long commentId, ContentRequest request) {
+
+    }
+
     private User getCurrentUser() {
         return authenticationFacade.getUser();
     }
