@@ -35,4 +35,6 @@ public class PortfolioRequest {
 
     private Boolean isOpen;
 
+    private List<ContainerRequest> containerList;
+
 }

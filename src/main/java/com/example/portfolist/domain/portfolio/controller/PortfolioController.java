@@ -35,8 +35,8 @@ public class PortfolioController {
     @ResponseStatus(HttpStatus.CREATED)
     public void createPortfolio(@RequestPart(value = "portfolioRequest") PortfolioRequest request,
                                 @RequestPart(value = "file", required = false) MultipartFile file,
-                                @RequestPart(value = "boxImgListList", required = false) List<List<MultipartFile>> boxImgListList) {
-        portfolioService.createPortfolio(request, file, boxImgListList);
+                                @RequestPart(value = "containerImgListList", required = false) List<List<MultipartFile>> containerImgListList) {
+        portfolioService.createPortfolio(request, file, containerImgListList);
     }
 
     @DeleteMapping("/{portfolioId}")
@@ -45,8 +45,12 @@ public class PortfolioController {
         portfolioService.deletePortfolio(portfolioId);
     }
 
-    @PutMapping
-    public void updatePortfolio(long portfolioId) {
+    @PutMapping("/{portfolioId}")
+    public void updatePortfolio(@PathVariable long portfolioId,
+                                @RequestPart(value = "portfolioRequest") PortfolioRequest request,
+                                @RequestPart(value = "file", required = false) MultipartFile file,
+                                @RequestPart(value = "containerImgListList", required = false) List<List<MultipartFile>> containerImgListList) {
+        portfolioService.updatePortfolio(portfolioId, request, file, containerImgListList);
     }
 
     @GetMapping("/recent")
