@@ -6,17 +6,18 @@ import com.example.portfolist.domain.portfolio.dto.response.QPortfolioPreview;
 import com.example.portfolist.domain.portfolio.entity.Portfolio;
 import com.example.portfolist.global.security.AuthenticationFacade;
 import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.example.portfolist.domain.auth.entity.QUser.user;
@@ -69,7 +70,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                 .where(fieldKindIn(fieldCond))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(portfolio.pk.desc())
+                .orderBy(descOrAsc(pageable.getSort()))
                 .fetchResults();
 
         List<PortfolioPreview> content = results.getResults();
@@ -87,6 +88,10 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                 .from(portfolioField)
                 .where(portfolioField.portfolio.pk.eq(id))
                 .fetch();
+    }
+
+    private OrderSpecifier<LocalDate> descOrAsc(Sort sort) {
+        return sort.toString().equals("date: DESC") ? portfolio.date.desc() : portfolio.date.asc();
     }
 
     private BooleanExpression fieldKindIn(List<String> fieldCond) {
