@@ -1,6 +1,5 @@
 package com.example.portfolist.domain.portfolio.service;
 
-import com.example.portfolist.domain.portfolio.dto.request.ContainerRequest;
 import com.example.portfolist.domain.portfolio.dto.request.PortfolioRequest;
 import com.example.portfolist.domain.portfolio.dto.response.*;
 import org.springframework.data.domain.Pageable;
@@ -11,13 +10,11 @@ import java.util.List;
 public interface PortfolioService {
     PortfolioListResponse getPortfolioList(Pageable pageable, List<String> fieldList);
     PortfolioResponse getPortfolioInfo(long portfolioId);
-    Long createPortfolio(PortfolioRequest request, MultipartFile file);
-    void createContainer(ContainerRequest containerRequest, List<MultipartFile> containerImgList);
+    void createPortfolio(PortfolioRequest request, MultipartFile file, List<List<MultipartFile>> boxImgListList);
     void deletePortfolio(long portfolioId);
-    Long updatePortfolio(long portfolioId, PortfolioRequest request, MultipartFile file);
+    Long updatePortfolio(long portfolioId, PortfolioRequest request, MultipartFile file, List<List<MultipartFile>> boxImgListList);
     List<RecentPortfolioResponse> getRecentPortfolio(Pageable pageable);
     ThisMonthPortfolioResponse getThisMonthPortfolio();
     List<PortfolioPreview> getPortfolioByUser(long userId);
     List<PortfolioPreview> getMyTouchingPortfolio(Pageable pageable, long userId);
-    void updateContainer(long portfolioId, ContainerRequest request, MultipartFile file);
 }
