@@ -3,7 +3,9 @@ package com.example.portfolist.domain.portfolio.service;
 import com.example.portfolist.domain.auth.entity.FieldKind;
 import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.auth.exception.FieldNotFoundException;
+import com.example.portfolist.domain.auth.exception.UserNotFoundException;
 import com.example.portfolist.domain.auth.repository.repository.FieldKindRepository;
+import com.example.portfolist.domain.auth.repository.repository.UserRepository;
 import com.example.portfolist.domain.portfolio.dto.request.CertificateRequest;
 import com.example.portfolist.domain.portfolio.dto.request.ContainerRequest;
 import com.example.portfolist.domain.portfolio.dto.request.PortfolioRequest;
@@ -29,7 +31,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,14 +41,15 @@ public class PortfolioServiceImpl implements PortfolioService{
 
     private final PortfolioRepository portfolioRepository;
     private final ContainerRepository containerRepository;
-    private final ContainerImageRepository boxImageRepository;
-    private final ContainerTextRepository boxTextRepository;
+    private final ContainerImageRepository containerImageRepository;
+    private final ContainerTextRepository containerTextRepository;
     private final PortfolioFieldRepository portfolioFieldRepository;
     private final FieldKindRepository fieldKindRepository;
     private final MoreInfoRepository moreInfoRepository;
     private final CertificateContainerRepository certificateContainerRepository;
     private final CertificateRepository certificateRepository;
     private final TouchingRepository touchingRepository;
+    private final UserRepository userRepository;
 
     private final FileUploadProvider fileUploadProvider;
 
@@ -67,50 +72,29 @@ public class PortfolioServiceImpl implements PortfolioService{
         Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(PortfolioNotFoundException::new);
         Boolean touched = touchingRepository.findById(new TouchingId(getCurrentUser().getPk(), portfolioId)).isPresent();
 
-        return PortfolioResponse.of(portfolio, isItMine(portfolioId), touched);
+        return PortfolioResponse.of(portfolio, portfolio.getUser().getPk() == getCurrentUser().getPk(), touched);
     }
 
     @Override
     @Transactional
-    public void createPortfolio(PortfolioRequest request, List<List<MultipartFile>> boxImgListList) {
+    public void createPortfolio(PortfolioRequest request, MultipartFile file, List<List<MultipartFile>> containerImgListList) {
         User user = getCurrentUser();
-        Portfolio portfolio = portfolioRepository.save(PortfolioRequest.of(request, user));
 
-        for (int i = 0; i < request.getContainerList().size(); i++) {
-            ContainerRequest containerRequest = request.getContainerList().get(i);
-
-            Container container = containerRepository.save(Container.of(containerRequest, portfolio));
-
-            if (boxImgListList != null)
-                boxImgListList.get(i).forEach(boxImage -> boxImageRepository.save(ContainerImage.of(container, fileUploadProvider.uploadFile(boxImage))));
-
-            if (containerRequest.getBoxList() != null)
-                containerRequest.getBoxList().forEach(boxRequest -> boxTextRepository.save(ContainerText.of(container, boxRequest)));
+        if (file != null) {
+            String fileName = fileUploadProvider.uploadFile(file);
+            request.setFileName(fileName);
         }
 
-        request.getField().forEach(fieldKindId -> portfolioFieldRepository.save(PortfolioField.of(portfolio, getFieldKind(fieldKindId))));
-        request.getMoreInfo().forEach(moreInfoRequest -> moreInfoRepository.save(MoreInfo.of(portfolio, moreInfoRequest)));
+        Portfolio portfolio = portfolioRepository.save(Portfolio.toEntity(request, user));
 
-        for (CertificateRequest certificateRequest : request.getCertificateContainerList()) {
-            CertificateContainer certificateContainer = certificateContainerRepository
-                    .save(CertificateContainer.builder()
-                            .portfolio(portfolio)
-                            .title(certificateRequest.getTitle())
-                            .build());
-            certificateRequest.getCertificateList().forEach(s -> certificateRepository.save(Certificate.builder()
-                    .certificateContainer(certificateContainer).content(s).build()));
-        }
-    }
-
-    private FieldKind getFieldKind(Integer fieldKindId) {
-        return fieldKindRepository.findById(fieldKindId).orElseThrow(FieldNotFoundException::new);
+        saveOther(portfolio, request, containerImgListList);
     }
 
     @Override
     public void deletePortfolio(long portfolioId) {
-        if (!isItMine(portfolioId)) throw new PermissionDeniedException();
-
         Portfolio portfolio = getPortfolio(portfolioId);
+
+        if (!(portfolio.getUser().getPk() == getCurrentUser().getPk())) throw new PermissionDeniedException();
 
         fileUploadProvider.deleteFile(portfolio.getUrl());
         portfolio.getContainerList()
@@ -121,28 +105,94 @@ public class PortfolioServiceImpl implements PortfolioService{
     }
 
     @Override
-    public void updatePortfolio(long portfolioId) {
+    public Long updatePortfolio(long portfolioId, PortfolioRequest request, MultipartFile file, List<List<MultipartFile>> boxImgListList) {
+        Portfolio portfolio = getPortfolio(portfolioId);
+        if (file != null) {
+            fileUploadProvider.deleteFile(portfolio.getUrl());
+            String fileName = fileUploadProvider.uploadFile(file);
+            request.setFileName(fileName);
+        }
+        portfolio.update(request);
+        portfolio.getPortfolioFields().clear();
 
-    }
+        containerImageRepository.findByContainerPortfolioPk(portfolioId).forEach(img -> fileUploadProvider.deleteFile(img.getUrl()));
 
-    private boolean isItMine(long portfolioId) {
-        Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(PortfolioNotFoundException::new);
-        return portfolio.getUser().getPk() == getCurrentUser().getPk();
+        portfolioFieldRepository.deleteByPortfolioPk(portfolioId);
+        containerRepository.deleteByPortfolioPk(portfolioId);
+        certificateContainerRepository.deleteByPortfolioPk(portfolioId);
+        moreInfoRepository.deleteByPortfolioPk(portfolioId);
+        containerImageRepository.deleteByContainerPortfolioPk(portfolioId);
+        containerTextRepository.deleteByContainerPortfolioPk(portfolioId);
+
+        saveOther(portfolio, request, boxImgListList);
+
+        return portfolioId;
     }
 
     @Override
-    public RecentPortfolioResponse getRecentPortfolio(int size) {
-        return null;
+    public List<RecentPortfolioResponse> getRecentPortfolio(Pageable pageable) {
+        return portfolioRepository.findAllByOrderByDateDesc(pageable).getContent().stream()
+                .map(RecentPortfolioResponse::of)
+                .collect(Collectors.toList());
     }
 
     @Override
     public ThisMonthPortfolioResponse getThisMonthPortfolio() {
-        return null;
+        Portfolio thisMonthPortfolio = portfolioRepository.findThisMonthPortfolio();
+
+        return thisMonthPortfolio != null ? ThisMonthPortfolioResponse.of(thisMonthPortfolio) : null;
     }
 
     @Override
-    public PortfolioListResponse getPortfolioByUser(long userId) {
-        return null;
+    @Transactional
+    public List<PortfolioPreview> getPortfolioByUser(long userId) {
+        return portfolioRepository.findAllByUser(getUserById(userId));
+    }
+
+    @Override
+    public List<PortfolioPreview> getMyTouchingPortfolio(Pageable pageable, long userId) {
+        return portfolioRepository.findMyTouchingPortfolio(pageable, getUserById(userId));
+    }
+
+    @Override
+    public PortfolioListResponse searchPortfolio(Pageable pageable, String query, String searchType) {
+        List<Portfolio> portfolioList = new ArrayList<>();
+
+        if (searchType.equals("user")) {
+            portfolioList = portfolioRepository.findByUserNameLike("%" + query + "%");
+        } else if (searchType.equals("title")) {
+            portfolioList = portfolioRepository.findByTitleLike("%" + query + "%");
+        }
+
+        return new PortfolioListResponse(portfolioList.size(),
+                portfolioList.stream().map(PortfolioPreview::of).collect(Collectors.toList()));
+    }
+
+    private void saveOther(Portfolio portfolio, PortfolioRequest request, List<List<MultipartFile>> boxImgListList) {
+        for (int i = 0; i < request.getContainerList().size(); i++) {
+            ContainerRequest containerRequest = request.getContainerList().get(i);
+
+            Container container = containerRepository.save(Container.toEntity(containerRequest, portfolio));
+
+            if (boxImgListList != null)
+                boxImgListList.get(i).forEach(boxImage -> containerImageRepository.save(ContainerImage.toEntity(container, fileUploadProvider.uploadFile(boxImage))));
+
+            if (containerRequest.getContainerTextList() != null)
+                containerRequest.getContainerTextList().forEach(boxRequest -> containerTextRepository.save(ContainerText.toEntity(container, boxRequest)));
+        }
+
+        request.getField().forEach(fieldKindId -> portfolioFieldRepository.save(PortfolioField.toEntity(portfolio, getFieldKind(fieldKindId))));
+        request.getMoreInfo().forEach(moreInfoRequest -> moreInfoRepository.save(MoreInfo.toEntity(portfolio, moreInfoRequest)));
+
+        for (CertificateRequest certificateRequest : request.getCertificateContainerList()) {
+            CertificateContainer certificateContainer = certificateContainerRepository.save(CertificateContainer.toEntity(certificateRequest, portfolio));
+            certificateRequest.getCertificateList().forEach(s -> certificateRepository.save(Certificate.toEntity(certificateContainer, s)));
+        }
+    }
+
+
+    private User getUserById(long userId) {
+        return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
     }
 
     private User getCurrentUser() {
@@ -151,5 +201,9 @@ public class PortfolioServiceImpl implements PortfolioService{
 
     private Portfolio getPortfolio(long portfolioId) {
         return portfolioRepository.findById(portfolioId).orElseThrow(PortfolioNotFoundException::new);
+    }
+
+    private FieldKind getFieldKind(Integer fieldKindId) {
+        return fieldKindRepository.findById(fieldKindId).orElseThrow(FieldNotFoundException::new);
     }
 }

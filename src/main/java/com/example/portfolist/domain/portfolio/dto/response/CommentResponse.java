@@ -29,9 +29,9 @@ public class CommentResponse {
 
     private LocalDate cDate;
 
-    private List<ReCommentResponse> reCommentList;
+    private boolean reCommentExist;
 
-    public static CommentResponse of(Comment comment, Boolean isMine, List<ReCommentResponse> reCommentList) {
+    public static CommentResponse of(Comment comment, Boolean isMine) {
         if (comment.getDeleteYN().equals('Y')) {
             return CommentResponse.builder()
                     .userId(null)
@@ -41,7 +41,7 @@ public class CommentResponse {
                     .commentId(comment.getPk())
                     .commentContent(null)
                     .cDate(comment.getDate())
-                    .reCommentList(reCommentList)
+                    .reCommentExist(comment.getReCommentList().size() > 0)
                     .build();
         }
         return CommentResponse.builder()
@@ -52,7 +52,7 @@ public class CommentResponse {
                 .commentId(comment.getPk())
                 .commentContent(comment.getContent())
                 .cDate(comment.getDate())
-                .reCommentList(reCommentList)
+                .reCommentExist(comment.getReCommentList().size() > 0)
                 .build();
     }
 }

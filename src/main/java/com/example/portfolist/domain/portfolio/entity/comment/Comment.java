@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -37,7 +38,7 @@ public class Comment {
     private Character deleteYN;
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
-    private List<ReComment> reCommentList;
+    private final List<ReComment> reCommentList = new ArrayList<>();
 
     public void deleteComment() {
         this.deleteYN = 'Y';

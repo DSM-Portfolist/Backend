@@ -22,7 +22,7 @@ public class Certificate {
     @Column(length = 45)
     private String content;
 
-    public static Certificate of(CertificateContainer certificateContainer, String certificate) {
+    public static Certificate toEntity(CertificateContainer certificateContainer, String certificate) {
         return Certificate.builder()
                 .certificateContainer(certificateContainer)
                 .content(certificate)

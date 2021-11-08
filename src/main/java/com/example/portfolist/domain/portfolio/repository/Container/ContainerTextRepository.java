@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ContainerTextRepository extends JpaRepository<ContainerText,Long> {
 
     void deleteByContainerPortfolioUser(User user);
+
+    void deleteByContainerPortfolioPk(long portfolioId);
 }

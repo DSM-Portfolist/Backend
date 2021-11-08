@@ -30,7 +30,7 @@ public class Container {
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
 
-    public static Container of(ContainerRequest request, Portfolio portfolio) {
+    public static Container toEntity(ContainerRequest request, Portfolio portfolio) {
         return Container.builder()
                 .title(request.getContainerTitle())
                 .portfolio(portfolio)

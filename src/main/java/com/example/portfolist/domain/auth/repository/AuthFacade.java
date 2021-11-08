@@ -51,7 +51,7 @@ public class AuthFacade {
                 .email(email)
                 .token(token)
                 .certification(false)
-                .exp(300000L)
+                .exp(300L)
                 .build();
         certificationRepository.save(certification);
     }
@@ -98,7 +98,7 @@ public class AuthFacade {
                 .email(certification.getEmail())
                 .token(certification.getToken())
                 .certification(true)
-                .exp(300000L)
+                .exp(300L)
                 .build();
         certificationRepository.save(certification);
     }

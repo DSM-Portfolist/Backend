@@ -1,12 +1,14 @@
 package com.example.portfolist.domain.portfolio.controller;
 
-import com.example.portfolist.domain.portfolio.dto.request.CommentRequest;
+import com.example.portfolist.domain.portfolio.dto.request.ContentRequest;
 import com.example.portfolist.domain.portfolio.dto.response.CommentListResponse;
+import com.example.portfolist.domain.portfolio.dto.response.ReCommentResponse;
 import com.example.portfolist.domain.portfolio.service.CommentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,7 +24,7 @@ public class CommentController {
 
     @PostMapping("/comment/{portfolioId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createComment(@PathVariable long portfolioId, @RequestBody CommentRequest request) {
+    public void createComment(@PathVariable long portfolioId, @RequestBody ContentRequest request) {
         commentService.createComment(portfolioId, request);
     }
 
@@ -32,9 +34,15 @@ public class CommentController {
         commentService.deleteComment(commentId);
     }
 
+    @GetMapping("/re-comment/{commentId}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ReCommentResponse> getReCommentList(@PathVariable long commentId) {
+        return commentService.getReCommentList(commentId);
+    }
+
     @PostMapping("/re-comment/{commentId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createReComment(@PathVariable long commentId, @RequestBody CommentRequest request) {
+    public void createReComment(@PathVariable long commentId, @RequestBody ContentRequest request) {
         commentService.createReComment(commentId, request);
     }
 
@@ -42,6 +50,12 @@ public class CommentController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteReComment(@PathVariable long reCommentId) {
         commentService.deleteReComment(reCommentId);
+    }
+
+    @PostMapping("/comment/{commentId}/report")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void reportComment(@PathVariable long commentId, @RequestBody ContentRequest request) {
+        commentService.reportComment(commentId, request);
     }
 
 }

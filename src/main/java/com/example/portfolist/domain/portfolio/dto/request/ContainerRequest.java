@@ -11,9 +11,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ContainerRequest {
+
     private String containerTitle;
 
-    private List<MultipartFile> boxImgList;
+    private List<String> containerImgList;
 
-    private List<BoxRequest> boxList;
+    private List<ContainerTextRequest> containerTextList;
 }

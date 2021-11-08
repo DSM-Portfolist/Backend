@@ -1,6 +1,6 @@
 package com.example.portfolist.domain.portfolio.entity.container;
 
-import com.example.portfolist.domain.portfolio.dto.request.BoxRequest;
+import com.example.portfolist.domain.portfolio.dto.request.ContainerTextRequest;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,7 +26,7 @@ public class ContainerText {
     @Column(length = 1500, nullable = false)
     private String content;
 
-    public static ContainerText of(Container container, BoxRequest boxRequest) {
+    public static ContainerText toEntity(Container container, ContainerTextRequest boxRequest) {
         return ContainerText.builder()
                 .container(container)
                 .title(boxRequest.getBoxTitle())

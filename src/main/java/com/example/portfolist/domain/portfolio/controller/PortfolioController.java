@@ -1,12 +1,8 @@
 package com.example.portfolist.domain.portfolio.controller;
 
 import com.example.portfolist.domain.portfolio.dto.request.PortfolioRequest;
-import com.example.portfolist.domain.portfolio.dto.response.PortfolioListResponse;
-import com.example.portfolist.domain.portfolio.dto.response.PortfolioResponse;
-import com.example.portfolist.domain.portfolio.dto.response.RecentPortfolioResponse;
-import com.example.portfolist.domain.portfolio.dto.response.ThisMonthPortfolioResponse;
+import com.example.portfolist.domain.portfolio.dto.response.*;
 import com.example.portfolist.domain.portfolio.service.PortfolioService;
-import com.example.portfolist.global.file.FileUploadProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -22,7 +18,6 @@ import java.util.List;
 public class PortfolioController {
 
     private final PortfolioService portfolioService;
-    private final FileUploadProvider fileUploadProvider;
 
     @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
@@ -40,13 +35,8 @@ public class PortfolioController {
     @ResponseStatus(HttpStatus.CREATED)
     public void createPortfolio(@RequestPart(value = "portfolioRequest") PortfolioRequest request,
                                 @RequestPart(value = "file", required = false) MultipartFile file,
-                                @RequestPart(value = "boxImgListList", required = false) List<List<MultipartFile>> boxImgListList) {
-        if (file != null) {
-            String fileName = fileUploadProvider.uploadFile(file);
-            System.out.println("file is null");
-            request.setFileName(fileName);
-        }
-        portfolioService.createPortfolio(request, boxImgListList);
+                                @RequestPart(value = "containerImgListList", required = false) List<List<MultipartFile>> containerImgListList) {
+        portfolioService.createPortfolio(request, file, containerImgListList);
     }
 
     @DeleteMapping("/{portfolioId}")
@@ -55,24 +45,37 @@ public class PortfolioController {
         portfolioService.deletePortfolio(portfolioId);
     }
 
-    @PutMapping
-    public void updatePortfolio(long portfolioId) {
+    @PutMapping("/{portfolioId}")
+    public void updatePortfolio(@PathVariable long portfolioId,
+                                @RequestPart(value = "portfolioRequest") PortfolioRequest request,
+                                @RequestPart(value = "file", required = false) MultipartFile file,
+                                @RequestPart(value = "containerImgListList", required = false) List<List<MultipartFile>> containerImgListList) {
+        portfolioService.updatePortfolio(portfolioId, request, file, containerImgListList);
     }
 
     @GetMapping("/recent")
-    public RecentPortfolioResponse getRecentPortfolio(@RequestParam int size) {
-        return null;
+    public List<RecentPortfolioResponse> getRecentPortfolio(Pageable pageable) {
+        return portfolioService.getRecentPortfolio(pageable);
     }
 
     @GetMapping("/month")
     public ThisMonthPortfolioResponse getThisMonthPortfolio() {
-        return null;
+        return portfolioService.getThisMonthPortfolio();
     }
 
     @GetMapping("/user/{userId}")
-    public PortfolioListResponse getPortfolioByUser(@PathVariable long userId) {
-        return null;
+    public List<PortfolioPreview> getPortfolioByUser(@PathVariable long userId) {
+        return portfolioService.getPortfolioByUser(userId);
     }
 
+    @GetMapping("/user/{userId}/touching")
+    public List<PortfolioPreview> getTouchedPortfolioByUser(Pageable pageable, @PathVariable long userId) {
+        return portfolioService.getMyTouchingPortfolio(pageable, userId);
+    }
+
+    @GetMapping("/search")
+    public PortfolioListResponse searchPortfolio(Pageable pageable, @RequestParam String query, @RequestParam String searchType) {
+        return portfolioService.searchPortfolio(pageable, query, searchType);
+    }
 }
 

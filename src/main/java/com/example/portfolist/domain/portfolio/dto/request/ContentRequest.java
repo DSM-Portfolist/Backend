@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoxRequest {
-    private String boxTitle;
-    private String boxContent;
+public class ContentRequest {
+
+    private String content;
 }

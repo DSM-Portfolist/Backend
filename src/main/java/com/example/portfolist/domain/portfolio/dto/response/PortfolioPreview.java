@@ -1,5 +1,6 @@
 package com.example.portfolist.domain.portfolio.dto.response;
 
+import com.example.portfolist.domain.portfolio.entity.Portfolio;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 
@@ -7,6 +8,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
+@Builder
+@AllArgsConstructor
 public class PortfolioPreview {
 
     private long id;
@@ -25,7 +28,7 @@ public class PortfolioPreview {
 
     private int totalComment;
 
-    private boolean touched;
+    private Boolean touched;
 
     private long userId;
 
@@ -46,5 +49,18 @@ public class PortfolioPreview {
         this.touched = touched;
         this.totalComment = totalComment;
         this.totalTouching = totalTouching;
+    }
+
+    public static PortfolioPreview of(Portfolio portfolio) {
+        return PortfolioPreview.builder()
+                .id(portfolio.getPk())
+                .pofolImg(portfolio.getUrl())
+                .title(portfolio.getTitle())
+                .introduce(portfolio.getIntroduce())
+                .date(portfolio.getDate())
+                .userId(portfolio.getUser().getPk())
+                .name(portfolio.getUser().getName())
+                .profileImg(portfolio.getUser().getUrl())
+                .build();
     }
 }
