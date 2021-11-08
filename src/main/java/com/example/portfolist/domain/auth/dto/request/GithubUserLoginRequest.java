@@ -10,6 +10,6 @@ import javax.validation.constraints.NotBlank;
 public class GithubUserLoginRequest {
 
     @NotBlank
-    private String githubToken;
+    private String code;
 
 }

@@ -10,6 +10,9 @@ auth:
     secret: ${JWT_SECRET:}
     access: ${ACCESS_LIFESPAN}
     refresh: ${REFRESH_LIFESPAN}
+  github:
+    id: ${CLIENT_ID:}
+    secret: ${CLIENT_SECRET:}
 spring:
   profiles:
     include:

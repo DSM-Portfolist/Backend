@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class GithubResponse {
+public class GithubTokenResponse {
 
     private String login;
     private String avatarUrl;

@@ -7,8 +7,10 @@ import com.example.portfolist.domain.auth.entity.NormalUser;
 import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.auth.entity.redis.Certification;
 import com.example.portfolist.domain.auth.exception.OauthServerException;
-import com.example.portfolist.domain.auth.util.api.client.GithubClient;
-import com.example.portfolist.domain.auth.util.api.dto.GithubResponse;
+import com.example.portfolist.domain.auth.util.api.client.GithubCodeClient;
+import com.example.portfolist.domain.auth.util.api.client.GithubTokenClient;
+import com.example.portfolist.domain.auth.util.api.dto.GithubCodeResponse;
+import com.example.portfolist.domain.auth.util.api.dto.GithubTokenResponse;
 import com.example.portfolist.global.event.GlobalEventPublisher;
 import com.example.portfolist.global.security.JwtTokenProvider;
 import org.junit.jupiter.api.DisplayName;
@@ -25,7 +27,6 @@ import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class AuthControllerTest extends ApiTest {
@@ -38,7 +39,9 @@ public class AuthControllerTest extends ApiTest {
     @MockBean
     private GlobalEventPublisher globalEventPublisher;
     @MockBean
-    private GithubClient githubClient;
+    private GithubCodeClient githubCodeClient;
+    @MockBean
+    private GithubTokenClient githubTokenClient;
 
     @Nested
     @DisplayName("일반 유저 로그인")
@@ -133,9 +136,9 @@ public class AuthControllerTest extends ApiTest {
     @DisplayName("깃허브 유저 로그인")
     class GithubUserLogin{
 
-        private GithubUserLoginRequest makeRequest(String githubToken) throws NoSuchFieldException, IllegalAccessException {
+        private GithubUserLoginRequest makeRequest(String code) throws NoSuchFieldException, IllegalAccessException {
             GithubUserLoginRequest request = new GithubUserLoginRequest();
-            inputField(request, "githubToken", githubToken);
+            inputField(request, "code", code);
             return request;
         }
 
@@ -143,13 +146,18 @@ public class AuthControllerTest extends ApiTest {
         @DisplayName("201")
         void githubUserLogin_first_201() throws Exception {
             // given
-            GithubResponse githubResponse = new GithubResponse();
-            inputField(githubResponse, "login", "nickname");
-            inputField(githubResponse, "avatarUrl", "profile");
-            inputField(githubResponse, "name", "name");
-            given(githubClient.getUserInfo("token githubToken")).willReturn(githubResponse);
+            GithubCodeResponse githubCodeResponse = new GithubCodeResponse();
+            inputField(githubCodeResponse, "accessToken", "githubToken");
 
-            GithubUserLoginRequest request = makeRequest("githubToken");
+            GithubTokenResponse githubTokenResponse = new GithubTokenResponse();
+            inputField(githubTokenResponse, "login", "nickname");
+            inputField(githubTokenResponse, "avatarUrl", "profile");
+            inputField(githubTokenResponse, "name", "name");
+
+            given(githubCodeClient.getUserToken("asdf", "asdf", "code")).willReturn(githubCodeResponse);
+            given(githubTokenClient.getUserInfo("token githubToken")).willReturn(githubTokenResponse);
+
+            GithubUserLoginRequest request = makeRequest("code");
 
             // when
             ResultActions resultActions = requestMvc(post("/login/github"), request);
@@ -162,13 +170,18 @@ public class AuthControllerTest extends ApiTest {
         @DisplayName("201")
         void githubUserLogin_201() throws Exception {
             // given
-            GithubResponse githubResponse = new GithubResponse();
-            inputField(githubResponse, "login", "nickname");
-            inputField(githubResponse, "avatarUrl", "profile");
-            inputField(githubResponse, "name", "name");
-            given(githubClient.getUserInfo("token githubToken")).willReturn(githubResponse);
+            GithubCodeResponse githubCodeResponse = new GithubCodeResponse();
+            inputField(githubCodeResponse, "accessToken", "githubToken");
 
-            GithubUserLoginRequest request = makeRequest("githubToken");
+            GithubTokenResponse githubTokenResponse = new GithubTokenResponse();
+            inputField(githubTokenResponse, "login", "nickname");
+            inputField(githubTokenResponse, "avatarUrl", "profile");
+            inputField(githubTokenResponse, "name", "name");
+
+            given(githubCodeClient.getUserToken("asdf", "asdf", "code")).willReturn(githubCodeResponse);
+            given(githubTokenClient.getUserInfo("token githubToken")).willReturn(githubTokenResponse);
+
+            GithubUserLoginRequest request = makeRequest("code");
 
             User user = User.builder()
                     .githubId("nickname")
@@ -200,9 +213,13 @@ public class AuthControllerTest extends ApiTest {
         @DisplayName("401")
         void githubUserLogin_401() throws Exception {
             // given
-            given(githubClient.getUserInfo("token githubToken")).willThrow(new OauthServerException(401, "Invalid Token"));
+            GithubCodeResponse githubCodeResponse = new GithubCodeResponse();
+            inputField(githubCodeResponse, "accessToken", "githubToken");
 
-            GithubUserLoginRequest request = makeRequest("githubToken");
+            given(githubCodeClient.getUserToken("asdf", "asdf", "code")).willReturn(githubCodeResponse);
+            given(githubTokenClient.getUserInfo("token githubToken")).willThrow(new OauthServerException(401, "Invalid Token"));
+
+            GithubUserLoginRequest request = makeRequest("code");
 
             // when
             ResultActions resultActions = requestMvc(post("/login/github"), request);
