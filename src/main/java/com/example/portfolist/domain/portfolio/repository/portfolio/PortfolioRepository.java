@@ -14,4 +14,8 @@ public interface PortfolioRepository extends JpaRepository<Portfolio, Long>, Que
     void deleteByUser(User user);
 
     Page<Portfolio> findAllByOrderByDateDesc(Pageable pageable);
+
+    List<Portfolio> findByUserNameLike(String query);
+
+    List<Portfolio> findByTitleLike(String title);
 }

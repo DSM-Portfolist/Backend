@@ -73,5 +73,9 @@ public class PortfolioController {
         return portfolioService.getMyTouchingPortfolio(pageable, userId);
     }
 
+    @GetMapping("/search")
+    public PortfolioListResponse searchPortfolio(Pageable pageable, @RequestParam String query, @RequestParam String searchType) {
+        return portfolioService.searchPortfolio(pageable, query, searchType);
+    }
 }
 

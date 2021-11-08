@@ -17,4 +17,5 @@ public interface PortfolioService {
     ThisMonthPortfolioResponse getThisMonthPortfolio();
     List<PortfolioPreview> getPortfolioByUser(long userId);
     List<PortfolioPreview> getMyTouchingPortfolio(Pageable pageable, long userId);
+    PortfolioListResponse searchPortfolio(Pageable pageable, String query, String searchType);
 }

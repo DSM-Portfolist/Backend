@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -153,7 +154,21 @@ public class PortfolioServiceImpl implements PortfolioService{
         return portfolioRepository.findMyTouchingPortfolio(pageable, getUserById(userId));
     }
 
-    private void saveOther(Portfolio portfolio,  PortfolioRequest request, List<List<MultipartFile>> boxImgListList) {
+    @Override
+    public PortfolioListResponse searchPortfolio(Pageable pageable, String query, String searchType) {
+        List<Portfolio> portfolioList = new ArrayList<>();
+
+        if (searchType.equals("user")) {
+            portfolioList = portfolioRepository.findByUserNameLike("%" + query + "%");
+        } else if (searchType.equals("title")) {
+            portfolioList = portfolioRepository.findByTitleLike("%" + query + "%");
+        }
+
+        return new PortfolioListResponse(portfolioList.size(),
+                portfolioList.stream().map(PortfolioPreview::of).collect(Collectors.toList()));
+    }
+
+    private void saveOther(Portfolio portfolio, PortfolioRequest request, List<List<MultipartFile>> boxImgListList) {
         for (int i = 0; i < request.getContainerList().size(); i++) {
             ContainerRequest containerRequest = request.getContainerList().get(i);
 
