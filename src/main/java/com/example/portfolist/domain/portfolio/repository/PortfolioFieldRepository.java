@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface PortfolioFieldRepository extends JpaRepository<PortfolioField, Long> {
 
     void deleteByPortfolioUser(User user);
+
+    void deleteByPortfolioPk(long portfolioId);
 }
