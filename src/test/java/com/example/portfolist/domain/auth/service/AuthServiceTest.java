@@ -11,8 +11,10 @@ import com.example.portfolist.domain.auth.entity.redis.Certification;
 import com.example.portfolist.domain.auth.exception.PasswordNotMatchedException;
 import com.example.portfolist.domain.auth.repository.AuthCheckFacade;
 import com.example.portfolist.domain.auth.repository.AuthFacade;
-import com.example.portfolist.domain.auth.util.api.client.GithubClient;
-import com.example.portfolist.domain.auth.util.api.dto.GithubResponse;
+import com.example.portfolist.domain.auth.util.api.client.GithubCodeClient;
+import com.example.portfolist.domain.auth.util.api.client.GithubTokenClient;
+import com.example.portfolist.domain.auth.util.api.dto.GithubCodeResponse;
+import com.example.portfolist.domain.auth.util.api.dto.GithubTokenResponse;
 import com.example.portfolist.global.error.exception.InvalidTokenException;
 import com.example.portfolist.global.event.GlobalEventPublisher;
 import com.example.portfolist.global.mail.HtmlSourceProvider;
@@ -55,7 +57,9 @@ public class AuthServiceTest extends ServiceTest {
     private GlobalEventPublisher globalEventPublisher;
 
     @Mock
-    private GithubClient githubClient;
+    private GithubCodeClient githubCodeClient;
+    @Mock
+    private GithubTokenClient githubTokenClient;
 
     @InjectMocks
     private AuthService authService;
@@ -134,9 +138,9 @@ public class AuthServiceTest extends ServiceTest {
     @DisplayName("Github User Login")
     class GithubUserLogin {
 
-        private GithubUserLoginRequest makeRequest(String githubToken) throws NoSuchFieldException, IllegalAccessException {
+        private GithubUserLoginRequest makeRequest(String code) throws NoSuchFieldException, IllegalAccessException {
             GithubUserLoginRequest request = new GithubUserLoginRequest();
-            inputField(request, "githubToken", githubToken);
+            inputField(request, "code", code);
             return request;
         }
 
@@ -146,13 +150,18 @@ public class AuthServiceTest extends ServiceTest {
         @NullSource
         void githubUserFirstLogin(String name) throws NoSuchFieldException, IllegalAccessException {
             // given
-            GithubUserLoginRequest request = makeRequest("githubToken");
+            GithubUserLoginRequest request = makeRequest("code");
 
-            GithubResponse githubResponse = new GithubResponse();
-            inputField(githubResponse, "login", "nickname");
-            inputField(githubResponse, "avatarUrl", "profile");
-            inputField(githubResponse, "name", name);
-            given(githubClient.getUserInfo("token githubToken")).willReturn(githubResponse);
+            GithubCodeResponse githubCodeResponse = new GithubCodeResponse();
+            inputField(githubCodeResponse, "accessToken", "githubToken");
+
+            GithubTokenResponse githubTokenResponse = new GithubTokenResponse();
+            inputField(githubTokenResponse, "login", "nickname");
+            inputField(githubTokenResponse, "avatarUrl", "profile");
+            inputField(githubTokenResponse, "name", "name");
+
+            given(githubCodeClient.getUserToken(null, null, "code")).willReturn(githubCodeResponse);
+            given(githubTokenClient.getUserInfo("token githubToken")).willReturn(githubTokenResponse);
 
             given(authFacade.findUserByGithubId("nickname")).willReturn(Optional.empty());
             User user = User.builder()
@@ -180,13 +189,18 @@ public class AuthServiceTest extends ServiceTest {
         @NullSource
         void githubUserLogin(String name) throws NoSuchFieldException, IllegalAccessException {
             // given
-            GithubUserLoginRequest request = makeRequest("githubToken");
+            GithubUserLoginRequest request = makeRequest("code");
 
-            GithubResponse githubResponse = new GithubResponse();
-            inputField(githubResponse, "login", "nickname");
-            inputField(githubResponse, "avatarUrl", "profile");
-            inputField(githubResponse, "name", name);
-            given(githubClient.getUserInfo("token githubToken")).willReturn(githubResponse);
+            GithubCodeResponse githubCodeResponse = new GithubCodeResponse();
+            inputField(githubCodeResponse, "accessToken", "githubToken");
+
+            GithubTokenResponse githubTokenResponse = new GithubTokenResponse();
+            inputField(githubTokenResponse, "login", "nickname");
+            inputField(githubTokenResponse, "avatarUrl", "profile");
+            inputField(githubTokenResponse, "name", "name");
+
+            given(githubCodeClient.getUserToken(null, null, "code")).willReturn(githubCodeResponse);
+            given(githubTokenClient.getUserInfo("token githubToken")).willReturn(githubTokenResponse);
 
             User user = User.builder()
                     .pk(1L)

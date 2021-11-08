@@ -10,6 +10,9 @@ auth:
     secret: asdf
     access: 3600000
     refresh: 1209600000
+  github:
+    id: ${CLIENT_ID:asdf}
+    secret: ${CLIENT_SECRET:asdf}
 spring:
   h2:
     console:

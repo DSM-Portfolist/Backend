@@ -12,8 +12,9 @@ import com.example.portfolist.domain.auth.entity.redis.Certification;
 import com.example.portfolist.domain.auth.exception.PasswordNotMatchedException;
 import com.example.portfolist.domain.auth.repository.AuthCheckFacade;
 import com.example.portfolist.domain.auth.repository.AuthFacade;
-import com.example.portfolist.domain.auth.util.api.client.GithubClient;
-import com.example.portfolist.domain.auth.util.api.dto.GithubResponse;
+import com.example.portfolist.domain.auth.util.api.client.GithubCodeClient;
+import com.example.portfolist.domain.auth.util.api.client.GithubTokenClient;
+import com.example.portfolist.domain.auth.util.api.dto.GithubTokenResponse;
 import com.example.portfolist.global.error.exception.InvalidTokenException;
 import com.example.portfolist.global.event.GlobalEventPublisher;
 import com.example.portfolist.global.mail.HtmlSourceProvider;
@@ -40,7 +41,8 @@ public class AuthService {
     private final HtmlSourceProvider htmlSourceProvider;
     private final GlobalEventPublisher globalEventPublisher;
 
-    private final GithubClient githubClient;
+    private final GithubCodeClient githubCodeClient;
+    private final GithubTokenClient githubTokenClient;
 
     @Value("${auth.jwt.refresh}")
     private Long refreshLifespan;
@@ -57,6 +59,12 @@ public class AuthService {
     @Value(value = "${page.fail}")
     private String failPage;
 
+    @Value(value = "${auth.github.id}")
+    private String clientId;
+
+    @Value(value = "${auth.github.secret}")
+    private String clientSecret;
+
     public NormalUserLoginResponse login(NormalUserLoginRequest request) {
         User user = authCheckFacade.findByNormalUserEmail(request.getEmail());
         if (!passwordEncoder.matches(request.getPassword(),user.getNormalUser().getPassword())) {
@@ -71,7 +79,9 @@ public class AuthService {
     }
 
     public GithubUserLoginResponse login(GithubUserLoginRequest request) {
-        GithubResponse response = githubClient.getUserInfo("token " + request.getGithubToken());
+        System.out.println("테스트" + clientId + clientSecret);
+        String token = githubCodeClient.getUserToken(clientId, clientSecret, request.getCode()).getAccessToken();
+        GithubTokenResponse response = githubTokenClient.getUserInfo("token " + token);
         String nickname = response.getLogin();
         String name = response.getName();
         String url = response.getAvatarUrl();
