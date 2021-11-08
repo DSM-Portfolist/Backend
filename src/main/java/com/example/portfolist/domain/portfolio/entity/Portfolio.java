@@ -77,7 +77,7 @@ public class Portfolio {
         this.link = request.getLink();
         this.url = request.getFileName();
         this.mainIcon = request.getIcon();
-        this.isOpen = request.getIsOpen();
+        this.isOpen = request.isOpen();
     }
 
     public static Portfolio toEntity(PortfolioRequest request, User user) {
@@ -88,7 +88,7 @@ public class Portfolio {
                 .link(request.getLink())
                 .url(request.getFileName())
                 .date(LocalDate.now())
-                .isOpen(request.getIsOpen())
+                .isOpen(request.isOpen())
                 .mainIcon(request.getIcon())
                 .build();
     }
