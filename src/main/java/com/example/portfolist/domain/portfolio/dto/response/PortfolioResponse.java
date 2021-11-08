@@ -27,9 +27,9 @@ public class PortfolioResponse {
 
     private long portfolioId;
 
-    private Boolean touched;
+    private boolean touched;
 
-    private Boolean isMine;
+    private boolean isMine;
 
     private int totalTouching;
 
