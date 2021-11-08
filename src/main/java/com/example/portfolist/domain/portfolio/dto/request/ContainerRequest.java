@@ -12,11 +12,9 @@ import java.util.List;
 @AllArgsConstructor
 public class ContainerRequest {
 
-    private long portfolioId;
-
     private String containerTitle;
 
-    private List<MultipartFile> containerImgList;
+    private List<String> containerImgList;
 
-    private List<BoxRequest> containerTextList;
+    private List<ContainerTextRequest> containerTextList;
 }
