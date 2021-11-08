@@ -28,6 +28,7 @@ public class Notification {
     private boolean isRead;
 
     @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
     private NoticeType type;
 
     @ManyToOne
