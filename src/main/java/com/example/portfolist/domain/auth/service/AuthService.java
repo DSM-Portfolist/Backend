@@ -79,7 +79,6 @@ public class AuthService {
     }
 
     public GithubUserLoginResponse login(GithubUserLoginRequest request) {
-        System.out.println("테스트" + clientId + clientSecret);
         String token = githubCodeClient.getUserToken(clientId, clientSecret, request.getCode()).getAccessToken();
         GithubTokenResponse response = githubTokenClient.getUserInfo("token " + token);
         String nickname = response.getLogin();
