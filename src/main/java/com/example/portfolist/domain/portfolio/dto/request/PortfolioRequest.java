@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter
@@ -25,15 +26,17 @@ public class PortfolioRequest {
 
     private String content;
 
+    @NotNull
     private String name;
 
     private String introduce;
 
+    @NotNull
     private String title;
 
     private String fileName;
 
-    private Boolean isOpen;
+    private boolean isOpen;
 
     private List<ContainerRequest> containerList;
 

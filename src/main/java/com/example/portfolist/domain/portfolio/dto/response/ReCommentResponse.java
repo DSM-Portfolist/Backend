@@ -21,7 +21,7 @@ public class ReCommentResponse {
 
     private String profileImg;
 
-    private Boolean isMine;
+    private boolean isMine;
 
     private long reCommentId;
 

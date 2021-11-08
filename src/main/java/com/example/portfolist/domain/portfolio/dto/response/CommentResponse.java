@@ -21,7 +21,7 @@ public class CommentResponse {
 
     private String profileImg;
 
-    private Boolean isMine;
+    private boolean isMine;
 
     private long commentId;
 
@@ -37,7 +37,7 @@ public class CommentResponse {
                     .userId(null)
                     .name(null)
                     .profileImg(null)
-                    .isMine(null)
+                    .isMine(false)
                     .commentId(comment.getPk())
                     .commentContent(null)
                     .cDate(comment.getDate())
