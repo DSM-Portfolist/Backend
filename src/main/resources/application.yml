@@ -34,14 +34,19 @@ spring:
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-    generate-ddl: false
-    show-sql: false
+    generate-ddl: true
+    show-sql: true
     hibernate:
+      ddl-auto: update
       use-new-id-generator-mappings: false
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
   redis:
-    host: localhost
-    port: ${REDIS_PORT:}
-    password: ${REDIS_PASSWORD:}
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
+    password: ${REDIS_PASSWORD}
   mail:
     host: smtp.gmail.com
     port: 587

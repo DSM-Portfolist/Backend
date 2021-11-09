@@ -28,7 +28,7 @@ spring:
       hibernate:
         id:
           new_generator_mappings: false
-        show_sql: true
+#        show_sql: true
   redis:
     host: localhost
     port: 6379
