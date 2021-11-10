@@ -6,6 +6,7 @@ import com.example.portfolist.domain.auth.entity.NormalUser;
 import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.auth.entity.redis.Certification;
 import com.example.portfolist.domain.auth.entity.redis.RefreshToken;
+import com.example.portfolist.domain.auth.exception.UserNotFoundException;
 import com.example.portfolist.domain.auth.repository.repository.FieldKindRepository;
 import com.example.portfolist.domain.auth.repository.repository.FieldRepository;
 import com.example.portfolist.domain.auth.repository.repository.NormalUserRepository;
@@ -101,6 +102,11 @@ public class AuthFacade {
                 .exp(300L)
                 .build();
         certificationRepository.save(certification);
+    }
+
+    public User findUserById(long id) {
+        return userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
     }
 
 }
