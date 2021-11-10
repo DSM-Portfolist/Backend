@@ -160,7 +160,7 @@ public class AuthServiceTest extends ServiceTest {
             inputField(githubTokenResponse, "avatarUrl", "profile");
             inputField(githubTokenResponse, "name", "name");
 
-            given(githubCodeClient.getUserToken(null, null, "code")).willReturn(githubCodeResponse);
+            given(githubCodeClient.getUserToken("application/json", null, null, "code")).willReturn(githubCodeResponse);
             given(githubTokenClient.getUserInfo("token githubToken")).willReturn(githubTokenResponse);
 
             given(authFacade.findUserByGithubId("nickname")).willReturn(Optional.empty());
@@ -199,7 +199,7 @@ public class AuthServiceTest extends ServiceTest {
             inputField(githubTokenResponse, "avatarUrl", "profile");
             inputField(githubTokenResponse, "name", "name");
 
-            given(githubCodeClient.getUserToken(null, null, "code")).willReturn(githubCodeResponse);
+            given(githubCodeClient.getUserToken("application/json", null, null, "code")).willReturn(githubCodeResponse);
             given(githubTokenClient.getUserInfo("token githubToken")).willReturn(githubTokenResponse);
 
             User user = User.builder()

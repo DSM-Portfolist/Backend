@@ -154,7 +154,7 @@ public class AuthControllerTest extends ApiTest {
             inputField(githubTokenResponse, "avatarUrl", "profile");
             inputField(githubTokenResponse, "name", "name");
 
-            given(githubCodeClient.getUserToken("asdf", "asdf", "code")).willReturn(githubCodeResponse);
+            given(githubCodeClient.getUserToken("application/json", "asdf", "asdf", "code")).willReturn(githubCodeResponse);
             given(githubTokenClient.getUserInfo("token githubToken")).willReturn(githubTokenResponse);
 
             GithubUserLoginRequest request = makeRequest("code");
@@ -178,7 +178,7 @@ public class AuthControllerTest extends ApiTest {
             inputField(githubTokenResponse, "avatarUrl", "profile");
             inputField(githubTokenResponse, "name", "name");
 
-            given(githubCodeClient.getUserToken("asdf", "asdf", "code")).willReturn(githubCodeResponse);
+            given(githubCodeClient.getUserToken("application/json", "asdf", "asdf", "code")).willReturn(githubCodeResponse);
             given(githubTokenClient.getUserInfo("token githubToken")).willReturn(githubTokenResponse);
 
             GithubUserLoginRequest request = makeRequest("code");
@@ -216,7 +216,7 @@ public class AuthControllerTest extends ApiTest {
             GithubCodeResponse githubCodeResponse = new GithubCodeResponse();
             inputField(githubCodeResponse, "accessToken", "githubToken");
 
-            given(githubCodeClient.getUserToken("asdf", "asdf", "code")).willReturn(githubCodeResponse);
+            given(githubCodeClient.getUserToken("application/json", "asdf", "asdf", "code")).willReturn(githubCodeResponse);
             given(githubTokenClient.getUserInfo("token githubToken")).willThrow(new OauthServerException(401, "Invalid Token"));
 
             GithubUserLoginRequest request = makeRequest("code");
