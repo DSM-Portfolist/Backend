@@ -33,11 +33,6 @@ public class MypageController {
         mypageService.checkPassword(request, authenticationFacade.getNormalUser());
     }
 
-    @GetMapping("/profile")
-    public ProfileGetResponse getProfile() {
-        return mypageService.getProfile(authenticationFacade.getUser());
-    }
-
     @PostMapping("/profile")
     public void registerProfile(@RequestPart(value = "file") MultipartFile file) {
         mypageService.registerProfile(file, authenticationFacade.getNormalUser());

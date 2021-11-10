@@ -13,30 +13,26 @@ import java.util.stream.Collectors;
 @Getter
 @AllArgsConstructor
 @Builder(access = AccessLevel.PRIVATE)
-public class UserInfoGetResponse {
-
-    private List<String> field;
+public class InfoUserGetResponse {private List<String> field;
     private String introduce;
     private String name;
     private String profileImg;
-    private boolean githubUser;
 
-    public static UserInfoGetResponse from(User user) {
+    public static InfoUserGetResponse from(User user) {
         List<String> fields = null;
         if(!CollectionUtils.isNullOrEmpty(user.getFieldList())) {
-             fields = user.getFieldList().stream()
+            fields = user.getFieldList().stream()
                     .map(field -> {
                         return field.getFieldKind().getContent();
                     })
                     .collect(Collectors.toList());
         }
 
-        return UserInfoGetResponse.builder()
+        return InfoUserGetResponse.builder()
                 .field(fields)
                 .introduce(user.getIntroduce())
                 .name(user.getName())
                 .profileImg(user.getUrl())
-                .githubUser(user.getGithubId()!=null)
                 .build();
     }
 
