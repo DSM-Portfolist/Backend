@@ -230,39 +230,6 @@ public class MypageControllerTest extends ApiTest {
     }
 
     @Nested
-    @DisplayName("프로필 가져오기")
-    class GetProfile {
-
-        @Test
-        @DisplayName("200")
-        void getProfile_200() throws Exception {
-            //given
-            NormalUser normalUser = NormalUser.builder()
-                    .email("testtest@gmail.com")
-                    .password(passwordEncoder.encode("testPassword"))
-                    .build();
-            normalUser = normalUserRepository.save(normalUser);
-
-            User user = User.builder()
-                    .normalUser(normalUser)
-                    .name("가나다")
-                    .url("profileUrl")
-                    .build();
-            user = userRepository.save(user);
-
-            String token = jwtTokenProvider.generateAccessToken(user.getPk());
-
-            // when
-            setToken(token);
-            ResultActions resultActions = requestMvc(get("/user/profile"));
-
-            // then
-            resultActions.andExpect(status().is(200));
-        }
-
-    }
-
-    @Nested
     @DisplayName("프로필 변경")
     class ChangeProfile {
 

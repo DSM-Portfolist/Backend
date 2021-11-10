@@ -162,47 +162,6 @@ public class MypageServiceTest extends ServiceTest {
     }
 
     @Nested
-    @DisplayName("Get Profile")
-    class GetProfile {
-
-        @Test
-        @DisplayName("Github User")
-        void getProfile_githubUser() {
-            // given
-            User user = User.builder()
-                    .name("가나다")
-                    .url("profileUrl")
-                    .githubId("githubId")
-                    .build();
-
-            // when
-            ProfileGetResponse response = mypageService.getProfile(user);
-
-            // then
-            Assertions.assertEquals(response.getProfile(), "profileUrl");
-            Assertions.assertEquals(response.isGithubUser(), true);
-        }
-
-        @Test
-        @DisplayName("Normal User")
-        void getProfile_normalUser() {
-            //given
-            User user = User.builder()
-                    .name("가나다")
-                    .url("profileUrl")
-                    .build();
-
-            // when
-            ProfileGetResponse response = mypageService.getProfile(user);
-
-            // then
-            Assertions.assertEquals(response.getProfile(), "profileUrl");
-            Assertions.assertEquals(response.isGithubUser(), false);
-        }
-
-    }
-
-    @Nested
     @DisplayName("Register Profile")
     class RegisterProfile {
 
@@ -304,6 +263,7 @@ public class MypageServiceTest extends ServiceTest {
             // given
             User user = User.builder()
                     .githubId("githubUser")
+                    .url("hello.com")
                     .name("가나다")
                     .build();
 
@@ -314,6 +274,8 @@ public class MypageServiceTest extends ServiceTest {
             Assertions.assertEquals(response.getName(), "가나다");
             Assertions.assertNull(response.getField());
             Assertions.assertNull(response.getIntroduce());
+            Assertions.assertEquals(response.getProfileImg(), "hello.com");
+            Assertions.assertTrue(response.isGithubUser());
 
         }
 

@@ -18,6 +18,8 @@ public class UserInfoGetResponse {
     private List<String> field;
     private String introduce;
     private String name;
+    private String profileImg;
+    private boolean githubUser;
 
     public static UserInfoGetResponse from(User user) {
         List<String> fields = null;
@@ -33,6 +35,8 @@ public class UserInfoGetResponse {
                 .field(fields)
                 .introduce(user.getIntroduce())
                 .name(user.getName())
+                .profileImg(user.getUrl())
+                .githubUser(user.getGithubId()!=null)
                 .build();
     }
 
