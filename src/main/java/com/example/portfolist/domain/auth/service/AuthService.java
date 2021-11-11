@@ -79,7 +79,7 @@ public class AuthService {
     }
 
     public GithubUserLoginResponse login(GithubUserLoginRequest request) {
-        String token = githubCodeClient.getUserToken(clientId, clientSecret, request.getCode()).getAccessToken();
+        String token = githubCodeClient.getUserToken("application/json", clientId, clientSecret, request.getCode()).getAccessToken();
         GithubTokenResponse response = githubTokenClient.getUserInfo("token " + token);
         String nickname = response.getLogin();
         String name = response.getName();

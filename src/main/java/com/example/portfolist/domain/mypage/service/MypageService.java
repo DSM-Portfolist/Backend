@@ -52,12 +52,6 @@ public class MypageService {
         }
     }
 
-    public ProfileGetResponse getProfile(User user) {
-        String profile = user.getUrl();
-        boolean githubUser = user.getGithubId()!=null;
-        return new ProfileGetResponse(profile, githubUser);
-    }
-
     public void registerProfile(MultipartFile file, NormalUser normalUser) {
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
         String contentType = file.getContentType();

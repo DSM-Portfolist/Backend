@@ -22,6 +22,12 @@ public class FeignClientErrorDecoder implements ErrorDecoder {
                 message = objectMapper.readTree(response.body().toString())
                         .get("message").asText();
             } catch (JsonProcessingException e) {
+                try {
+                    message = objectMapper.readTree(response.body().toString())
+                            .get("error").asText();
+                } catch (JsonProcessingException ex) {
+                    ex.printStackTrace();
+                }
                 e.printStackTrace();
             }
         }
