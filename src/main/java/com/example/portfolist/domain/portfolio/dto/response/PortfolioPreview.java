@@ -14,7 +14,7 @@ public class PortfolioPreview {
 
     private long id;
 
-    private String pofolImg;
+    private String url;
 
     private List<String> field;
 
@@ -37,9 +37,9 @@ public class PortfolioPreview {
     private String profileImg;
 
     @QueryProjection
-    public PortfolioPreview(long id, String pofolImg, String title, String introduce, LocalDate date, long userId, String name, String profileImg, boolean touched, int totalComment, int totalTouching) {
+    public PortfolioPreview(long id, String url, String title, String introduce, LocalDate date, long userId, String name, String profileImg, boolean touched, int totalComment, int totalTouching) {
         this.id = id;
-        this.pofolImg = pofolImg;
+        this.url = url;
         this.title = title;
         this.introduce = introduce;
         this.date = date;
@@ -54,7 +54,7 @@ public class PortfolioPreview {
     public static PortfolioPreview of(Portfolio portfolio) {
         return PortfolioPreview.builder()
                 .id(portfolio.getPk())
-                .pofolImg(portfolio.getUrl())
+                .url(portfolio.getUrl())
                 .title(portfolio.getTitle())
                 .introduce(portfolio.getIntroduce())
                 .date(portfolio.getDate())

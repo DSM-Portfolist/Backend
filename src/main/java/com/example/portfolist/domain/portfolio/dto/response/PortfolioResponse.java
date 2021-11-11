@@ -17,11 +17,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class PortfolioResponse {
 
-    private long userId;
-
-    private String name;
-
-    private String profileImg;
+    private UserDto user;
 
     private LocalDate createDate;
 
@@ -53,9 +49,7 @@ public class PortfolioResponse {
 
     public static PortfolioResponse of(Portfolio portfolio, Boolean isMine, Boolean touched) {
         return PortfolioResponse.builder()
-                .userId(portfolio.getUser().getPk())
-                .name(portfolio.getUser().getName())
-                .profileImg(portfolio.getUser().getUrl())
+                .user(UserDto.of(portfolio.getUser()))
                 .createDate(portfolio.getDate())
                 .portfolioId(portfolio.getPk())
                 .touched(touched)

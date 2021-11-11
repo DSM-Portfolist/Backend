@@ -15,11 +15,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class ReCommentResponse {
 
-    private long userId;
-
-    private String name;
-
-    private String profileImg;
+    private UserDto user;
 
     private boolean isMine;
 
@@ -31,9 +27,7 @@ public class ReCommentResponse {
 
     public static ReCommentResponse of(ReComment reComment, Boolean isMine) {
         return ReCommentResponse.builder()
-                .userId(reComment.getUser().getPk())
-                .name(reComment.getUser().getName())
-                .profileImg(reComment.getUser().getUrl())
+                .user(UserDto.of(reComment.getUser()))
                 .isMine(isMine)
                 .reCommentId(reComment.getPk())
                 .reCommentContent(reComment.getContent())

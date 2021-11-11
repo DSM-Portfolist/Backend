@@ -15,11 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class CommentResponse {
 
-    private Long userId;
-
-    private String name;
-
-    private String profileImg;
+    private UserDto user;
 
     private boolean isMine;
 
@@ -34,9 +30,7 @@ public class CommentResponse {
     public static CommentResponse of(Comment comment, Boolean isMine) {
         if (comment.getDeleteYN().equals('Y')) {
             return CommentResponse.builder()
-                    .userId(null)
-                    .name(null)
-                    .profileImg(null)
+                    .user(null)
                     .isMine(false)
                     .commentId(comment.getPk())
                     .commentContent(null)
@@ -45,9 +39,7 @@ public class CommentResponse {
                     .build();
         }
         return CommentResponse.builder()
-                .userId(comment.getUser().getPk())
-                .name(comment.getUser().getName())
-                .profileImg(comment.getUser().getUrl())
+                .user(UserDto.of(comment.getUser()))
                 .isMine(isMine)
                 .commentId(comment.getPk())
                 .commentContent(comment.getContent())
