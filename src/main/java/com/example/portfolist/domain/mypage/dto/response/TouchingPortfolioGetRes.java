@@ -24,13 +24,13 @@ public class TouchingPortfolioGetRes {
 
         private long userId;
         private String name;
-        private String profile;
+        private String profileImg;
 
         public static ContentUser from(User user) {
             return ContentUser.builder()
                     .userId(user.getPk())
                     .name(user.getName())
-                    .profile(user.getUrl())
+                    .profileImg(user.getUrl())
                     .build();
         }
     }
@@ -47,8 +47,8 @@ public class TouchingPortfolioGetRes {
         private String title;
         private String introduce;
         private ContentUser user;
-        private int comment;
-        private int touching;
+        private int totalComment;
+        private int totalTouching;
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDate date;
@@ -70,9 +70,9 @@ public class TouchingPortfolioGetRes {
                     .title(portfolio.getTitle())
                     .introduce(portfolio.getIntroduce())
                     .user(ContentUser.from(portfolio.getUser()))
-                    .comment(CollectionUtils.isNullOrEmpty(portfolio.getCommentList()) ?
+                    .totalComment(CollectionUtils.isNullOrEmpty(portfolio.getCommentList()) ?
                             0 : portfolio.getCommentList().size())
-                    .touching(CollectionUtils.isNullOrEmpty(portfolio.getTouchingList()) ?
+                    .totalTouching(CollectionUtils.isNullOrEmpty(portfolio.getTouchingList()) ?
                             0 : portfolio.getTouchingList().size())
                     .date(portfolio.getDate())
                     .build();

@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class ProfileGetResponse {
 
-    private String profile;
+    private String profileImg;
     private boolean githubUser;
 
 }

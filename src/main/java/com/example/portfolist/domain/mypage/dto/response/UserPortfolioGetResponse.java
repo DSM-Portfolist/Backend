@@ -23,8 +23,8 @@ public class UserPortfolioGetResponse {
     private String icon;
     private String title;
     private String introduce;
-    private int comment;
-    private int touching;
+    private int totalComment;
+    private int totalTouching;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate date;
@@ -44,9 +44,9 @@ public class UserPortfolioGetResponse {
                 .icon(portfolio.getMainIcon())
                 .title(portfolio.getTitle())
                 .introduce(portfolio.getIntroduce())
-                .comment(CollectionUtils.isNullOrEmpty(portfolio.getCommentList()) ?
+                .totalComment(CollectionUtils.isNullOrEmpty(portfolio.getCommentList()) ?
                         0 : portfolio.getCommentList().size())
-                .touching(CollectionUtils.isNullOrEmpty(portfolio.getTouchingList()) ?
+                .totalTouching(CollectionUtils.isNullOrEmpty(portfolio.getTouchingList()) ?
                         0 : portfolio.getTouchingList().size())
                 .date(portfolio.getDate())
                 .build();

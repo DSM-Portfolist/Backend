@@ -179,7 +179,7 @@ public class MypageServiceTest extends ServiceTest {
             ProfileGetResponse response = mypageService.getProfile(user);
 
             // then
-            Assertions.assertEquals(response.getProfile(), "profileUrl");
+            Assertions.assertEquals(response.getProfileImg(), "profileUrl");
             Assertions.assertEquals(response.isGithubUser(), true);
         }
 
@@ -196,7 +196,7 @@ public class MypageServiceTest extends ServiceTest {
             ProfileGetResponse response = mypageService.getProfile(user);
 
             // then
-            Assertions.assertEquals(response.getProfile(), "profileUrl");
+            Assertions.assertEquals(response.getProfileImg(), "profileUrl");
             Assertions.assertEquals(response.isGithubUser(), false);
         }
 
