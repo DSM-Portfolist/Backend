@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface FieldRepository extends JpaRepository<Field, Long>, QuerydslPredicateExecutor<Field> {
 
     List<Field> findByUser(User user);
-    Optional<Field> findByFieldKindPk(int pk);
+    Optional<Field> findByFieldKindPkAndUser(int fieldKind_pk, User user);
     void deleteByUser(User user);
 
 }

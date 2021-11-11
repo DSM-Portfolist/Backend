@@ -59,8 +59,8 @@ public class AuthCheckFacade {
         }
     }
 
-    public Field findFieldByFieldKindPk(int pk) {
-        return fieldRepository.findByFieldKindPk(pk)
+    public Field findFieldByFieldKindPkAndUser(int pk, User user) {
+        return fieldRepository.findByFieldKindPkAndUser(pk, user)
                 .orElseThrow(FieldNotFoundException::new);
     }
 
