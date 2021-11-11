@@ -375,7 +375,7 @@ public class MypageServiceTest extends ServiceTest {
             mypageService.changeUserInfo(request, user);
 
             // then
-            verify(authCheckFacade, never()).findFieldByFieldKindPk(eq(1));
+            verify(authCheckFacade, never()).findFieldByFieldKindPkAndUser(eq(1), any());
             verify(authCheckFacade, never()).findFieldKindById(eq(1));
             verify(authFacade, times(1)).delete(any(List.class));
             verify(authFacade, times(1)).save(any(List.class));

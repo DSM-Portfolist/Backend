@@ -93,7 +93,7 @@ public class MypageService {
             List<Field> deleteField = new ArrayList<>();
             for(int fieldId : nowField) {
                 if (!changeField.contains(fieldId)) {
-                    Field field = authCheckFacade.findFieldByFieldKindPk(fieldId);
+                    Field field = authCheckFacade.findFieldByFieldKindPkAndUser(fieldId, user);
                     deleteField.add(field);
                 }
             }
