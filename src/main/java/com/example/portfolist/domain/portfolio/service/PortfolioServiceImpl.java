@@ -77,12 +77,16 @@ public class PortfolioServiceImpl implements PortfolioService{
 
     @Override
     @Transactional
-    public void createPortfolio(PortfolioRequest request, MultipartFile file, List<List<MultipartFile>> containerImgListList) {
+    public void createPortfolio(PortfolioRequest request, MultipartFile file, List<List<MultipartFile>> containerImgListList, MultipartFile thumbnail) {
         User user = getCurrentUser();
 
         if (file != null) {
             String fileName = fileUploadProvider.uploadFile(file);
             request.setFileName(fileName);
+        }
+        if (thumbnail != null) {
+            String thumbnailName = fileUploadProvider.uploadFile(thumbnail);
+            request.setThumbnail(thumbnailName);
         }
 
         Portfolio portfolio = portfolioRepository.save(Portfolio.toEntity(request, user));
@@ -107,6 +111,9 @@ public class PortfolioServiceImpl implements PortfolioService{
     @Override
     public Long updatePortfolio(long portfolioId, PortfolioRequest request, MultipartFile file, List<List<MultipartFile>> boxImgListList) {
         Portfolio portfolio = getPortfolio(portfolioId);
+
+        if (!(portfolio.getUser().getPk() == getCurrentUser().getPk())) throw new PermissionDeniedException();
+
         if (file != null) {
             fileUploadProvider.deleteFile(portfolio.getUrl());
             String fileName = fileUploadProvider.uploadFile(file);

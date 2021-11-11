@@ -18,14 +18,14 @@ public class RecentPortfolioResponse {
 
     private String introduce;
 
-    private String img;
+    private String thumbnail;
 
     public static RecentPortfolioResponse of(Portfolio portfolio) {
         return RecentPortfolioResponse.builder()
                 .portfolioId(portfolio.getPk())
                 .title(portfolio.getTitle())
                 .introduce(portfolio.getIntroduce())
-                .img(portfolio.getUrl())
+                .thumbnail(portfolio.getThumbnail())
                 .build();
     }
 }

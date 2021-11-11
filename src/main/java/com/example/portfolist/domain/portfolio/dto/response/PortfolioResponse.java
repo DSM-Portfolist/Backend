@@ -47,6 +47,8 @@ public class PortfolioResponse {
 
     private String file;
 
+    private String thumbnail;
+
     public static PortfolioResponse of(Portfolio portfolio, Boolean isMine, Boolean touched) {
         return PortfolioResponse.builder()
                 .user(UserDto.of(portfolio.getUser()))
@@ -76,6 +78,7 @@ public class PortfolioResponse {
                         .collect(Collectors.toList()))
                 .link(portfolio.getLink())
                 .file(portfolio.getUrl())
+                .thumbnail(portfolio.getThumbnail())
                 .build();
     }
 }
