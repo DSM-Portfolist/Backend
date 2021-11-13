@@ -14,7 +14,7 @@ public class ThisMonthPortfolioResponse {
 
     private long id;
 
-    private String img;
+    private String thumbnail;
 
     private String title;
 
@@ -28,7 +28,7 @@ public class ThisMonthPortfolioResponse {
         return ThisMonthPortfolioResponse.builder()
                 .id(thisMonthPortfolio.getPk())
                 .title(thisMonthPortfolio.getTitle())
-                .img(thisMonthPortfolio.getUrl())
+                .thumbnail(thisMonthPortfolio.getThumbnail())
                 .name(thisMonthPortfolio.getUser().getName())
                 .introduce(thisMonthPortfolio.getIntroduce())
                 .totalTouching(thisMonthPortfolio.getTouchingList().size())

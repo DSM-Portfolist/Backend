@@ -35,8 +35,9 @@ public class PortfolioController {
     @ResponseStatus(HttpStatus.CREATED)
     public void createPortfolio(@RequestPart(value = "portfolioRequest") PortfolioRequest request,
                                 @RequestPart(value = "file", required = false) MultipartFile file,
-                                @RequestPart(value = "containerImgListList", required = false) List<List<MultipartFile>> containerImgListList) {
-        portfolioService.createPortfolio(request, file, containerImgListList);
+                                @RequestPart(value = "containerImgListList", required = false) List<List<MultipartFile>> containerImgListList,
+                                @RequestPart(value = "thumbnail") MultipartFile thumbnail) {
+        portfolioService.createPortfolio(request, file, containerImgListList, thumbnail);
     }
 
     @DeleteMapping("/{portfolioId}")

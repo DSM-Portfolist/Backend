@@ -38,6 +38,8 @@ public class PortfolioRequest {
 
     private boolean isOpen;
 
+    private String thumbnail;
+
     private List<ContainerRequest> containerList;
 
 }

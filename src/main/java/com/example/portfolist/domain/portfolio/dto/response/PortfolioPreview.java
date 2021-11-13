@@ -14,7 +14,7 @@ public class PortfolioPreview {
 
     private long id;
 
-    private String url;
+    private String thumbnail;
 
     private List<String> field;
 
@@ -30,22 +30,20 @@ public class PortfolioPreview {
 
     private boolean touched;
 
-    private long userId;
-
-    private String name;
-
-    private String profileImg;
+    private UserDto user;
 
     @QueryProjection
-    public PortfolioPreview(long id, String url, String title, String introduce, LocalDate date, long userId, String name, String profileImg, boolean touched, int totalComment, int totalTouching) {
+    public PortfolioPreview(long id, String thumbnail, String title, String introduce, LocalDate date, long userId, String name, String profileImg, boolean touched, int totalComment, int totalTouching) {
         this.id = id;
-        this.url = url;
+        this.thumbnail = thumbnail;
         this.title = title;
         this.introduce = introduce;
         this.date = date;
-        this.userId = userId;
-        this.name = name;
-        this.profileImg = profileImg;
+        this.user = UserDto.builder()
+                .userId(userId)
+                .name(name)
+                .profileImg(profileImg)
+                .build();
         this.touched = touched;
         this.totalComment = totalComment;
         this.totalTouching = totalTouching;
@@ -54,13 +52,11 @@ public class PortfolioPreview {
     public static PortfolioPreview of(Portfolio portfolio) {
         return PortfolioPreview.builder()
                 .id(portfolio.getPk())
-                .url(portfolio.getUrl())
+                .thumbnail(portfolio.getUrl())
                 .title(portfolio.getTitle())
                 .introduce(portfolio.getIntroduce())
                 .date(portfolio.getDate())
-                .userId(portfolio.getUser().getPk())
-                .name(portfolio.getUser().getName())
-                .profileImg(portfolio.getUser().getUrl())
+                .user(UserDto.of(portfolio.getUser()))
                 .build();
     }
 }

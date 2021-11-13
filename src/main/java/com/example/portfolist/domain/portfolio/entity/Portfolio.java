@@ -51,6 +51,9 @@ public class Portfolio {
     @Column(length = 1)
     private String mainIcon;
 
+    @Column
+    private String thumbnail;
+
     @LazyCollection(LazyCollectionOption.EXTRA)
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.REMOVE)
     private final List<Comment> commentList = new ArrayList<>();
@@ -90,6 +93,11 @@ public class Portfolio {
                 .date(LocalDate.now())
                 .isOpen(request.isOpen())
                 .mainIcon(request.getIcon())
+                .thumbnail(request.getThumbnail())
                 .build();
+    }
+
+    public void updateThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 }
