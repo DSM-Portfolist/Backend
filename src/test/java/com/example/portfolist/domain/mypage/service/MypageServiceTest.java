@@ -327,26 +327,6 @@ public class MypageServiceTest extends ServiceTest {
         }
 
         @Test
-        @DisplayName("None Change Success")
-        void changeUserInfo_noneChange_Success() throws NoSuchFieldException, IllegalAccessException {
-            // given
-            User user = User.builder()
-                    .githubId("githubUser")
-                    .name("가나다")
-                    .build();
-
-            List<Integer> field = new ArrayList<>();
-            UserInfoChangeRequest request = makeRequest(field, "바람이 불지 않으면 노를 저어라", "김땡땡");
-
-            // when
-            mypageService.changeUserInfo(request, user);
-
-            // then
-            verify(authFacade, never()).delete(any(List.class));
-            verify(authFacade, never()).save(any(List.class));
-        }
-
-        @Test
         @DisplayName("Same Field Success")
         void changeUserInfo_sameField_Success() throws NoSuchFieldException, IllegalAccessException {
             // given

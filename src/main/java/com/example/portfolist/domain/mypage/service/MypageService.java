@@ -85,34 +85,32 @@ public class MypageService {
     public void changeUserInfo(UserInfoChangeRequest request, User user) {
         user.updateUserInfo(request.getName(), request.getIntroduce());
 
-        if (!CollectionUtils.isNullOrEmpty(request.getField())) {
-            List<Integer> changeField = request.getField();
-            List<Integer> nowField = authFacade.findFieldByUser(user).stream()
-                    .map(field -> field.getFieldKind().getPk()).collect(Collectors.toList());
+        List<Integer> changeField = request.getField();
+        List<Integer> nowField = authFacade.findFieldByUser(user).stream()
+                .map(field -> field.getFieldKind().getPk()).collect(Collectors.toList());
 
-            List<Field> deleteField = new ArrayList<>();
-            for(int fieldId : nowField) {
-                if (!changeField.contains(fieldId)) {
-                    Field field = authCheckFacade.findFieldByFieldKindPkAndUser(fieldId, user);
-                    deleteField.add(field);
-                }
+        List<Field> deleteField = new ArrayList<>();
+        for(int fieldId : nowField) {
+            if (!changeField.contains(fieldId)) {
+                Field field = authCheckFacade.findFieldByFieldKindPkAndUser(fieldId, user);
+                deleteField.add(field);
             }
-
-            List<Field> saveField = new ArrayList<>();
-            for(int fieldId : changeField) {
-                if (!nowField.contains(fieldId)) {
-                    FieldKind fieldKind = authCheckFacade.findFieldKindById(fieldId);
-                    Field field = Field.builder()
-                            .user(user)
-                            .fieldKind(fieldKind)
-                            .build();
-                    saveField.add(field);
-                }
-            }
-
-            authFacade.delete(deleteField);
-            authFacade.save(saveField);
         }
+
+        List<Field> saveField = new ArrayList<>();
+        for(int fieldId : changeField) {
+            if (!nowField.contains(fieldId)) {
+                FieldKind fieldKind = authCheckFacade.findFieldKindById(fieldId);
+                Field field = Field.builder()
+                        .user(user)
+                        .fieldKind(fieldKind)
+                        .build();
+                saveField.add(field);
+            }
+        }
+
+        authFacade.delete(deleteField);
+        authFacade.save(saveField);
     }
 
     @Transactional
