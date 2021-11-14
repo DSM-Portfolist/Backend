@@ -1,12 +1,14 @@
 package com.example.portfolist.domain.portfolio.service;
 
 import com.example.portfolist.domain.auth.entity.User;
+import com.example.portfolist.domain.mypage.entity.NoticeType;
 import com.example.portfolist.domain.portfolio.entity.Portfolio;
 import com.example.portfolist.domain.portfolio.entity.touching.Touching;
 import com.example.portfolist.domain.portfolio.entity.touching.TouchingId;
 import com.example.portfolist.domain.portfolio.exception.PortfolioNotFoundException;
 import com.example.portfolist.domain.portfolio.repository.TouchingRepository;
 import com.example.portfolist.domain.portfolio.repository.portfolio.PortfolioRepository;
+import com.example.portfolist.global.event.GlobalEventPublisher;
 import com.example.portfolist.global.security.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,9 +22,14 @@ public class TouchingServiceImpl implements TouchingService{
 
     private final AuthenticationFacade authenticationFacade;
 
+    private final GlobalEventPublisher eventPublisher;
+
     @Override
     public void createTouching(long portfolioId) {
-        touchingRepository.save(Touching.toEntity(getCurrentUser(), getPortfolio(portfolioId)));
+        Portfolio portfolio = getPortfolio(portfolioId);
+        User user = getCurrentUser();
+        touchingRepository.save(Touching.toEntity(user, portfolio));
+        eventPublisher.makeNotice(user, portfolio.getUser(), NoticeType.TOUCHING);
     }
 
     @Override

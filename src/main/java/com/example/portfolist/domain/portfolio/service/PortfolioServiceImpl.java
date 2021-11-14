@@ -6,6 +6,7 @@ import com.example.portfolist.domain.auth.exception.FieldNotFoundException;
 import com.example.portfolist.domain.auth.exception.UserNotFoundException;
 import com.example.portfolist.domain.auth.repository.repository.FieldKindRepository;
 import com.example.portfolist.domain.auth.repository.repository.UserRepository;
+import com.example.portfolist.domain.mypage.entity.NoticeType;
 import com.example.portfolist.domain.portfolio.dto.request.CertificateRequest;
 import com.example.portfolist.domain.portfolio.dto.request.ContainerRequest;
 import com.example.portfolist.domain.portfolio.dto.request.PortfolioRequest;
@@ -14,6 +15,7 @@ import com.example.portfolist.domain.portfolio.entity.*;
 import com.example.portfolist.domain.portfolio.entity.container.ContainerImage;
 import com.example.portfolist.domain.portfolio.entity.container.ContainerText;
 import com.example.portfolist.domain.portfolio.entity.container.Container;
+import com.example.portfolist.domain.portfolio.entity.touching.Touching;
 import com.example.portfolist.domain.portfolio.entity.touching.TouchingId;
 import com.example.portfolist.domain.portfolio.exception.PortfolioNotFoundException;
 import com.example.portfolist.domain.portfolio.repository.*;
@@ -22,6 +24,7 @@ import com.example.portfolist.domain.portfolio.repository.Container.ContainerTex
 import com.example.portfolist.domain.portfolio.repository.Container.ContainerRepository;
 import com.example.portfolist.domain.portfolio.repository.portfolio.PortfolioRepository;
 import com.example.portfolist.global.error.exception.PermissionDeniedException;
+import com.example.portfolist.global.event.GlobalEventPublisher;
 import com.example.portfolist.global.file.FileUploadProvider;
 import com.example.portfolist.global.security.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
@@ -54,6 +57,8 @@ public class PortfolioServiceImpl implements PortfolioService{
     private final FileUploadProvider fileUploadProvider;
 
     private final AuthenticationFacade authenticationFacade;
+
+    private final GlobalEventPublisher eventPublisher;
 
     @Override
     public PortfolioListResponse getPortfolioList(Pageable page, List<String> fieldList) {
@@ -124,14 +129,12 @@ public class PortfolioServiceImpl implements PortfolioService{
 
         containerImageRepository.findByContainerPortfolioPk(portfolioId).forEach(img -> fileUploadProvider.deleteFile(img.getUrl()));
 
-        portfolioFieldRepository.deleteByPortfolioPk(portfolioId);
-        containerRepository.deleteByPortfolioPk(portfolioId);
-        certificateContainerRepository.deleteByPortfolioPk(portfolioId);
-        moreInfoRepository.deleteByPortfolioPk(portfolioId);
-        containerImageRepository.deleteByContainerPortfolioPk(portfolioId);
-        containerTextRepository.deleteByContainerPortfolioPk(portfolioId);
+        deleteOther(portfolioId);
 
         saveOther(portfolio, request, boxImgListList);
+
+        List<Touching> touchingList = touchingRepository.findByPortfolio(portfolio);
+        touchingList.forEach(touching -> eventPublisher.makeNotice(portfolio.getUser(), touching.getUser(), NoticeType.P_MODIFY));
 
         return portfolioId;
     }
@@ -173,6 +176,15 @@ public class PortfolioServiceImpl implements PortfolioService{
 
         return new PortfolioListResponse(portfolioList.size(),
                 portfolioList.stream().map(PortfolioPreview::of).collect(Collectors.toList()));
+    }
+
+    private void deleteOther(long portfolioId) {
+        portfolioFieldRepository.deleteByPortfolioPk(portfolioId);
+        containerRepository.deleteByPortfolioPk(portfolioId);
+        certificateContainerRepository.deleteByPortfolioPk(portfolioId);
+        moreInfoRepository.deleteByPortfolioPk(portfolioId);
+        containerImageRepository.deleteByContainerPortfolioPk(portfolioId);
+        containerTextRepository.deleteByContainerPortfolioPk(portfolioId);
     }
 
     private void saveOther(Portfolio portfolio, PortfolioRequest request, List<List<MultipartFile>> boxImgListList) {
