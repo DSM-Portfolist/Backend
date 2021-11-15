@@ -1,6 +1,7 @@
 package com.example.portfolist.domain.portfolio.service;
 
 import com.example.portfolist.domain.auth.entity.User;
+import com.example.portfolist.domain.mypage.entity.NoticeType;
 import com.example.portfolist.domain.portfolio.dto.request.ContentRequest;
 import com.example.portfolist.domain.portfolio.dto.response.CommentListResponse;
 import com.example.portfolist.domain.portfolio.dto.response.CommentResponse;
@@ -14,6 +15,7 @@ import com.example.portfolist.domain.portfolio.repository.comment.CommentReposit
 import com.example.portfolist.domain.portfolio.repository.comment.ReCommentRepository;
 import com.example.portfolist.domain.portfolio.repository.portfolio.PortfolioRepository;
 import com.example.portfolist.global.error.exception.PermissionDeniedException;
+import com.example.portfolist.global.event.GlobalEventPublisher;
 import com.example.portfolist.global.security.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,8 @@ public class CommentServiceImpl implements CommentService{
 
     private final AuthenticationFacade authenticationFacade;
 
+    private final GlobalEventPublisher eventPublisher;
+
     @Override
     public CommentListResponse getCommentList(long portfolioId) {
 
@@ -45,13 +49,16 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public void createComment(long portfolioId, ContentRequest request) {
+        Portfolio portfolio = getPortfolio(portfolioId);
+        User user = getCurrentUser();
         commentRepository.save(Comment.builder()
-                .portfolio(getPortfolio(portfolioId))
-                .user(getCurrentUser())
+                .portfolio(portfolio)
+                .user(user)
                 .date(LocalDate.now())
                 .deleteYN('N')
                 .content(request.getContent())
                 .build());
+        eventPublisher.makeNotice(user, portfolio.getUser(), NoticeType.COMMENT);
     }
 
     @Override
@@ -80,12 +87,15 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public void createReComment(long commentId, ContentRequest request) {
+        Comment comment = getComment(commentId);
+        User user = getCurrentUser();
         reCommentRepository.save(ReComment.builder()
                 .user(getCurrentUser())
                 .comment(getComment(commentId))
                 .date(LocalDate.now())
                 .content(request.getContent())
                 .build());
+        eventPublisher.makeNotice(user, comment.getUser(), NoticeType.RECOMMENT);
     }
 
     @Override

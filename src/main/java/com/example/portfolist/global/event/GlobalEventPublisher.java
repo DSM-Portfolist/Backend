@@ -15,6 +15,7 @@ public class GlobalEventPublisher {
     private final ApplicationEventPublisher eventPublisher;
 
     public void makeNotice(User fromUser, User toUser, NoticeType event) {
+        if (fromUser.equals(toUser)) return;
         eventPublisher.publishEvent(new NoticeEvent(fromUser, toUser, event));
     }
 
