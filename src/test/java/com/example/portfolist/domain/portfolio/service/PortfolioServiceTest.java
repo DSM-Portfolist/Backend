@@ -1,4 +1,4 @@
-package com.example.portfolist.domain.portfolio.repository;
+package com.example.portfolist.domain.portfolio.service;
 
 import com.example.portfolist.ApiTest;
 import com.example.portfolist.domain.auth.entity.FieldKind;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PortfolioRepositoryTest extends ApiTest {
+class PortfolioServiceTest extends ApiTest {
 
     @Autowired
     JwtTokenProvider jwtTokenProvider;
@@ -85,16 +85,5 @@ class PortfolioRepositoryTest extends ApiTest {
             System.out.println("totalTouching = " + portfolioPreview.getTotalTouching());
             portfolioPreview.getField().forEach(p -> System.out.println("p = " + p));
         }
-    }
-
-    @Test
-    public void hi() throws Exception {
-        //given
-        Portfolio thisMonthPortfolio = portfolioRepository.findThisMonthPortfolio();
-        System.out.println("thisMonthPortfolio.getTitle() = " + thisMonthPortfolio.getTitle());
-
-        //when
-
-        //then
     }
 }
