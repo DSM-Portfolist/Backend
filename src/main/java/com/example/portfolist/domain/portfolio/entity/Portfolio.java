@@ -78,7 +78,7 @@ public class Portfolio {
         this.title = request.getTitle();
         this.introduce = request.getIntroduce();
         this.link = request.getLink();
-        this.url = request.getFileName();
+        this.url = request.getFile();
         this.mainIcon = request.getIcon();
         this.isOpen = request.isOpen();
     }
@@ -89,7 +89,7 @@ public class Portfolio {
                 .title(request.getTitle())
                 .introduce(request.getIntroduce())
                 .link(request.getLink())
-                .url(request.getFileName())
+                .url(request.getFile())
                 .date(LocalDate.now())
                 .isOpen(request.isOpen())
                 .mainIcon(request.getIcon())

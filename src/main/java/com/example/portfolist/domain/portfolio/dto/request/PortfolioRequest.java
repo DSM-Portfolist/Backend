@@ -34,7 +34,7 @@ public class PortfolioRequest {
     @NotNull
     private String title;
 
-    private String fileName;
+    private String file;
 
     private boolean isOpen;
 

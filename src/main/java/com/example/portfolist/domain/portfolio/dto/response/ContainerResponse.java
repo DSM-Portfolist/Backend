@@ -18,14 +18,14 @@ public class ContainerResponse {
 
     private String containerTitle;
 
-    private List<String> containerImg;
+    private List<String> containerImgList;
 
     private List<ContainerTextResponse> containerTextList;
 
     public static ContainerResponse of(Container container) {
         return ContainerResponse.builder()
                 .containerTitle(container.getTitle())
-                .containerImg(container.getContainerImageList().stream()
+                .containerImgList(container.getContainerImageList().stream()
                         .map(ContainerImage::getUrl)
                         .collect(Collectors.toList()))
                 .containerTextList(container.getContainerTextList().stream()
