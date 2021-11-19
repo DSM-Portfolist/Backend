@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -33,11 +32,8 @@ public class PortfolioController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createPortfolio(@RequestPart(value = "portfolioRequest") PortfolioRequest request,
-                                @RequestPart(value = "file", required = false) MultipartFile file,
-                                @RequestPart(value = "containerImgListList", required = false) List<List<MultipartFile>> containerImgListList,
-                                @RequestPart(value = "thumbnail") MultipartFile thumbnail) {
-        portfolioService.createPortfolio(request, file, containerImgListList, thumbnail);
+    public void createPortfolio(@RequestPart(value = "portfolioRequest") PortfolioRequest request) {
+        portfolioService.createPortfolio(request);
     }
 
     @DeleteMapping("/{portfolioId}")
@@ -48,10 +44,8 @@ public class PortfolioController {
 
     @PutMapping("/{portfolioId}")
     public void updatePortfolio(@PathVariable long portfolioId,
-                                @RequestPart(value = "portfolioRequest") PortfolioRequest request,
-                                @RequestPart(value = "file", required = false) MultipartFile file,
-                                @RequestPart(value = "containerImgListList", required = false) List<List<MultipartFile>> containerImgListList) {
-        portfolioService.updatePortfolio(portfolioId, request, file, containerImgListList);
+                                @RequestPart(value = "portfolioRequest") PortfolioRequest request) {
+        portfolioService.updatePortfolio(portfolioId, request);
     }
 
     @GetMapping("/recent")

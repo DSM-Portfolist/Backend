@@ -82,21 +82,12 @@ public class PortfolioServiceImpl implements PortfolioService{
 
     @Override
     @Transactional
-    public void createPortfolio(PortfolioRequest request, MultipartFile file, List<List<MultipartFile>> containerImgListList, MultipartFile thumbnail) {
+    public void createPortfolio(PortfolioRequest request) {
         User user = getCurrentUser();
-
-        if (file != null) {
-            String fileName = fileUploadProvider.uploadFile(file);
-            request.setFileName(fileName);
-        }
-        if (thumbnail != null) {
-            String thumbnailName = fileUploadProvider.uploadFile(thumbnail);
-            request.setThumbnail(thumbnailName);
-        }
 
         Portfolio portfolio = portfolioRepository.save(Portfolio.toEntity(request, user));
 
-        saveOther(portfolio, request, containerImgListList);
+        saveOther(portfolio, request);
     }
 
     @Override
@@ -114,16 +105,11 @@ public class PortfolioServiceImpl implements PortfolioService{
     }
 
     @Override
-    public Long updatePortfolio(long portfolioId, PortfolioRequest request, MultipartFile file, List<List<MultipartFile>> boxImgListList) {
+    public Long updatePortfolio(long portfolioId, PortfolioRequest request) {
         Portfolio portfolio = getPortfolio(portfolioId);
 
         if (!(portfolio.getUser().getPk() == getCurrentUser().getPk())) throw new PermissionDeniedException();
 
-        if (file != null) {
-            fileUploadProvider.deleteFile(portfolio.getUrl());
-            String fileName = fileUploadProvider.uploadFile(file);
-            request.setFileName(fileName);
-        }
         portfolio.update(request);
         portfolio.getPortfolioFields().clear();
 
@@ -131,7 +117,7 @@ public class PortfolioServiceImpl implements PortfolioService{
 
         deleteOther(portfolioId);
 
-        saveOther(portfolio, request, boxImgListList);
+        saveOther(portfolio, request);
 
         List<Touching> touchingList = touchingRepository.findByPortfolio(portfolio);
         touchingList.forEach(touching -> eventPublisher.makeNotice(portfolio.getUser(), touching.getUser(), NoticeType.P_MODIFY));
@@ -187,14 +173,11 @@ public class PortfolioServiceImpl implements PortfolioService{
         containerTextRepository.deleteByContainerPortfolioPk(portfolioId);
     }
 
-    private void saveOther(Portfolio portfolio, PortfolioRequest request, List<List<MultipartFile>> boxImgListList) {
+    private void saveOther(Portfolio portfolio, PortfolioRequest request) {
         for (int i = 0; i < request.getContainerList().size(); i++) {
             ContainerRequest containerRequest = request.getContainerList().get(i);
 
             Container container = containerRepository.save(Container.toEntity(containerRequest, portfolio));
-
-            if (boxImgListList != null)
-                boxImgListList.get(i).forEach(boxImage -> containerImageRepository.save(ContainerImage.toEntity(container, fileUploadProvider.uploadFile(boxImage))));
 
             if (containerRequest.getContainerTextList() != null)
                 containerRequest.getContainerTextList().forEach(boxRequest -> containerTextRepository.save(ContainerText.toEntity(container, boxRequest)));
