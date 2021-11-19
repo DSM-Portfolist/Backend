@@ -37,7 +37,7 @@ public class PortfolioResponse {
 
     private List<String> field;
 
-    private List<MoreInfoResponse> moreInfoList;
+    private List<MoreInfoResponse> moreInfo;
 
     private List<ContainerResponse> containerList;
 
@@ -63,7 +63,7 @@ public class PortfolioResponse {
                 .field(portfolio.getPortfolioFields().stream()
                         .map(portfolioField -> portfolioField.getFieldKind().getContent())
                         .collect(Collectors.toList()))
-                .moreInfoList(portfolio.getMoreInfoList().stream()
+                .moreInfo(portfolio.getMoreInfoList().stream()
                         .map(MoreInfoResponse::of)
                         .collect(Collectors.toList()))
                 .containerList(portfolio.getContainerList().stream()
