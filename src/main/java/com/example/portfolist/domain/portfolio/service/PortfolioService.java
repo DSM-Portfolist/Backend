@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface PortfolioService {
-    PortfolioListResponse getPortfolioList(Pageable pageable, List<String> fieldList);
+    PortfolioListResponse getPortfolioList(Pageable pageable, List<String> fieldList, String query, String searchType);
     PortfolioResponse getPortfolioInfo(long portfolioId);
     void createPortfolio(PortfolioRequest request);
     void deletePortfolio(long portfolioId);
@@ -16,5 +16,4 @@ public interface PortfolioService {
     ThisMonthPortfolioResponse getThisMonthPortfolio();
     List<PortfolioPreview> getPortfolioByUser(long userId);
     List<PortfolioPreview> getMyTouchingPortfolio(Pageable pageable, long userId);
-    PortfolioListResponse searchPortfolio(Pageable pageable, String query, String searchType);
 }

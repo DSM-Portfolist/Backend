@@ -74,7 +74,8 @@ class PortfolioServiceTest extends ApiTest {
         setToken(jwtTokenProvider.generateAccessToken(user1.getPk()));
 
         //given
-        Page<PortfolioPreview> portfolioList = portfolioRepository.getPortfolioList(pageable, new ArrayList<>());
+        Page<PortfolioPreview> portfolioList = portfolioRepository
+                .getPortfolioList(pageable, new ArrayList<>(), "강은", "user");
 
         //then
         assertThat(portfolioList.getTotalElements()).isEqualTo(2);

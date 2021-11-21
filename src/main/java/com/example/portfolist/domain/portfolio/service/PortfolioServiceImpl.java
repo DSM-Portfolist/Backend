@@ -61,9 +61,12 @@ public class PortfolioServiceImpl implements PortfolioService{
     private final GlobalEventPublisher eventPublisher;
 
     @Override
-    public PortfolioListResponse getPortfolioList(Pageable page, List<String> fieldList) {
+    public PortfolioListResponse getPortfolioList(Pageable page,
+                                                  List<String> fieldList,
+                                                  String query,
+                                                  String searchType) {
 
-        Page<PortfolioPreview> portfolioList = portfolioRepository.getPortfolioList(page, fieldList);
+        Page<PortfolioPreview> portfolioList = portfolioRepository.getPortfolioList(page, fieldList, query, searchType);
 
         return new PortfolioListResponse(
                 portfolioList.getTotalElements(),
@@ -148,20 +151,6 @@ public class PortfolioServiceImpl implements PortfolioService{
     @Override
     public List<PortfolioPreview> getMyTouchingPortfolio(Pageable pageable, long userId) {
         return portfolioRepository.findMyTouchingPortfolio(pageable, getUserById(userId));
-    }
-
-    @Override
-    public PortfolioListResponse searchPortfolio(Pageable pageable, String query, String searchType) {
-        List<Portfolio> portfolioList = new ArrayList<>();
-
-        if (searchType.equals("user")) {
-            portfolioList = portfolioRepository.findByUserNameLike("%" + query + "%");
-        } else if (searchType.equals("title")) {
-            portfolioList = portfolioRepository.findByTitleLike("%" + query + "%");
-        }
-
-        return new PortfolioListResponse(portfolioList.size(),
-                portfolioList.stream().map(PortfolioPreview::of).collect(Collectors.toList()));
     }
 
     private void deleteOther(long portfolioId) {

@@ -20,8 +20,11 @@ public class PortfolioController {
 
     @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
-    public PortfolioListResponse getPortfolioList(Pageable pageable, @RequestParam(required = false)List<String> field) {
-        return portfolioService.getPortfolioList(pageable, field);
+    public PortfolioListResponse getPortfolioList(Pageable pageable,
+                                                  @RequestParam(required = false)List<String> field,
+                                                  @RequestParam String query,
+                                                  @RequestParam String searchType) {
+        return portfolioService.getPortfolioList(pageable, field, query, searchType);
     }
 
     @GetMapping("/{portfolioId}")
@@ -66,11 +69,6 @@ public class PortfolioController {
     @GetMapping("/user/{userId}/touching")
     public List<PortfolioPreview> getTouchedPortfolioByUser(Pageable pageable, @PathVariable long userId) {
         return portfolioService.getMyTouchingPortfolio(pageable, userId);
-    }
-
-    @GetMapping("/search")
-    public PortfolioListResponse searchPortfolio(Pageable pageable, @RequestParam String query, @RequestParam String searchType) {
-        return portfolioService.searchPortfolio(pageable, query, searchType);
     }
 }
 

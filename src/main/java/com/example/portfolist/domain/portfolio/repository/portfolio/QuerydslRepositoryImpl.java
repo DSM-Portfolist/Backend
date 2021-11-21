@@ -34,7 +34,10 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
     private final AuthenticationFacade authenticationFacade;
 
     @Override
-    public Page<PortfolioPreview> getPortfolioList(Pageable pageable, List<String> fieldCond) {
+    public Page<PortfolioPreview> getPortfolioList(Pageable pageable,
+                                                   List<String> fieldCond,
+                                                   String query,
+                                                   String searchType) {
 
         List<Portfolio> touchedPortfolioList = new ArrayList<>();
 
@@ -67,7 +70,8 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                 .from(portfolio)
                 .join(portfolio.user, user)
                 .leftJoin(portfolio.portfolioFields, portfolioField)
-                .where(fieldKindIn(fieldCond))
+                .where(fieldKindIn(fieldCond),
+                        searchCond("%" + query + "%", searchType))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(descOrAsc(pageable.getSort()))
@@ -88,6 +92,15 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                 .from(portfolioField)
                 .where(portfolioField.portfolio.pk.eq(id))
                 .fetch();
+    }
+
+    private BooleanExpression searchCond(String query, String searchType) {
+        if (searchType.equals("title")) {
+            return portfolio.title.like(query);
+        } else if (searchType.equals("user")) {
+            return portfolio.user.name.like(query);
+        }
+        return null;
     }
 
     private OrderSpecifier<LocalDate> descOrAsc(Sort sort) {
