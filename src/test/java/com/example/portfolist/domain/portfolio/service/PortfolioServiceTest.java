@@ -75,7 +75,7 @@ class PortfolioServiceTest extends ApiTest {
 
         //given
         Page<PortfolioPreview> portfolioList = portfolioRepository
-                .getPortfolioList(pageable, new ArrayList<>(), "강은", "user");
+                .getPortfolioList(pageable, new ArrayList<>(), "포", "title");
 
         //then
         assertThat(portfolioList.getTotalElements()).isEqualTo(2);

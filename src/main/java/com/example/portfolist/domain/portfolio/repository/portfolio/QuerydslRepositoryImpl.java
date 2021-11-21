@@ -17,7 +17,6 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static com.example.portfolist.domain.auth.entity.QUser.user;

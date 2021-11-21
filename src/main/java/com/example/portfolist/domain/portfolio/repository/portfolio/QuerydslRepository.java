@@ -1,7 +1,6 @@
 package com.example.portfolist.domain.portfolio.repository.portfolio;
 
 import com.example.portfolist.domain.auth.entity.User;
-import com.example.portfolist.domain.portfolio.dto.response.CommentResponse;
 import com.example.portfolist.domain.portfolio.dto.response.PortfolioPreview;
 import com.example.portfolist.domain.portfolio.entity.Portfolio;
 import org.springframework.data.domain.Page;
