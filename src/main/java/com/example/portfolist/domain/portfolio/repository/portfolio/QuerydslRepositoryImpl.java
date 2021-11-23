@@ -53,7 +53,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
         QueryResults<PortfolioPreview> results = queryFactory
                 .select(new QPortfolioPreview(
                         portfolio.pk,
-                        portfolio.url,
+                        portfolio.thumbnail,
                         portfolio.title,
                         portfolio.introduce,
                         portfolio.date,
