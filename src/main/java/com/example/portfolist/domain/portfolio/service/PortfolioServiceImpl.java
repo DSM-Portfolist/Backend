@@ -12,6 +12,7 @@ import com.example.portfolist.domain.portfolio.dto.request.ContainerRequest;
 import com.example.portfolist.domain.portfolio.dto.request.PortfolioRequest;
 import com.example.portfolist.domain.portfolio.dto.response.*;
 import com.example.portfolist.domain.portfolio.entity.*;
+import com.example.portfolist.domain.portfolio.entity.container.ContainerImage;
 import com.example.portfolist.domain.portfolio.entity.container.ContainerText;
 import com.example.portfolist.domain.portfolio.entity.container.Container;
 import com.example.portfolist.domain.portfolio.entity.touching.Touching;
@@ -167,6 +168,10 @@ public class PortfolioServiceImpl implements PortfolioService{
 
             if (containerRequest.getContainerTextList() != null)
                 containerRequest.getContainerTextList().forEach(boxRequest -> containerTextRepository.save(ContainerText.toEntity(container, boxRequest)));
+
+            if (containerRequest.getContainerImgList() != null)
+                containerRequest.getContainerImgList().forEach(boxImageRequest -> containerImageRepository.save(
+                        ContainerImage.toEntity(container, boxImageRequest)));
         }
 
         request.getField().forEach(fieldKindId -> portfolioFieldRepository.save(PortfolioField.toEntity(portfolio, getFieldKind(fieldKindId))));
