@@ -16,9 +16,16 @@ public class FileService {
 
     public FileNameResponse uploadFile(MultipartFile file) {
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-        String contentType = file.getContentType();
-        if (!"png".equals(extension) && !"jpeg".equals(extension) && !"jpg".equals(extension)
-                || contentType == null || !contentType.split("/")[0].equals("image")) {
+        if (!"png".equals(extension) && !"jpeg".equals(extension) && !"jpg".equals(extension)) {
+            throw new WrongFileException();
+        }
+
+        return new FileNameResponse(fileUploadProvider.uploadFile(file));
+    }
+
+    public FileNameResponse uploadPDF(MultipartFile file) {
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+        if (!"pdf".equals(extension)) {
             throw new WrongFileException();
         }
 

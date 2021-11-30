@@ -19,4 +19,10 @@ public class FileController {
     public FileNameResponse uploadFile(@RequestPart(value = "file") MultipartFile file) {
         return fileService.uploadFile(file);
     }
+
+    @PostMapping("/pdf")
+    @ResponseStatus(HttpStatus.CREATED)
+    public FileNameResponse uploadPDF(@RequestPart(value = "file") MultipartFile file) {
+        return fileService.uploadPDF(file);
+    }
 }
