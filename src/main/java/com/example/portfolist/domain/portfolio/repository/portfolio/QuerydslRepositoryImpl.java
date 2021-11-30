@@ -71,7 +71,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                 .join(portfolio.user, user)
                 .leftJoin(portfolio.portfolioFields, portfolioField)
                 .where(fieldKindIn(fieldCond),
-                        searchCond("%" + query + "%", searchType))
+                        searchCond("%" + query + "%", searchType), portfolio.isOpen.eq(true))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(descOrAsc(pageable.getSort()))
@@ -104,7 +104,6 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
     }
 
     private OrderSpecifier<LocalDateTime> descOrAsc(Sort sort) {
-        System.out.println("sort = " + sort);
         return sort.toString().equals("date: DESC") ? portfolio.date.desc() : portfolio.date.asc();
     }
 
@@ -120,6 +119,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
         return queryFactory
                 .selectFrom(portfolio)
                 .join(portfolio.touchingList, touching)
+                .where(portfolio.isOpen.eq(true))
                 .orderBy(touching.count().desc())
                 .groupBy(portfolio)
                 .fetchFirst();
@@ -159,7 +159,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                 )).distinct()
                 .from(portfolio)
                 .join(portfolio.user, user)
-                .where(user.pk.eq(byUser.getPk()))
+                .where(user.pk.eq(byUser.getPk()), portfolio.isOpen.eq(true))
                 .orderBy(portfolio.pk.desc())
                 .fetch();
     }
@@ -183,7 +183,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                 .from(touching)
                 .leftJoin(touching.user, user)
                 .leftJoin(touching.portfolio, portfolio)
-                .where(user.pk.eq(byUser.getPk()))
+                .where(user.pk.eq(byUser.getPk()), portfolio.isOpen.eq(true))
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
                 .orderBy(portfolio.pk.desc())

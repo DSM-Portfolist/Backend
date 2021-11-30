@@ -13,7 +13,7 @@ public interface PortfolioRepository extends JpaRepository<Portfolio, Long>, Que
 
     void deleteByUser(User user);
 
-    Page<Portfolio> findAllByOrderByDateDesc(Pageable pageable);
+    Page<Portfolio> findByIsOpenIsOrderByDateDesc(Pageable pageable, Boolean isOpen);
 
     List<Portfolio> findByUserNameLike(String query);
 

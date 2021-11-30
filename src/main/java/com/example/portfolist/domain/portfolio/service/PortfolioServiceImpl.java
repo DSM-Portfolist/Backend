@@ -127,7 +127,7 @@ public class PortfolioServiceImpl implements PortfolioService{
 
     @Override
     public List<RecentPortfolioResponse> getRecentPortfolio(Pageable pageable) {
-        return portfolioRepository.findAllByOrderByDateDesc(pageable).getContent().stream()
+        return portfolioRepository.findByIsOpenIsOrderByDateDesc(pageable, true).getContent().stream()
                 .map(RecentPortfolioResponse::of)
                 .collect(Collectors.toList());
     }
