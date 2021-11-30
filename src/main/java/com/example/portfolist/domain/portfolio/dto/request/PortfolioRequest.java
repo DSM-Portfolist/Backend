@@ -24,11 +24,7 @@ public class PortfolioRequest {
 
     private List<MoreInfoRequest> moreInfo;
 
-    private String content;
-
     @NotNull
-    private String name;
-
     private String introduce;
 
     @NotNull
