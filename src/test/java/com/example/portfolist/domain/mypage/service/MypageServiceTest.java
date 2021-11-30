@@ -39,6 +39,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -417,7 +418,7 @@ public class MypageServiceTest extends ServiceTest {
                     .user(user)
                     .title("제목제목")
                     .introduce("나는 노를 젓는 김땡땡")
-                    .date(LocalDate.now())
+                    .date(LocalDateTime.now())
                     .isOpen(true)
                     .build();
 
@@ -460,7 +461,7 @@ public class MypageServiceTest extends ServiceTest {
                     .user(user)
                     .title("제목제목")
                     .introduce("나는 노를 젓는 김땡땡")
-                    .date(LocalDate.now())
+                    .date(LocalDateTime.now())
                     .isOpen(true)
                     .build();
 

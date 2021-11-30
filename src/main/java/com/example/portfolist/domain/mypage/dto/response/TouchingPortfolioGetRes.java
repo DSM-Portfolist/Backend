@@ -12,6 +12,7 @@ import lombok.Getter;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,7 +52,7 @@ public class TouchingPortfolioGetRes {
         private int totalTouching;
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-        private LocalDate date;
+        private LocalDateTime date;
 
         public static Content from(Touching touching) {
             Portfolio portfolio = touching.getPortfolio();

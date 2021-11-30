@@ -35,7 +35,7 @@ public class PortfolioController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createPortfolio(@RequestPart(value = "portfolioRequest") PortfolioRequest request) {
+    public void createPortfolio(@RequestBody PortfolioRequest request) {
         portfolioService.createPortfolio(request);
     }
 
@@ -47,7 +47,7 @@ public class PortfolioController {
 
     @PutMapping("/{portfolioId}")
     public void updatePortfolio(@PathVariable long portfolioId,
-                                @RequestPart(value = "portfolioRequest") PortfolioRequest request) {
+                                @RequestBody PortfolioRequest request) {
         portfolioService.updatePortfolio(portfolioId, request);
     }
 

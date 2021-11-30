@@ -5,6 +5,7 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -22,7 +23,7 @@ public class PortfolioPreview {
 
     private String introduce;
 
-    private LocalDate date;
+    private LocalDateTime date;
 
     private int totalTouching;
 
@@ -33,7 +34,7 @@ public class PortfolioPreview {
     private UserDto user;
 
     @QueryProjection
-    public PortfolioPreview(long id, String thumbnail, String title, String introduce, LocalDate date, long userId, String name, String profileImg, boolean touched, int totalComment, int totalTouching) {
+    public PortfolioPreview(long id, String thumbnail, String title, String introduce, LocalDateTime date, long userId, String name, String profileImg, boolean touched, int totalComment, int totalTouching) {
         this.id = id;
         this.thumbnail = thumbnail;
         this.title = title;

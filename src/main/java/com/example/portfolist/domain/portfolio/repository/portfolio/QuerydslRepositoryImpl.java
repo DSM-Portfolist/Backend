@@ -16,6 +16,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,7 +103,8 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
         return null;
     }
 
-    private OrderSpecifier<LocalDate> descOrAsc(Sort sort) {
+    private OrderSpecifier<LocalDateTime> descOrAsc(Sort sort) {
+        System.out.println("sort = " + sort);
         return sort.toString().equals("date: DESC") ? portfolio.date.desc() : portfolio.date.asc();
     }
 

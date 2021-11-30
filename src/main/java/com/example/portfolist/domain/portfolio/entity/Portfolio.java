@@ -11,6 +11,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class Portfolio {
     private String url;
 
     @Column(nullable = false)
-    private LocalDate date;
+    private LocalDateTime date;
 
     @Column(nullable = false, columnDefinition = "tinyint(1) default true")
     private boolean isOpen;
@@ -90,7 +91,7 @@ public class Portfolio {
                 .introduce(request.getIntroduce())
                 .link(request.getLink())
                 .url(request.getFile())
-                .date(LocalDate.now())
+                .date(LocalDateTime.now())
                 .isOpen(request.isOpen())
                 .mainIcon(request.getIcon())
                 .thumbnail(request.getThumbnail())

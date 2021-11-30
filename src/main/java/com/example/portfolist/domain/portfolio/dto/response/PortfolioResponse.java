@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,7 +20,7 @@ public class PortfolioResponse {
 
     private UserDto user;
 
-    private LocalDate createDate;
+    private LocalDateTime createDate;
 
     private long portfolioId;
 

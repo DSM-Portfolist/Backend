@@ -26,6 +26,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -458,7 +459,7 @@ public class MypageControllerTest extends ApiTest {
                     .user(user)
                     .title("제목제목")
                     .introduce("나는 노를 젓는 김땡땡")
-                    .date(LocalDate.now())
+                    .date(LocalDateTime.now())
                     .isOpen(true)
                     .build();
             portfolioRepository.save(portfolio);
@@ -493,7 +494,7 @@ public class MypageControllerTest extends ApiTest {
                     .user(user)
                     .title("제목제목")
                     .introduce("나는 노를 젓는 김땡땡")
-                    .date(LocalDate.now())
+                    .date(LocalDateTime.now())
                     .isOpen(true)
                     .build();
             portfolio = portfolioRepository.save(portfolio);
@@ -555,7 +556,7 @@ public class MypageControllerTest extends ApiTest {
                     .user(user)
                     .title("제목제목")
                     .introduce("나는 노를 젓는 김땡땡")
-                    .date(LocalDate.now())
+                    .date(LocalDateTime.now())
                     .isOpen(true)
                     .build();
             portfolioRepository.save(portfolio);

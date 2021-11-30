@@ -41,6 +41,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
@@ -156,7 +157,7 @@ public class ApiTest extends IntegrationTest{
                 .title(title)
                 .introduce(introduce)
                 .isOpen(true)
-                .date(LocalDate.now())
+                .date(LocalDateTime.now())
                 .build());
     }
 
