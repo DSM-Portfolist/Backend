@@ -24,6 +24,7 @@ public class UserPortfolioGetResponse {
     private String icon;
     private String title;
     private String introduce;
+    private String thumbnail;
     private int totalComment;
     private int totalTouching;
 
@@ -43,6 +44,7 @@ public class UserPortfolioGetResponse {
                 .url(portfolio.getUrl())
                 .field(fields)
                 .icon(portfolio.getMainIcon())
+                .thumbnail(portfolio.getThumbnail())
                 .title(portfolio.getTitle())
                 .introduce(portfolio.getIntroduce())
                 .totalComment(CollectionUtils.isNullOrEmpty(portfolio.getCommentList()) ?
