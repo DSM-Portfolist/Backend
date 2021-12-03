@@ -42,7 +42,7 @@ public class TouchingPortfolioGetRes {
     public static class Content {
 
         private long id;
-        private String url;
+        private String thumbnail;
         private List<String> field;
         private String icon;
         private String title;
@@ -65,7 +65,7 @@ public class TouchingPortfolioGetRes {
 
             return Content.builder()
                     .id(portfolio.getPk())
-                    .url(portfolio.getUrl())
+                    .thumbnail(portfolio.getThumbnail())
                     .field(fields)
                     .icon(portfolio.getMainIcon())
                     .title(portfolio.getTitle())

@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 public class UserPortfolioGetResponse {
 
     private long id;
-    private String url;
     private List<String> field;
     private String icon;
     private String title;
@@ -41,7 +40,6 @@ public class UserPortfolioGetResponse {
 
         return UserPortfolioGetResponse.builder()
                 .id(portfolio.getPk())
-                .url(portfolio.getUrl())
                 .field(fields)
                 .icon(portfolio.getMainIcon())
                 .thumbnail(portfolio.getThumbnail())
