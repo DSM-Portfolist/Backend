@@ -157,6 +157,7 @@ public class MypageService {
 
     public void changeNotificationStatus(User user, boolean status) {
         user.updateNotificationStatus(status);
+        authFacade.save(user);
     }
 
 }
