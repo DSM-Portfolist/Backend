@@ -44,6 +44,7 @@ public class MypageService {
             throw new PasswordNotMatchedException();
         }
         normalUser.changePassword(passwordEncoder.encode(request.getNewPassword()));
+        authFacade.save(normalUser);
     }
 
     public void checkPassword(PasswordCheckRequest request, NormalUser normalUser) {
