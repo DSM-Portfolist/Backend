@@ -1,6 +1,5 @@
 package com.example.portfolist.domain.mypage.service;
 
-import com.amazonaws.util.CollectionUtils;
 import com.example.portfolist.domain.auth.entity.Field;
 import com.example.portfolist.domain.auth.entity.FieldKind;
 import com.example.portfolist.domain.auth.entity.NormalUser;

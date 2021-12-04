@@ -166,6 +166,8 @@ public class AuthService {
         }
 
         authFacade.save(fields);
+        authFacade.deleteCertification(request.getEmail());
+
     }
 
     public TokenRefreshResponse tokenRefresh(TokenRefreshRequest request) {
