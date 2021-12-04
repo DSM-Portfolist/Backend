@@ -104,11 +104,6 @@ public class AuthFacade {
         certificationRepository.save(certification);
     }
 
-    public void deleteCertification(String email) {
-        Optional<Certification> certification = certificationRepository.findByEmail(email);
-        certification.ifPresent(certificationRepository::delete);
-    }
-
     public User findUserById(long id) {
         return userRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new);

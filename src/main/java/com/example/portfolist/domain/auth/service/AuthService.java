@@ -141,6 +141,7 @@ public class AuthService {
 
     public void join(NormalUserJoinRequest request) {
         authCheckFacade.checkAuthorizedEmail(request.getEmail());
+        authCheckFacade.checkConflictEmail(request.getEmail());
 
         NormalUser normalUser = NormalUser.builder()
                 .email(request.getEmail())
@@ -166,8 +167,6 @@ public class AuthService {
         }
 
         authFacade.save(fields);
-        authFacade.deleteCertification(request.getEmail());
-
     }
 
     public TokenRefreshResponse tokenRefresh(TokenRefreshRequest request) {
