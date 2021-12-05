@@ -144,7 +144,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
         return queryFactory
                 .select(new QPortfolioPreview(
                         portfolio.pk,
-                        portfolio.url,
+                        portfolio.thumbnail,
                         portfolio.title,
                         portfolio.introduce,
                         portfolio.date,
@@ -169,7 +169,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
         return queryFactory
                 .select(new QPortfolioPreview(
                         portfolio.pk,
-                        portfolio.url,
+                        portfolio.thumbnail,
                         portfolio.title,
                         portfolio.introduce,
                         portfolio.date,
