@@ -81,7 +81,7 @@ public class CommentServiceImpl implements CommentService{
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
 
         return reCommentRepository.findAllByComment(comment).stream()
-                .map(reComment -> ReCommentResponse.of(reComment, getCurrentUser().getPk() == comment.getUser().getPk()))
+                .map(reComment -> ReCommentResponse.of(reComment, getCurrentUser().getPk() == reComment.getUser().getPk()))
                 .collect(Collectors.toList());
     }
 
