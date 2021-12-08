@@ -10,7 +10,6 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +36,8 @@ public class Portfolio {
     @Column(length = 45, nullable = false)
     private String introduce;
 
-    @Column(length = 100)
     private String link;
 
-    @Column(length = 100)
     private String url;
 
     @Column(nullable = false)
@@ -52,7 +49,6 @@ public class Portfolio {
     @Column(length = 1)
     private String mainIcon;
 
-    @Column
     private String thumbnail;
 
     @LazyCollection(LazyCollectionOption.EXTRA)
