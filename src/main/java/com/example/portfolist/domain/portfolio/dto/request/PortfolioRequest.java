@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Getter
@@ -14,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class PortfolioRequest {
 
+    @Size(min = 1, max = 1)
     private String icon;
 
     private String link;
@@ -24,10 +27,10 @@ public class PortfolioRequest {
 
     private List<MoreInfoRequest> moreInfo;
 
-    @NotNull
+    @NotBlank
     private String introduce;
 
-    @NotNull
+    @NotBlank
     private String title;
 
     private String file;

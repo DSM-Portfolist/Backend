@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -35,7 +36,7 @@ public class PortfolioController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createPortfolio(@RequestBody PortfolioRequest request) {
+    public void createPortfolio(@Valid @RequestBody PortfolioRequest request) {
         portfolioService.createPortfolio(request);
     }
 
@@ -47,7 +48,7 @@ public class PortfolioController {
 
     @PutMapping("/{portfolioId}")
     public void updatePortfolio(@PathVariable long portfolioId,
-                                @RequestBody PortfolioRequest request) {
+                                @Valid @RequestBody PortfolioRequest request) {
         portfolioService.updatePortfolio(portfolioId, request);
     }
 
