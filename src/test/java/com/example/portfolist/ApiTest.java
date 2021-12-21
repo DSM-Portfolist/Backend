@@ -117,12 +117,12 @@ public class ApiTest extends IntegrationTest{
     protected ResultActions requestMvc(MockHttpServletRequestBuilder build) throws Exception {
         if (token != null) {
             return mvc.perform(build.contentType(MediaType.APPLICATION_JSON)
-                            .header("AUTHORIZATION", "Bearer " + token))
-                    .andDo(print());
+                            .header("AUTHORIZATION", "Bearer " + token));
+//                    .andDo(print());
         }
         return mvc.perform(build
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print());
+                        .contentType(MediaType.APPLICATION_JSON));
+//                .andDo(print());
     }
 
     protected ResultActions requestMvc(MockHttpServletRequestBuilder build, Object obj) throws Exception {
@@ -132,15 +132,15 @@ public class ApiTest extends IntegrationTest{
                                     .registerModule(new JavaTimeModule())
                                     .writeValueAsString(obj))
                             .contentType(MediaType.APPLICATION_JSON)
-                            .header("AUTHORIZATION", "Bearer " + token))
-                    .andDo(print());
+                            .header("AUTHORIZATION", "Bearer " + token));
+//                    .andDo(print());
         }
         return mvc.perform(build
                         .content(objectMapper
                                 .registerModule(new JavaTimeModule())
                                 .writeValueAsString(obj))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print());
+                        .contentType(MediaType.APPLICATION_JSON));
+//                .andDo(print());
     }
 
     protected <T> T inputField(Object objectRequest, String name, Object value) throws NoSuchFieldException, IllegalAccessException {
