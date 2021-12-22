@@ -7,12 +7,15 @@ import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.portfolio.constant.UserConstant;
 import com.example.portfolist.domain.portfolio.dto.request.*;
 import com.example.portfolist.global.security.JwtTokenProvider;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collections;
+import java.util.List;
 
 import static java.util.Arrays.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,13 +48,6 @@ class PortfolioControllerTest extends ApiTest {
                 .build();
         
         userRepository.save(user);
-
-        fieldKindRepository.save(FieldKind.builder()
-                .content("WEB")
-                .build());
-        fieldKindRepository.save(FieldKind.builder()
-                .content("APP")
-                .build());
     }
     
     @Test
@@ -85,6 +81,14 @@ class PortfolioControllerTest extends ApiTest {
     @Test
     public void 포트폴리오_생성_201() throws Exception {
         auth();
+
+        fieldKindRepository.save(FieldKind.builder()
+                .content("WEB")
+                .build());
+
+        fieldKindRepository.save(FieldKind.builder()
+                .content("APP")
+                .build());
 
         requestMvc(post("/portfolio"),
                 new PortfolioRequest(

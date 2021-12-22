@@ -54,7 +54,7 @@ public class ApiTest extends IntegrationTest{
     private String token;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    protected PasswordEncoder passwordEncoder;
 
     @Autowired
     protected FieldKindRepository fieldKindRepository;
