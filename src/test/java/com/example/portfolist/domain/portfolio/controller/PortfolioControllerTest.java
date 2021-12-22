@@ -10,7 +10,6 @@ import com.example.portfolist.global.security.JwtTokenProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collections;
@@ -46,6 +45,13 @@ class PortfolioControllerTest extends ApiTest {
                 .build();
         
         userRepository.save(user);
+
+        fieldKindRepository.save(FieldKind.builder()
+                .content("WEB")
+                .build());
+        fieldKindRepository.save(FieldKind.builder()
+                .content("APP")
+                .build());
     }
     
     @Test
@@ -76,46 +82,39 @@ class PortfolioControllerTest extends ApiTest {
                 .andExpect(status().isNotFound());
     }
 
-//    @Test
-//    public void 포트폴리오_생성_201() throws Exception {
-//        auth();
-//
-//        fieldKindRepository.save(FieldKind.builder()
-//                .content("WEB")
-//                .build());
-//        fieldKindRepository.save(FieldKind.builder()
-//                .content("APP")
-//                .build());
-//
-//        requestMvc(post("/portfolio"),
-//                new PortfolioRequest(
-//                        "1",
-//                        "link",
-//                        asList(1,2),
-//                        asList(new CertificateRequest("자격증", asList("c1", "c2")),
-//                                new CertificateRequest("학력", asList("c3", "c4"))
-//                        ),
-//                        asList(new MoreInfoRequest("name1", "content1"),
-//                                new MoreInfoRequest("name2", "content2")),
-//                        "introduce",
-//                        "title",
-//                        "file.png",
-//                        true,
-//                        "thumbnail.png",
-//                        asList(new ContainerRequest("containerTitle1",
-//                                asList("containerImg1", "containerImg2"),
-//                                asList(new ContainerTextRequest("boxTitle1", "boxContent1"),
-//                                        new ContainerTextRequest("boxTitle2", "boxContent2"))),
-//                                new ContainerRequest("containerTitle2",
-//                                        asList("containerImg3", "containerImg4"),
-//                                        asList(new ContainerTextRequest("boxTitle3", "boxContent3"),
-//                                                new ContainerTextRequest("boxTitle4", "boxContent4")))
-//                        )
-//        )).andExpect(status().isCreated())
-//                .andDo(print());
-//
-//        assertEquals(portfolioRepository.findAll().size(), 1);
-//    } 왜 로컬에서만 될까
+    @Test
+    public void 포트폴리오_생성_201() throws Exception {
+        auth();
+
+        requestMvc(post("/portfolio"),
+                new PortfolioRequest(
+                        "1",
+                        "link",
+                        asList(1,2),
+                        asList(new CertificateRequest("자격증", asList("c1", "c2")),
+                                new CertificateRequest("학력", asList("c3", "c4"))
+                        ),
+                        asList(new MoreInfoRequest("name1", "content1"),
+                                new MoreInfoRequest("name2", "content2")),
+                        "introduce",
+                        "title",
+                        "file.png",
+                        true,
+                        "thumbnail.png",
+                        asList(new ContainerRequest("containerTitle1",
+                                asList("containerImg1", "containerImg2"),
+                                asList(new ContainerTextRequest("boxTitle1", "boxContent1"),
+                                        new ContainerTextRequest("boxTitle2", "boxContent2"))),
+                                new ContainerRequest("containerTitle2",
+                                        asList("containerImg3", "containerImg4"),
+                                        asList(new ContainerTextRequest("boxTitle3", "boxContent3"),
+                                                new ContainerTextRequest("boxTitle4", "boxContent4")))
+                        )
+        )).andExpect(status().isCreated())
+                .andDo(print());
+
+        assertEquals(portfolioRepository.findAll().size(), 1);
+    }
 
     @Test
     public void 포트폴리오_삭제_204() throws Exception {
