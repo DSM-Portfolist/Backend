@@ -18,6 +18,7 @@ import java.util.Collections;
 import static java.util.Arrays.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class PortfolioControllerTest extends ApiTest {
@@ -110,7 +111,7 @@ class PortfolioControllerTest extends ApiTest {
                                         asList(new ContainerTextRequest("boxTitle3", "boxContent3"),
                                                 new ContainerTextRequest("boxTitle4", "boxContent4")))
                         )
-        )).andExpect(status().isCreated());
+        )).andExpect(status().isCreated()).andDo(print());
 
         assertEquals(portfolioRepository.findAll().size(), 1);
     }
