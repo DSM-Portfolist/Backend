@@ -88,6 +88,7 @@ public class PortfolioService {
         saveOther(portfolio, request);
     }
 
+    @Transactional
     public void deletePortfolio(long portfolioId) {
         Portfolio portfolio = getPortfolio(portfolioId);
 
@@ -101,6 +102,7 @@ public class PortfolioService {
         portfolioRepository.deleteById(portfolioId);
     }
 
+    @Transactional
     public Long updatePortfolio(long portfolioId, PortfolioRequest request) {
         Portfolio portfolio = getPortfolio(portfolioId);
 
