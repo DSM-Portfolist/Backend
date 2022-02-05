@@ -111,8 +111,6 @@ public class PortfolioService {
         portfolio.update(request);
         portfolio.getPortfolioFields().clear();
 
-        containerImageRepository.findByContainerPortfolioPk(portfolioId).forEach(img -> fileUploadProvider.deleteFile(img.getUrl()));
-
         deleteOther(portfolioId);
 
         saveOther(portfolio, request);
