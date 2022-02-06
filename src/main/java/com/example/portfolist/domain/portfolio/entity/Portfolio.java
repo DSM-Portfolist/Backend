@@ -78,6 +78,7 @@ public class Portfolio {
         this.url = request.getFile();
         this.mainIcon = request.getIcon();
         this.isOpen = request.isOpen();
+        this.thumbnail = request.getThumbnail();
     }
 
     public static Portfolio toEntity(PortfolioRequest request, User user) {
