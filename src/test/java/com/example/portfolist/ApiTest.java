@@ -13,14 +13,12 @@ import com.example.portfolist.domain.mypage.repository.repository.NotificationRe
 import com.example.portfolist.domain.portfolio.entity.comment.Comment;
 import com.example.portfolist.domain.portfolio.entity.Portfolio;
 import com.example.portfolist.domain.portfolio.entity.PortfolioField;
-import com.example.portfolist.domain.portfolio.entity.comment.ReComment;
 import com.example.portfolist.domain.portfolio.entity.touching.Touching;
 import com.example.portfolist.domain.portfolio.entity.touching.TouchingId;
 import com.example.portfolist.domain.portfolio.repository.Container.ContainerImageRepository;
 import com.example.portfolist.domain.portfolio.repository.Container.ContainerTextRepository;
 import com.example.portfolist.domain.portfolio.repository.Container.ContainerRepository;
 import com.example.portfolist.domain.portfolio.repository.comment.CommentRepository;
-import com.example.portfolist.domain.portfolio.repository.comment.ReCommentRepository;
 import com.example.portfolist.domain.portfolio.repository.CertificateRepository;
 import com.example.portfolist.domain.portfolio.repository.MoreInfoRepository;
 import com.example.portfolist.domain.portfolio.repository.PortfolioFieldRepository;
@@ -42,8 +40,6 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 public class ApiTest extends IntegrationTest{
 
@@ -102,7 +98,6 @@ public class ApiTest extends IntegrationTest{
         certificateRepository.deleteAll();
         touchingRepository.deleteAll();
         portfolioFieldRepository.deleteAll();
-        reCommentRepository.deleteAll();
         commentRepository.deleteAll();
         portfolioRepository.deleteAll();
         notificationRepository.deleteAll();
@@ -212,15 +207,6 @@ public class ApiTest extends IntegrationTest{
                 .content(content)
                 .deleteYN('N')
                 .build()
-        );
-    }
-
-    public ReComment createReComment(User user, Comment comment, String content) {
-        return reCommentRepository.save(ReComment.builder()
-                .comment(comment)
-                .user(user)
-                .date(LocalDate.now())
-                .content(content).build()
         );
     }
 }
