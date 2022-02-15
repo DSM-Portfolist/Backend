@@ -67,6 +67,7 @@ public class MypageService {
 
         String fileUrl = fileUploadProvider.uploadFile(file);
         user.updateProfile(fileUrl);
+        authFacade.save(user);
     }
 
     public void deleteProfile(NormalUser normalUser) {
