@@ -30,6 +30,8 @@ public class UserPortfolioGetResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDateTime date;
 
+    private boolean isOpen;
+
     public static UserPortfolioGetResponse from(Portfolio portfolio) {
         List<String> fields = null;
         if (!CollectionUtils.isNullOrEmpty(portfolio.getPortfolioFields())) {
@@ -50,6 +52,7 @@ public class UserPortfolioGetResponse {
                 .totalTouching(CollectionUtils.isNullOrEmpty(portfolio.getTouchingList()) ?
                         0 : portfolio.getTouchingList().size())
                 .date(portfolio.getDate())
+                .isOpen(portfolio.isOpen())
                 .build();
     }
 
