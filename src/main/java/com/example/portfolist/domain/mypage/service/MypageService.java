@@ -76,6 +76,7 @@ public class MypageService {
         if (url != null) {
             fileUploadProvider.deleteFile(url);
             user.updateProfile(null);
+            authFacade.save(user);
         }
     }
 
