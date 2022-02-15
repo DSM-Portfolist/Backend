@@ -25,7 +25,7 @@ public class NormalUser {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @OneToOne(mappedBy = "normalUser")
+    @OneToOne(mappedBy = "normalUser", cascade = CascadeType.REMOVE)
     private User user;
 
     public void changePassword(String password) {

@@ -380,7 +380,7 @@ public class MypageServiceTest extends ServiceTest {
             mypageService.deleteUser(user);
 
             // then
-            verify(authFacade, times(1)).deleteUser(any());
+            verify(authFacade, times(1)).deleteNormalByUser(any());
         }
 
     }
