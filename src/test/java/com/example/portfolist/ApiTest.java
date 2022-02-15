@@ -69,8 +69,6 @@ public class ApiTest extends IntegrationTest{
     @Autowired
     protected CommentRepository commentRepository;
     @Autowired
-    protected ReCommentRepository reCommentRepository;
-    @Autowired
     protected ContainerImageRepository boxImageRepository;
     @Autowired
     protected ContainerTextRepository boxTextRepository;

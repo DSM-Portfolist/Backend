@@ -124,7 +124,6 @@ public class MypageService {
         portfolioFacade.deleteCertificateByUser(user);
         portfolioFacade.deleteTouchingByUser(user);
         portfolioFacade.deletePortfolioFieldByUser(user);
-        portfolioFacade.deleteReCommentByUser(user);
         portfolioFacade.deleteCommentByUser(user);
         portfolioFacade.deletePortfolioByUser(user);
 

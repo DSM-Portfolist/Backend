@@ -37,12 +37,17 @@ public class Comment {
     @Column(nullable = false, columnDefinition = "char(1) default 'N'")
     private Character deleteYN;
 
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
-    private final List<ReComment> reCommentList = new ArrayList<>();
+    @OneToMany(mappedBy = "pComment", cascade = CascadeType.REMOVE)
+    private final List<Comment> commentList = new ArrayList<>();
 
-    public void deleteComment() {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "comment_pk")
+    private Comment pComment;
+
+    public void disableComment() {
         this.deleteYN = 'Y';
         this.content = null;
         this.user = null;
     }
+
 }

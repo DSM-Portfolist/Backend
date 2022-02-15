@@ -35,7 +35,7 @@ public class CommentResponse {
                     .commentId(comment.getPk())
                     .commentContent(null)
                     .cDate(comment.getDate())
-                    .reCommentExist(comment.getReCommentList().size() > 0)
+                    .reCommentExist(comment.getCommentList().size() > 0)
                     .build();
         }
         return CommentResponse.builder()
@@ -44,7 +44,7 @@ public class CommentResponse {
                 .commentId(comment.getPk())
                 .commentContent(comment.getContent())
                 .cDate(comment.getDate())
-                .reCommentExist(comment.getReCommentList().size() > 0)
+                .reCommentExist(comment.getCommentList().size() > 0)
                 .build();
     }
 }

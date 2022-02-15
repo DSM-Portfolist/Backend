@@ -2,7 +2,6 @@ package com.example.portfolist.domain.auth.entity;
 
 import com.example.portfolist.domain.mypage.entity.Notification;
 import com.example.portfolist.domain.portfolio.entity.comment.Comment;
-import com.example.portfolist.domain.portfolio.entity.comment.ReComment;
 import com.example.portfolist.domain.portfolio.entity.Portfolio;
 import com.example.portfolist.domain.portfolio.entity.touching.Touching;
 import io.netty.util.internal.StringUtil;
@@ -53,9 +52,6 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Comment> commentList;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<ReComment>  reCommentList;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Field> fieldList;
