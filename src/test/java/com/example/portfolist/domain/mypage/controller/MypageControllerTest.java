@@ -441,8 +441,14 @@ public class MypageControllerTest extends ApiTest {
         @DisplayName("204")
         void deleteUser_204() throws Exception {
             // given
+            NormalUser normalUser = NormalUser.builder()
+                    .email("asdf")
+                    .password("asdfsadf")
+                    .build();
+            normalUserRepository.save(normalUser);
+
             User user = User.builder()
-                    .githubId("githubUser")
+                    .normalUser(normalUser)
                     .name("가나다")
                     .build();
             user = userRepository.save(user);

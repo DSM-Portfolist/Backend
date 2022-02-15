@@ -15,6 +15,7 @@ import com.example.portfolist.domain.auth.repository.repository.redis.Certificat
 import com.example.portfolist.domain.auth.repository.repository.redis.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -82,7 +83,7 @@ public class AuthFacade {
     }
 
     public void deleteNormalByUser(User user) {
-        normalUserRepository.deleteByUser(user);
+        normalUserRepository.delete(user.getNormalUser());
     }
 
     public void deleteUser(User user) {

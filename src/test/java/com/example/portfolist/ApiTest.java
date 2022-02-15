@@ -111,7 +111,7 @@ public class ApiTest extends IntegrationTest{
 //        fieldRepository.deleteAll();
         fieldKindRepository.deleteAll();
         userRepository.deleteAll();
-//        normalUserRepository.deleteAll();
+        normalUserRepository.deleteAll();
     }
 
     protected ResultActions requestMvc(MockHttpServletRequestBuilder build) throws Exception {
