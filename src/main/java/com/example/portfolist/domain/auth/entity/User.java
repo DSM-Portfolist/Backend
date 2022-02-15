@@ -26,7 +26,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long pk;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "normalUser_pk")
     private NormalUser normalUser;
 
