@@ -13,4 +13,6 @@ public class ContentRequest {
 
     @NotNull
     private String content;
+
+    private Long commentId;
 }

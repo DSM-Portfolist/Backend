@@ -1,7 +1,6 @@
 package com.example.portfolist.domain.portfolio.dto.response;
 
 import com.example.portfolist.domain.portfolio.entity.comment.Comment;
-import com.example.portfolist.domain.portfolio.entity.comment.ReComment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,7 +24,7 @@ public class ReCommentResponse {
 
     private LocalDate rcDate;
 
-    public static ReCommentResponse of(ReComment reComment, Boolean isMine) {
+    public static ReCommentResponse of(Comment reComment, Boolean isMine) {
         return ReCommentResponse.builder()
                 .user(UserDto.of(reComment.getUser()))
                 .isMine(isMine)

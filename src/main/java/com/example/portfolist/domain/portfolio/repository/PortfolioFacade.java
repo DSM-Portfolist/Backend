@@ -6,7 +6,6 @@ import com.example.portfolist.domain.portfolio.repository.Container.ContainerIma
 import com.example.portfolist.domain.portfolio.repository.Container.ContainerTextRepository;
 import com.example.portfolist.domain.portfolio.repository.Container.ContainerRepository;
 import com.example.portfolist.domain.portfolio.repository.comment.CommentRepository;
-import com.example.portfolist.domain.portfolio.repository.comment.ReCommentRepository;
 import com.example.portfolist.domain.portfolio.repository.portfolio.PortfolioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Component;
 public class PortfolioFacade {
 
     private final CommentRepository commentRepository;
-    private final ReCommentRepository reCommentRepository;
     private final ContainerImageRepository boxImageRepository;
     private final ContainerTextRepository boxTextRepository;
     private final ContainerRepository containerRepository;
@@ -58,10 +56,6 @@ public class PortfolioFacade {
 
     public void deleteCommentByUser(User user) {
         commentRepository.deleteByUser(user);
-    }
-
-    public void deleteReCommentByUser(User user) {
-        reCommentRepository.deleteByCommentUser(user);
     }
 
     public void deletePortfolioFieldByUser(User user) {
