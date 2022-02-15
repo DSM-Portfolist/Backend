@@ -63,6 +63,9 @@ public class User {
     @OneToMany(mappedBy = "fromUser", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Notification> notificationList;
 
+    @OneToMany(mappedBy = "toUser", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Notification> toNotificationList;
+
     public void updateUserInfo(String name, String introduce) {
         if (!StringUtil.isNullOrEmpty(name)) {
             this.name = name;
