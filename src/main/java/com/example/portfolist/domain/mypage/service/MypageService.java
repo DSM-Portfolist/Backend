@@ -117,22 +117,7 @@ public class MypageService {
 
     @Transactional
     public void deleteUser(User user) {
-        portfolioFacade.deleteMoreInfoByUser(user);
-        portfolioFacade.deleteContainerImageByUser(user);
-        portfolioFacade.deleteContainerTextByUser(user);
-        portfolioFacade.deleteContainerByUser(user);
-        portfolioFacade.deleteCertificateByUser(user);
-        portfolioFacade.deleteTouchingByUser(user);
-        portfolioFacade.deletePortfolioFieldByUser(user);
-        portfolioFacade.deleteReCommentByUser(user);
-        portfolioFacade.deleteCommentByUser(user);
-        portfolioFacade.deletePortfolioByUser(user);
-
-        mypageFacade.deleteNotificationByUser(user);
-
-        authFacade.deleteFieldByUser(user);
         authFacade.deleteUser(user);
-        authFacade.deleteNormalByUser(user);
     }
 
     public TouchingPortfolioGetRes.Response getTouchingPortfolio(int page, int size, User user) {

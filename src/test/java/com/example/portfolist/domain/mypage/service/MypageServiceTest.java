@@ -380,22 +380,7 @@ public class MypageServiceTest extends ServiceTest {
             mypageService.deleteUser(user);
 
             // then
-            verify(portfolioFacade, times(1)).deleteMoreInfoByUser(any());
-            verify(portfolioFacade, times(1)).deleteContainerImageByUser(any());
-            verify(portfolioFacade, times(1)).deleteContainerTextByUser(any());
-            verify(portfolioFacade, times(1)).deleteContainerByUser(any());
-            verify(portfolioFacade, times(1)).deleteCertificateByUser(any());
-            verify(portfolioFacade, times(1)).deleteTouchingByUser(any());
-            verify(portfolioFacade, times(1)).deletePortfolioFieldByUser(any());
-            verify(portfolioFacade, times(1)).deleteReCommentByUser(any());
-            verify(portfolioFacade, times(1)).deleteCommentByUser(any());
-            verify(portfolioFacade, times(1)).deletePortfolioByUser(any());
-
-            verify(mypageFacade, times(1)).deleteNotificationByUser(any());
-
-            verify(authFacade, times(1)).deleteFieldByUser(any());
             verify(authFacade, times(1)).deleteUser(any());
-            verify(authFacade, times(1)).deleteNormalByUser(any());
         }
 
     }

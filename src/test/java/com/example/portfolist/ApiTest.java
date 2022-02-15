@@ -97,21 +97,21 @@ public class ApiTest extends IntegrationTest{
     @AfterEach
     void clear() {
         setToken(null);
-        moreInfoRepository.deleteAll();
-        boxImageRepository.deleteAll();
-        boxTextRepository.deleteAll();
-        containerRepository.deleteAll();
-        certificateRepository.deleteAll();
-        touchingRepository.deleteAll();
-        portfolioFieldRepository.deleteAll();
-        reCommentRepository.deleteAll();
-        commentRepository.deleteAll();
-        portfolioRepository.deleteAll();
-        notificationRepository.deleteAll();
-        fieldRepository.deleteAll();
+//        moreInfoRepository.deleteAll();
+//        boxImageRepository.deleteAll();
+//        boxTextRepository.deleteAll();
+//        containerRepository.deleteAll();
+//        certificateRepository.deleteAll();
+//        touchingRepository.deleteAll();
+//        portfolioFieldRepository.deleteAll();
+//        reCommentRepository.deleteAll();
+//        commentRepository.deleteAll();
+//        portfolioRepository.deleteAll();
+//        notificationRepository.deleteAll();
+//        fieldRepository.deleteAll();
         fieldKindRepository.deleteAll();
         userRepository.deleteAll();
-        normalUserRepository.deleteAll();
+//        normalUserRepository.deleteAll();
     }
 
     protected ResultActions requestMvc(MockHttpServletRequestBuilder build) throws Exception {
