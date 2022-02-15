@@ -18,7 +18,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({MethodArgumentNotValidException.class, MissingServletRequestPartException.class,
             MissingServletRequestParameterException.class, MultipartException.class, HttpMessageNotReadableException.class})
     protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(final Exception e) {
-        e.printStackTrace();
         final ErrorResponse response = new ErrorResponse(ErrorCode.INVALID_INPUT_VALUE);
         return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
     }
