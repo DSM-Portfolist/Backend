@@ -37,7 +37,7 @@ spring:
     generate-ddl: true
 #    show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
       use-new-id-generator-mappings: false
     properties:
       hibernate:
