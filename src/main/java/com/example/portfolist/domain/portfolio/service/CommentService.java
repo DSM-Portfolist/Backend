@@ -60,7 +60,7 @@ public class CommentService {
                 null : commentRepository.findById(request.getCommentId()).orElseThrow(CommentNotFoundException::new);
 
         commentRepository.save(Comment.builder()
-                .portfolio(portfolio)
+                .portfolio(pComment == null ? portfolio : null)
                 .user(user)
                 .date(LocalDate.now())
                 .deleteYN('N')

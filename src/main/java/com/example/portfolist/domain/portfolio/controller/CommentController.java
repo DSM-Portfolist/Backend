@@ -19,8 +19,14 @@ public class CommentController {
 
     @GetMapping("/comment/{portfolioId}")
     @ResponseStatus(HttpStatus.OK)
-    public CommentListResponse getCommentList(@PathVariable long portfolioId) {
+    public CommentListResponse queryCommentList(@PathVariable long portfolioId) {
         return commentService.queryCommentList(portfolioId);
+    }
+
+    @GetMapping("/re-comment/{commentId}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ReCommentResponse> queryReCommentList(@PathVariable long commentId) {
+        return commentService.queryReCommentList(commentId);
     }
 
     @PostMapping("/comment/{portfolioId}")
@@ -33,12 +39,6 @@ public class CommentController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteComment(@PathVariable long commentId) {
         commentService.deleteComment(commentId);
-    }
-
-    @GetMapping("/re-comment/{commentId}")
-    @ResponseStatus(HttpStatus.OK)
-    public List<ReCommentResponse> getReCommentList(@PathVariable long commentId) {
-        return commentService.queryReCommentList(commentId);
     }
 
     @PostMapping("/comment/{commentId}/report")
