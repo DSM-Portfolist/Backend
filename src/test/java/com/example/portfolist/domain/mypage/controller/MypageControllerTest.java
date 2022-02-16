@@ -449,6 +449,7 @@ public class MypageControllerTest extends ApiTest {
 
             User user = User.builder()
                     .normalUser(normalUser)
+//                    .githubId("asdf")
                     .name("가나다")
                     .build();
             user = userRepository.save(user);

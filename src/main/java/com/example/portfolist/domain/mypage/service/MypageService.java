@@ -115,13 +115,11 @@ public class MypageService {
         authFacade.save(saveField);
     }
 
-    @Transactional
     public void deleteUser(User user) {
-//        authFacade.deleteUser(user);
-        if (user.getGithubId() == null) {
-            authFacade.deleteUser(user);
-        } else {
+        try {
             authFacade.deleteNormalByUser(user);
+        } catch (Exception e) {
+            authFacade.deleteUser(user);
         }
     }
 
