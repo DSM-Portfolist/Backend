@@ -44,10 +44,4 @@ public class Comment {
     @JoinColumn(name = "comment_id")
     private Comment pComment;
 
-    public void disableComment() {
-        this.deleteYN = 'Y';
-        this.content = null;
-        this.user = null;
-    }
-
 }

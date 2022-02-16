@@ -51,7 +51,6 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
-
     public void createComment(long portfolioId, ContentRequest request) {
         Portfolio portfolio = getPortfolio(portfolioId);
         User user = getCurrentUser();
@@ -78,14 +77,10 @@ public class CommentService {
     public void deleteComment(long commentId) {
         Comment comment = getComment(commentId);
 
-        if (comment.getUser().getPk() == getCurrentUser().getPk()) {
-            if (comment.getCommentList().size() == 0)
-                commentRepository.deleteById(commentId);
-            else
-                comment.disableComment();
-        }
-        else
+        if (comment.getUser().getPk() != getCurrentUser().getPk())
             throw new PermissionDeniedException();
+
+        commentRepository.deleteById(commentId);
     }
 
     public void reportComment(long commentId, ContentRequest request) {
@@ -97,7 +92,8 @@ public class CommentService {
     }
 
     private Portfolio getPortfolio(long portfolioId) {
-        return portfolioRepository.findById(portfolioId).orElseThrow(PortfolioNotFoundException::new);
+        return portfolioRepository.findById(portfolioId)
+                .orElseThrow(PortfolioNotFoundException::new);
     }
 
     private Comment getComment(long commentId) {
