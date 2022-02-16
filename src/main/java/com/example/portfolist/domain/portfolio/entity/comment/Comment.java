@@ -41,7 +41,7 @@ public class Comment {
     private final List<Comment> commentList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "comment_pk")
+    @JoinColumn(name = "comment_id")
     private Comment pComment;
 
     public void disableComment() {
