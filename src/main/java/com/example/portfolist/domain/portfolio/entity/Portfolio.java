@@ -1,6 +1,7 @@
 package com.example.portfolist.domain.portfolio.entity;
 
 import com.example.portfolist.domain.auth.entity.User;
+import com.example.portfolist.domain.mypage.entity.Notification;
 import com.example.portfolist.domain.portfolio.dto.request.PortfolioRequest;
 import com.example.portfolist.domain.portfolio.entity.comment.Comment;
 import com.example.portfolist.domain.portfolio.entity.container.Container;
@@ -70,6 +71,9 @@ public class Portfolio {
 
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.REMOVE)
     private final List<PortfolioField> portfolioFields = new ArrayList<>();
+
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.REMOVE)
+    private final List<Notification> notificationList = new ArrayList<>();
 
     public void update(PortfolioRequest request) {
         this.title = request.getTitle();

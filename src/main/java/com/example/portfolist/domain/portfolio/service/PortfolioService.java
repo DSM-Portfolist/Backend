@@ -116,7 +116,7 @@ public class PortfolioService {
         saveOther(portfolio, request);
 
         List<Touching> touchingList = touchingRepository.findByPortfolio(portfolio);
-        touchingList.forEach(touching -> eventPublisher.makeNotice(portfolio.getUser(), touching.getUser(), NoticeType.P_MODIFY));
+        touchingList.forEach(touching -> eventPublisher.makeNotice(portfolio.getUser(), touching.getUser(), NoticeType.P_MODIFY, portfolio));
 
         return portfolioId;
     }

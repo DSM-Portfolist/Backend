@@ -21,6 +21,7 @@ public class MypageFacade {
                 .isRead(false)
                 .type(event.getType())
                 .fromUser(event.getFromUser())
+                .portfolio(event.getPortfolio())
                 .build();
         notificationRepository.save(notification);
     }

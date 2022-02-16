@@ -462,40 +462,40 @@ public class MypageServiceTest extends ServiceTest {
 
     }
 
-    @Nested
-    @DisplayName("Get Notification")
-    class GetNotification {
+//    @Nested
+//    @DisplayName("Get Notification")
+//    class GetNotification {
 
-        @Test
-        @DisplayName("Success")
-        void getNotification() {
-            // given
-            User user = User.builder()
-                    .githubId("githubUser")
-                    .name("가나다")
-                    .build();
-
-            Notification notification = Notification.builder()
-                    .toUser(user)
-                    .isRead(false)
-                    .type(NoticeType.COMMENT)
-                    .fromUser(user)
-                    .build();
-
-            List<Notification> notificationList = new ArrayList<>();
-            notificationList.add(notification);
-
-            given(mypageFacade.findNotificationByUser(any())).willReturn(notificationList);
-
-            // when
-            List<NotificationGetResponse> responses = mypageService.getNotification(user);
-
-            // then
-            verify(mypageFacade, times(1)).deleteAlreadyReadNotification(any());
-            Assertions.assertEquals(responses.size(), 1);
-        }
-
-    }
+//        @Test
+//        @DisplayName("Success")
+//        void getNotification() {
+//            // given
+//            User user = User.builder()
+//                    .githubId("githubUser")
+//                    .name("가나다")
+//                    .build();
+//
+//            Notification notification = Notification.builder()
+//                    .toUser(user)
+//                    .isRead(false)
+//                    .type(NoticeType.COMMENT)
+//                    .fromUser(user)
+//                    .build();
+//
+//            List<Notification> notificationList = new ArrayList<>();
+//            notificationList.add(notification);
+//
+//            given(mypageFacade.findNotificationByUser(any())).willReturn(notificationList);
+//
+//            // when
+//            List<NotificationGetResponse> responses = mypageService.getNotification(user);
+//
+//            // then
+//            verify(mypageFacade, times(1)).deleteAlreadyReadNotification(any());
+//            Assertions.assertEquals(responses.size(), 1);
+//        }
+//
+//    }
 
     @Nested
     @DisplayName("Get Notification Status")

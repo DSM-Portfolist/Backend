@@ -1,6 +1,7 @@
 package com.example.portfolist.domain.mypage.entity;
 
 import com.example.portfolist.domain.auth.entity.User;
+import com.example.portfolist.domain.portfolio.entity.Portfolio;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,6 +31,10 @@ public class Notification {
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
     private NoticeType type;
+
+    @ManyToOne
+    @JoinColumn(name = "portfolio_id", nullable = false)
+    private Portfolio portfolio;
 
     @ManyToOne
     @JoinColumn(name = "fromUser_id", nullable = false)

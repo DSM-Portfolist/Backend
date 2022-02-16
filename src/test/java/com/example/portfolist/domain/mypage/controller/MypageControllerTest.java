@@ -459,6 +459,7 @@ public class MypageControllerTest extends ApiTest {
                     .isRead(false)
                     .type(NoticeType.COMMENT)
                     .fromUser(user)
+                    .portfolio(createPortfolio(user, "title", "intro"))
                     .build();
             notificationRepository.save(notification);
 
@@ -599,6 +600,7 @@ public class MypageControllerTest extends ApiTest {
                     .isRead(false)
                     .type(NoticeType.COMMENT)
                     .fromUser(user)
+                    .portfolio(createPortfolio(user, "title", "intro"))
                     .build();
             notificationRepository.save(notification);
 

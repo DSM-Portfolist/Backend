@@ -2,6 +2,7 @@ package com.example.portfolist.global.event;
 
 import com.example.portfolist.domain.auth.entity.User;
 import com.example.portfolist.domain.mypage.entity.NoticeType;
+import com.example.portfolist.domain.portfolio.entity.Portfolio;
 import com.example.portfolist.global.event.event.EmailEvent;
 import com.example.portfolist.global.event.event.NoticeEvent;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +15,9 @@ public class GlobalEventPublisher {
 
     private final ApplicationEventPublisher eventPublisher;
 
-    public void makeNotice(User fromUser, User toUser, NoticeType event) {
+    public void makeNotice(User fromUser, User toUser, NoticeType event, Portfolio portfolio) {
         if (fromUser.equals(toUser)) return;
-        eventPublisher.publishEvent(new NoticeEvent(fromUser, toUser, event));
+        eventPublisher.publishEvent(new NoticeEvent(fromUser, toUser, event, portfolio));
     }
 
     public void sendEmail(String toEmail, String title, String content) {

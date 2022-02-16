@@ -68,9 +68,9 @@ public class CommentService {
                 .build());
 
         if (pComment == null)
-            eventPublisher.makeNotice(user, portfolio.getUser(), NoticeType.COMMENT);
+            eventPublisher.makeNotice(user, portfolio.getUser(), NoticeType.COMMENT, portfolio);
         else
-            eventPublisher.makeNotice(user, portfolio.getUser(), NoticeType.RECOMMENT);
+            eventPublisher.makeNotice(user, pComment.getUser(), NoticeType.RECOMMENT, portfolio);
     }
 
     @Transactional

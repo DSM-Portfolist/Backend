@@ -28,7 +28,7 @@ public class TouchingService {
         Portfolio portfolio = getPortfolio(portfolioId);
         User user = getCurrentUser();
         touchingRepository.save(Touching.toEntity(user, portfolio));
-        eventPublisher.makeNotice(user, portfolio.getUser(), NoticeType.TOUCHING);
+        eventPublisher.makeNotice(user, portfolio.getUser(), NoticeType.TOUCHING, portfolio);
     }
 
     public void deleteTouching(long portfolioId) {
