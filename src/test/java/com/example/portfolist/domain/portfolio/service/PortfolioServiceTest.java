@@ -71,7 +71,7 @@ class PortfolioServiceTest extends ApiTest {
     public void 포트폴리오_리스트_조회_필터링_없을_때() {
         //when
         Pageable pageable = PageRequest.of(0, 5);
-        setToken(jwtTokenProvider.generateAccessToken(user1.getPk()));
+        setToken(jwtTokenProvider.generateAccessToken(user1.getId()));
 
         //given
         Page<PortfolioPreview> portfolioList = portfolioRepository

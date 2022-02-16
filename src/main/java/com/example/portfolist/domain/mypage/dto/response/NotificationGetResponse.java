@@ -17,7 +17,7 @@ public class NotificationGetResponse {
 
     public static NotificationGetResponse from(Notification notification) {
         return NotificationGetResponse.builder()
-                .id(notification.getPk())
+                .id(notification.getId())
                 .name(notification.getFromUser().getName())
                 .type(notification.getType().name())
                 .build();

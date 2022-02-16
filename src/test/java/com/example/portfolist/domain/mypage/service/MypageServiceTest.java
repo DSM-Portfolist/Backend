@@ -37,9 +37,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.EntityNotFoundException;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -305,7 +303,7 @@ public class MypageServiceTest extends ServiceTest {
                     .build();
 
             FieldKind fieldKind = FieldKind.builder()
-                    .pk(1)
+                    .id(1)
                     .content("백엔드")
                     .build();
 
@@ -338,7 +336,7 @@ public class MypageServiceTest extends ServiceTest {
                     .build();
 
             FieldKind fieldKind = FieldKind.builder()
-                    .pk(1)
+                    .id(1)
                     .content("백엔드")
                     .build();
 
@@ -357,7 +355,7 @@ public class MypageServiceTest extends ServiceTest {
             mypageService.changeUserInfo(request, user);
 
             // then
-            verify(authCheckFacade, never()).findFieldByFieldKindPkAndUser(eq(1), any());
+            verify(authCheckFacade, never()).findFieldByFieldKindIdAndUser(eq(1), any());
             verify(authCheckFacade, never()).findFieldKindById(eq(1));
             verify(authFacade, times(1)).delete(any(List.class));
             verify(authFacade, times(1)).save(any(List.class));
@@ -395,7 +393,7 @@ public class MypageServiceTest extends ServiceTest {
         void getTouchingPortfolio_Success() {
             // given
             User user = User.builder()
-                    .pk(1L)
+                    .id(1L)
                     .githubId("githubUser")
                     .name("가나다")
                     .build();
@@ -409,7 +407,7 @@ public class MypageServiceTest extends ServiceTest {
                     .build();
 
             Touching touching = Touching.builder()
-                    .id(new TouchingId(user.getPk(), portfolio.getPk()))
+                    .id(new TouchingId(user.getId(), portfolio.getId()))
                     .user(user)
                     .portfolio(portfolio)
                     .build();
@@ -438,7 +436,7 @@ public class MypageServiceTest extends ServiceTest {
         void getMyPortfolio_Success() throws NoSuchFieldException, IllegalAccessException {
             // given
             User user = User.builder()
-                    .pk(1L)
+                    .id(1L)
                     .githubId("githubUser")
                     .name("가나다")
                     .build();

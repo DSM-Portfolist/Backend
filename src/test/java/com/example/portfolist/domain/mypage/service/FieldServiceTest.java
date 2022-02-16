@@ -35,7 +35,7 @@ public class FieldServiceTest extends ServiceTest {
         void getField_Success() {
             // given
             FieldKind fieldKind = FieldKind.builder()
-                    .pk(1)
+                    .id(1)
                     .content("백엔드")
                     .build();
 

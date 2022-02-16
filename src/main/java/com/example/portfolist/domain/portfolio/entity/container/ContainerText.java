@@ -14,7 +14,7 @@ public class ContainerText {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long pk;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "container_id", nullable = false)

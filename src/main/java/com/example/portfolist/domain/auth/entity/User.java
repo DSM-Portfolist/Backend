@@ -23,10 +23,10 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long pk;
+    private long id;
 
     @OneToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "normalUser_pk")
+    @JoinColumn(name = "normalUser_id")
     private NormalUser normalUser;
 
     @Column(name = "github_id")

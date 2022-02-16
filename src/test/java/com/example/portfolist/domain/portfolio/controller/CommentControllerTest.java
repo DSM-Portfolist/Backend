@@ -39,9 +39,9 @@ public class CommentControllerTest extends ApiTest {
 
         Portfolio portfolio = createPortfolio(user, "testTitle", "testIntroduce");
 
-        setToken(jwtTokenProvider.generateAccessToken(user.getPk()));
+        setToken(jwtTokenProvider.generateAccessToken(user.getId()));
 
-        requestMvc(post("/comment/" + portfolio.getPk())
+        requestMvc(post("/comment/" + portfolio.getId())
                 , new ContentRequest("와 포트폴리오가 너무 멋져요", null))
                 .andExpect(status().isCreated());
 
@@ -53,7 +53,7 @@ public class CommentControllerTest extends ApiTest {
     public void 댓글달기_권한없음_401() throws Exception {
         Portfolio portfolio = createPortfolio(user, "testTitle", "testIntroduce");
 
-        requestMvc(post("/comment/" + portfolio.getPk())
+        requestMvc(post("/comment/" + portfolio.getId())
                 , new ContentRequest("와 포트폴리오가 너무 멋져요", null))
                 .andExpect(status().isUnauthorized());
 
@@ -64,9 +64,9 @@ public class CommentControllerTest extends ApiTest {
     public void 댓글_삭제하기_204() throws Exception {
         Comment comment = createComment(user, portfolio, "와");
 
-        setToken(jwtTokenProvider.generateAccessToken(user.getPk()));
+        setToken(jwtTokenProvider.generateAccessToken(user.getId()));
 
-        requestMvc(delete("/comment/" + comment.getPk()))
+        requestMvc(delete("/comment/" + comment.getId()))
             .andExpect(status().isNoContent());
     }
 
@@ -77,9 +77,9 @@ public class CommentControllerTest extends ApiTest {
 
         User noPermissionUser = createUser("홍길동", "동에번쩍", null);
 
-        setToken(jwtTokenProvider.generateAccessToken(noPermissionUser.getPk()));
+        setToken(jwtTokenProvider.generateAccessToken(noPermissionUser.getId()));
 
-        requestMvc(delete("/comment/" + comment.getPk()))
+        requestMvc(delete("/comment/" + comment.getId()))
                 .andExpect(status().isForbidden());
 
         assertEquals(commentRepository.findAll().size(), 1);
@@ -89,9 +89,9 @@ public class CommentControllerTest extends ApiTest {
 //    public void 대댓글달기_201() throws Exception {
 //        Comment comment = createComment(user, portfolio, "test Content");
 //
-//        setToken(jwtTokenProvider.generateAccessToken(user.getPk()));
+//        setToken(jwtTokenProvider.generateAccessToken(user.getId()));
 //
-//        requestMvc(post("/comment/" + comment.getPk())
+//        requestMvc(post("/comment/" + comment.getId())
 //                , new ContentRequest("와 포트폴리오가 너무 멋져요"))
 //                .andExpect(status().isCreated());
 //
@@ -105,7 +105,7 @@ public class CommentControllerTest extends ApiTest {
 //
 //        Comment comment = createComment(user, portfolio, "test Content");
 //
-//        requestMvc(post("/re-comment/" + comment.getPk())
+//        requestMvc(post("/re-comment/" + comment.getId())
 //                , new ContentRequest("와 포트폴리오가 너무 멋져요"))
 //                .andExpect(status().isUnauthorized());
 //
@@ -117,9 +117,9 @@ public class CommentControllerTest extends ApiTest {
 //        Comment comment = createComment(user, portfolio, "test Content");
 //        ReComment reComment = createReComment(user, comment, "와");
 //
-//        setToken(jwtTokenProvider.generateAccessToken(user.getPk()));
+//        setToken(jwtTokenProvider.generateAccessToken(user.getId()));
 //
-//        requestMvc(delete("/re-comment/" + reComment.getPk()))
+//        requestMvc(delete("/re-comment/" + reComment.getId()))
 //                .andExpect(status().isNoContent());
 //
 //        assertEquals(reCommentRepository.findAll().size(), 0);
@@ -132,9 +132,9 @@ public class CommentControllerTest extends ApiTest {
 //
 //        User noPermissionUser = createUser("홍길동", "동에번쩍", null);
 //
-//        setToken(jwtTokenProvider.generateAccessToken(noPermissionUser.getPk()));
+//        setToken(jwtTokenProvider.generateAccessToken(noPermissionUser.getId()));
 //
-//        requestMvc(delete("/re-comment/" + reComment.getPk()))
+//        requestMvc(delete("/re-comment/" + reComment.getId()))
 //                .andExpect(status().isForbidden());
 //
 //        assertEquals(reCommentRepository.findAll().size(), 1);

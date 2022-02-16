@@ -17,7 +17,7 @@ import java.util.List;
 public class CertificateContainer {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long pk;
+    private long id;
 
     private String title;
 

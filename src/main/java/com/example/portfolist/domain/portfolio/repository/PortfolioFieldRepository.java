@@ -8,5 +8,5 @@ public interface PortfolioFieldRepository extends JpaRepository<PortfolioField, 
 
     void deleteByPortfolioUser(User user);
 
-    void deleteByPortfolioPk(long portfolioId);
+    void deleteByPortfolioId(long portfolioId);
 }

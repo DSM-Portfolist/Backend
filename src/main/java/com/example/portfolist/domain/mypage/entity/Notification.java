@@ -18,10 +18,10 @@ public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long pk;
+    private long id;
 
     @ManyToOne
-    @JoinColumn(name = "toUser_pk", nullable = false)
+    @JoinColumn(name = "toUser_id", nullable = false)
     private User toUser;
 
     @Column(name = "is_read", nullable = false)
@@ -32,7 +32,7 @@ public class Notification {
     private NoticeType type;
 
     @ManyToOne
-    @JoinColumn(name = "fromUser_pk", nullable = false)
+    @JoinColumn(name = "fromUser_id", nullable = false)
     private User fromUser;
 
 }

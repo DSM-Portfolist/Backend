@@ -65,12 +65,10 @@ public class JwtTokenProvider {
     }
 
     public Authentication getAuthentication(String token) {
-        Long pk = getId(token);
-        Optional<User> user = userRepository.findById(pk);
-        if (user.isPresent()) {
-            return new UsernamePasswordAuthenticationToken(user.get(), "", getAuthorities());
-        }
-        return new UsernamePasswordAuthenticationToken(null, "", null);
+        Long id = getId(token);
+        Optional<User> user = userRepository.findById(id);
+        return user.map(value -> new UsernamePasswordAuthenticationToken(value, "", getAuthorities()))
+                .orElseGet(() -> new UsernamePasswordAuthenticationToken(null, "", null));
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities() {

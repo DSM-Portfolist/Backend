@@ -27,7 +27,7 @@ public class InfoControllerTest extends ApiTest {
             userRepository.save(user);
 
             // when
-            ResultActions resultActions = requestMvc(get("/info/user/" + user.getPk()));
+            ResultActions resultActions = requestMvc(get("/info/user/" + user.getId()));
 
             // then
             resultActions.andExpect(status().is(200));

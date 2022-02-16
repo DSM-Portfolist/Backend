@@ -42,9 +42,9 @@ class TouchingControllerTest extends ApiTest {
         auth();
 
         Portfolio portfolio = createPortfolio(user, "title", "introduce");
-        long pk = portfolio.getPk();
+        long id = portfolio.getId();
 
-        requestMvc(post("/touching/" + pk))
+        requestMvc(post("/touching/" + id))
                 .andExpect(status().isCreated());
 
         assertEquals(touchingRepository.findByPortfolio(portfolio).size(), 1);
@@ -55,20 +55,20 @@ class TouchingControllerTest extends ApiTest {
         auth();
 
         Portfolio portfolio = createPortfolio(user, "title", "introduce");
-        long pk = portfolio.getPk();
+        long id = portfolio.getId();
 
-        requestMvc(post("/touching/" + pk))
+        requestMvc(post("/touching/" + id))
                 .andExpect(status().isCreated());
 
         assertEquals(touchingRepository.findByPortfolio(portfolio).size(), 1);
 
-        requestMvc(delete("/touching/" + pk))
+        requestMvc(delete("/touching/" + id))
             .andExpect(status().isNoContent());
 
         assertEquals(touchingRepository.findByPortfolio(portfolio).size(), 0);
     }
 
     private void auth() {
-        setToken(jwtTokenProvider.generateAccessToken(user.getPk()));
+        setToken(jwtTokenProvider.generateAccessToken(user.getId()));
     }
 }

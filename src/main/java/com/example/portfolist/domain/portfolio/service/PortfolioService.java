@@ -74,9 +74,9 @@ public class PortfolioService {
     @Transactional
     public PortfolioResponse getPortfolioInfo(long portfolioId) {
         Portfolio portfolio = portfolioRepository.findById(portfolioId).orElseThrow(PortfolioNotFoundException::new);
-        Boolean touched = touchingRepository.findById(new TouchingId(getCurrentUser().getPk(), portfolioId)).isPresent();
+        Boolean touched = touchingRepository.findById(new TouchingId(getCurrentUser().getId(), portfolioId)).isPresent();
 
-        return PortfolioResponse.of(portfolio, portfolio.getUser().getPk() == getCurrentUser().getPk(), touched);
+        return PortfolioResponse.of(portfolio, portfolio.getUser().getId() == getCurrentUser().getId(), touched);
     }
 
     @Transactional
@@ -92,7 +92,7 @@ public class PortfolioService {
     public void deletePortfolio(long portfolioId) {
         Portfolio portfolio = getPortfolio(portfolioId);
 
-        if (!(portfolio.getUser().getPk() == getCurrentUser().getPk())) throw new PermissionDeniedException();
+        if (!(portfolio.getUser().getId() == getCurrentUser().getId())) throw new PermissionDeniedException();
 
         fileUploadProvider.deleteFile(portfolio.getUrl());
         portfolio.getContainerList()
@@ -106,7 +106,7 @@ public class PortfolioService {
     public Long updatePortfolio(long portfolioId, PortfolioRequest request) {
         Portfolio portfolio = getPortfolio(portfolioId);
 
-        if (!(portfolio.getUser().getPk() == getCurrentUser().getPk())) throw new PermissionDeniedException();
+        if (!(portfolio.getUser().getId() == getCurrentUser().getId())) throw new PermissionDeniedException();
 
         portfolio.update(request);
         portfolio.getPortfolioFields().clear();
@@ -143,12 +143,12 @@ public class PortfolioService {
     }
 
     private void deleteOther(long portfolioId) {
-        portfolioFieldRepository.deleteByPortfolioPk(portfolioId);
-        containerRepository.deleteByPortfolioPk(portfolioId);
-        certificateContainerRepository.deleteByPortfolioPk(portfolioId);
-        moreInfoRepository.deleteByPortfolioPk(portfolioId);
-        containerImageRepository.deleteByContainerPortfolioPk(portfolioId);
-        containerTextRepository.deleteByContainerPortfolioPk(portfolioId);
+        portfolioFieldRepository.deleteByPortfolioId(portfolioId);
+        containerRepository.deleteByPortfolioId(portfolioId);
+        certificateContainerRepository.deleteByPortfolioId(portfolioId);
+        moreInfoRepository.deleteByPortfolioId(portfolioId);
+        containerImageRepository.deleteByContainerPortfolioId(portfolioId);
+        containerTextRepository.deleteByContainerPortfolioId(portfolioId);
     }
 
     private void saveOther(Portfolio portfolio, PortfolioRequest request) {

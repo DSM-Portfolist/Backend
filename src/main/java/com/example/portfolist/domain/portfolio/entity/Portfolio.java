@@ -24,7 +24,7 @@ public class Portfolio {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long pk;
+    private long id;
 
     @ManyToOne
     @JoinColumn(nullable = false)

@@ -22,7 +22,7 @@ public class RecentPortfolioResponse {
 
     public static RecentPortfolioResponse of(Portfolio portfolio) {
         return RecentPortfolioResponse.builder()
-                .portfolioId(portfolio.getPk())
+                .portfolioId(portfolio.getId())
                 .title(portfolio.getTitle())
                 .introduce(portfolio.getIntroduce())
                 .thumbnail(portfolio.getThumbnail())

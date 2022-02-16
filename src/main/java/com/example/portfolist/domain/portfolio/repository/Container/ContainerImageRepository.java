@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ContainerImageRepository extends JpaRepository<ContainerImage,Long> {
 
-    List<ContainerImage> findByContainerPortfolioPk(long portfolioId);
+    List<ContainerImage> findByContainerPortfolioId(long portfolioId);
     void deleteByContainerPortfolioUser(User user);
-    void deleteByContainerPortfolioPk(long portfolioId);
+    void deleteByContainerPortfolioId(long portfolioId);
 }

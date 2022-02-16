@@ -19,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -89,12 +88,12 @@ public class MypageService {
 
         List<Integer> changeField = request.getField();
         List<Integer> nowField = authFacade.findFieldByUser(user).stream()
-                .map(field -> field.getFieldKind().getPk()).collect(Collectors.toList());
+                .map(field -> field.getFieldKind().getId()).collect(Collectors.toList());
 
         List<Field> deleteField = new ArrayList<>();
         for(int fieldId : nowField) {
             if (!changeField.contains(fieldId)) {
-                Field field = authCheckFacade.findFieldByFieldKindPkAndUser(fieldId, user);
+                Field field = authCheckFacade.findFieldByFieldKindIdAndUser(fieldId, user);
                 deleteField.add(field);
             }
         }

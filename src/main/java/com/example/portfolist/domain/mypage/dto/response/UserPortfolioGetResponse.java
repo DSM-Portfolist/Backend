@@ -41,7 +41,7 @@ public class UserPortfolioGetResponse {
         }
 
         return UserPortfolioGetResponse.builder()
-                .id(portfolio.getPk())
+                .id(portfolio.getId())
                 .field(fields)
                 .icon(portfolio.getMainIcon())
                 .thumbnail(portfolio.getThumbnail())

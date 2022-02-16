@@ -32,7 +32,7 @@ public class TouchingService {
     }
 
     public void deleteTouching(long portfolioId) {
-        touchingRepository.deleteById(new TouchingId(getCurrentUser().getPk(), getPortfolio(portfolioId).getPk()));
+        touchingRepository.deleteById(new TouchingId(getCurrentUser().getId(), getPortfolio(portfolioId).getId()));
     }
 
     private User getCurrentUser() {

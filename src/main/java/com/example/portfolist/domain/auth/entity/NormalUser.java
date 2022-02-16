@@ -17,7 +17,7 @@ public class NormalUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long pk;
+    private long id;
 
     @Column(name = "email", nullable = false)
     private String email;

@@ -11,7 +11,7 @@ import java.util.List;
 public interface QuerydslRepository {
 
     Page<PortfolioPreview> getPortfolioList(Pageable pageable, List<String> fieldCond, String query, String searchType);
-    List<String> getFieldKindContentByPortfolioId(long id);
+    List<String> getFieldKindContentByportfolioId(long id);
     Portfolio findThisMonthPortfolio();
     List<PortfolioPreview> findAllByUser(User byUser);
     List<PortfolioPreview> findMyTouchingPortfolio(Pageable pageable, User byUser);

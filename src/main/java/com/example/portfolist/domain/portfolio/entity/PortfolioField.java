@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Entity
 public class PortfolioField {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    private long pk;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "portfolio_id", nullable = false)

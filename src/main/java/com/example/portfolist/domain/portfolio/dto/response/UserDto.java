@@ -20,7 +20,7 @@ public class UserDto {
 
     public static UserDto of(User user) {
         return UserDto.builder()
-                .userId(user.getPk())
+                .userId(user.getId())
                 .name(user.getName())
                 .profileImg(user.getUrl())
                 .build();

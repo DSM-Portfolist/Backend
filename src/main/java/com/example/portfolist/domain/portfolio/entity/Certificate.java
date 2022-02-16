@@ -13,7 +13,7 @@ public class Certificate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long pk;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "certificateContainer_id", nullable = false)

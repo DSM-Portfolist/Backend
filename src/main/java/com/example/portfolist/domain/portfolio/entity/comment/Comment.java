@@ -18,7 +18,7 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long pk;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "portfolio_id")
@@ -28,7 +28,6 @@ public class Comment {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column
     private LocalDate date;
 
     @Column(length = 300)

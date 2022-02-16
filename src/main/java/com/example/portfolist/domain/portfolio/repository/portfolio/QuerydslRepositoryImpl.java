@@ -47,18 +47,18 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
             touchedPortfolioList = queryFactory
                     .select(touching.portfolio)
                     .from(touching)
-                    .where(touching.user.pk.eq(loginUser.getPk()))
+                    .where(touching.user.id.eq(loginUser.getId()))
                     .fetch();
         }
 
         QueryResults<PortfolioPreview> results = queryFactory
                 .select(new QPortfolioPreview(
-                        portfolio.pk,
+                        portfolio.id,
                         portfolio.thumbnail,
                         portfolio.title,
                         portfolio.introduce,
                         portfolio.date,
-                        user.pk,
+                        user.id,
                         user.name,
                         user.url,
                         new CaseBuilder()
@@ -78,7 +78,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                 .fetchResults();
 
         List<PortfolioPreview> content = results.getResults();
-        content.forEach(p -> p.setField(getFieldKindContentByPortfolioId(p.getId())));
+        content.forEach(p -> p.setField(getFieldKindContentByportfolioId(p.getId())));
 
         long total = results.getTotal();
 
@@ -86,11 +86,11 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
     }
 
     @Override
-    public List<String> getFieldKindContentByPortfolioId(long id) {
+    public List<String> getFieldKindContentByportfolioId(long id) {
         return queryFactory
                 .select(portfolioField.fieldKind.content)
                 .from(portfolioField)
-                .where(portfolioField.portfolio.pk.eq(id))
+                .where(portfolioField.portfolio.id.eq(id))
                 .fetch();
     }
 
@@ -137,18 +137,18 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
             touchedPortfolioList = queryFactory
                     .select(touching.portfolio)
                     .from(touching)
-                    .where(touching.user.pk.eq(loginUser.getPk()))
+                    .where(touching.user.id.eq(loginUser.getId()))
                     .fetch();
         }
 
         return queryFactory
                 .select(new QPortfolioPreview(
-                        portfolio.pk,
+                        portfolio.id,
                         portfolio.thumbnail,
                         portfolio.title,
                         portfolio.introduce,
                         portfolio.date,
-                        user.pk,
+                        user.id,
                         user.name,
                         user.url,
                         new CaseBuilder()
@@ -159,8 +159,8 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                 )).distinct()
                 .from(portfolio)
                 .join(portfolio.user, user)
-                .where(user.pk.eq(byUser.getPk()), portfolio.isOpen.eq(true))
-                .orderBy(portfolio.pk.desc())
+                .where(user.id.eq(byUser.getId()), portfolio.isOpen.eq(true))
+                .orderBy(portfolio.id.desc())
                 .fetch();
     }
 
@@ -168,12 +168,12 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
     public List<PortfolioPreview> findMyTouchingPortfolio(Pageable pageable, User byUser) {
         return queryFactory
                 .select(new QPortfolioPreview(
-                        portfolio.pk,
+                        portfolio.id,
                         portfolio.thumbnail,
                         portfolio.title,
                         portfolio.introduce,
                         portfolio.date,
-                        user.pk,
+                        user.id,
                         user.name,
                         user.url,
                         Expressions.asBoolean(true),
@@ -183,10 +183,10 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                 .from(touching)
                 .leftJoin(touching.user, user)
                 .leftJoin(touching.portfolio, portfolio)
-                .where(user.pk.eq(byUser.getPk()), portfolio.isOpen.eq(true))
+                .where(user.id.eq(byUser.getId()), portfolio.isOpen.eq(true))
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
-                .orderBy(portfolio.pk.desc())
+                .orderBy(portfolio.id.desc())
                 .fetch();
     }
 }

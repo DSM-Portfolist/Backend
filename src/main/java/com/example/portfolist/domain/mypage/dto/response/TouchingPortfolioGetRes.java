@@ -29,7 +29,7 @@ public class TouchingPortfolioGetRes {
 
         public static ContentUser from(User user) {
             return ContentUser.builder()
-                    .userId(user.getPk())
+                    .userId(user.getId())
                     .name(user.getName())
                     .profileImg(user.getUrl())
                     .build();
@@ -64,7 +64,7 @@ public class TouchingPortfolioGetRes {
             }
 
             return Content.builder()
-                    .id(portfolio.getPk())
+                    .id(portfolio.getId())
                     .thumbnail(portfolio.getThumbnail())
                     .field(fields)
                     .icon(portfolio.getMainIcon())

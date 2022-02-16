@@ -87,7 +87,7 @@ public class AuthServiceTest extends ServiceTest {
                     .build();
 
             User user = User.builder()
-                    .pk(1L)
+                    .id(1L)
                     .normalUser(normalUser)
                     .name("가나다")
                     .build();
@@ -118,7 +118,7 @@ public class AuthServiceTest extends ServiceTest {
                     .build();
 
             User user = User.builder()
-                    .pk(1L)
+                    .id(1L)
                     .normalUser(normalUser)
                     .name("가나다")
                     .build();
@@ -165,7 +165,7 @@ public class AuthServiceTest extends ServiceTest {
 
             given(authFacade.findUserByGithubId("nickname")).willReturn(Optional.empty());
             User user = User.builder()
-                    .pk(1L)
+                    .id(1L)
                     .githubId("nickname")
                     .name(name==null ? "nickname" : name)
                     .url("profile")
@@ -203,7 +203,7 @@ public class AuthServiceTest extends ServiceTest {
             given(githubTokenClient.getUserInfo("token githubToken")).willReturn(githubTokenResponse);
 
             User user = User.builder()
-                    .pk(1L)
+                    .id(1L)
                     .githubId("nickname")
                     .name(name==null ? "nickname" : name)
                     .url("profile")
@@ -300,14 +300,14 @@ public class AuthServiceTest extends ServiceTest {
             NormalUserJoinRequest request = makeRequest("가나다", "testtest@gmail.com", "testPassword", field);
 
             NormalUser normalUser = NormalUser.builder()
-                    .pk(1)
+                    .id(1)
                     .email("testtest@gmail.com")
                     .password(passwordEncoder.encode("testPassword"))
                     .build();
             given(authFacade.save(any(NormalUser.class))).willReturn(normalUser);
 
             User user = User.builder()
-                    .pk(1)
+                    .id(1)
                     .normalUser(normalUser)
                     .name("가나다")
                     .build();

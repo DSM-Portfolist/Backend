@@ -197,7 +197,7 @@ public class ApiTest extends IntegrationTest{
 
     public Touching createTouching(User user, Portfolio portfolio) {
         return touchingRepository.save(new Touching(
-                new TouchingId(user.getPk(), portfolio.getPk()), user, portfolio));
+                new TouchingId(user.getId(), portfolio.getId()), user, portfolio));
     }
 
     public Comment createComment(User user, Portfolio portfolio, String content) {

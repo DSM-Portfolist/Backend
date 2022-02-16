@@ -326,7 +326,7 @@ public class AuthControllerTest extends ApiTest {
             fieldKind = fieldKindRepository.save(fieldKind);
 
             List<Integer> field = new ArrayList<>();
-            field.add(fieldKind.getPk());
+            field.add(fieldKind.getId());
             NormalUserJoinRequest request = makeRequest("가나다", "testtest@gmail.com", "testPassword", field);
 
             // when

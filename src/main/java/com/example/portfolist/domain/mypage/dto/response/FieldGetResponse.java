@@ -16,7 +16,7 @@ public class FieldGetResponse {
 
     public static FieldGetResponse from(FieldKind fieldKind) {
         return FieldGetResponse.builder()
-                .id(fieldKind.getPk())
+                .id(fieldKind.getId())
                 .content(fieldKind.getContent())
                 .build();
     }

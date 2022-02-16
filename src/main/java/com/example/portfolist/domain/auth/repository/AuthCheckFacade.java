@@ -48,8 +48,8 @@ public class AuthCheckFacade {
         }
     }
 
-    public FieldKind findFieldKindById(int pk) {
-        return fieldKindRepository.findById(pk)
+    public FieldKind findFieldKindById(int id) {
+        return fieldKindRepository.findById(id)
                 .orElseThrow(FieldNotFoundException::new);
     }
 
@@ -59,8 +59,8 @@ public class AuthCheckFacade {
         }
     }
 
-    public Field findFieldByFieldKindPkAndUser(int pk, User user) {
-        return fieldRepository.findByFieldKindPkAndUser(pk, user)
+    public Field findFieldByFieldKindIdAndUser(int id, User user) {
+        return fieldRepository.findByFieldKindIdAndUser(id, user)
                 .orElseThrow(FieldNotFoundException::new);
     }
 

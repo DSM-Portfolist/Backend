@@ -28,7 +28,7 @@ public class ReCommentResponse {
         return ReCommentResponse.builder()
                 .user(UserDto.of(reComment.getUser()))
                 .isMine(isMine)
-                .reCommentId(reComment.getPk())
+                .reCommentId(reComment.getId())
                 .reCommentContent(reComment.getContent())
                 .rcDate(reComment.getDate())
                 .build();

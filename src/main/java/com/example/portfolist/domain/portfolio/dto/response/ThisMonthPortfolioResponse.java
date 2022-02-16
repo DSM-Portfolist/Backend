@@ -26,7 +26,7 @@ public class ThisMonthPortfolioResponse {
 
     public static ThisMonthPortfolioResponse of(Portfolio thisMonthPortfolio) {
         return ThisMonthPortfolioResponse.builder()
-                .id(thisMonthPortfolio.getPk())
+                .id(thisMonthPortfolio.getId())
                 .title(thisMonthPortfolio.getTitle())
                 .thumbnail(thisMonthPortfolio.getThumbnail())
                 .name(thisMonthPortfolio.getUser().getName())

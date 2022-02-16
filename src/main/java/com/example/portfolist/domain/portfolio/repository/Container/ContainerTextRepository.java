@@ -8,5 +8,5 @@ public interface ContainerTextRepository extends JpaRepository<ContainerText,Lon
 
     void deleteByContainerPortfolioUser(User user);
 
-    void deleteByContainerPortfolioPk(long portfolioId);
+    void deleteByContainerPortfolioId(long portfolioId);
 }

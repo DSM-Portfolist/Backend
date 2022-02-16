@@ -63,18 +63,18 @@ class PortfolioControllerTest extends ApiTest {
     @Test
     public void 포트폴리오_상세보기_200() throws Exception {
         auth();
-        long pk = createPortfolio(user, "title", "introduce").getPk();
+        long id = createPortfolio(user, "title", "introduce").getId();
 
-        requestMvc(get("/portfolio/" + pk))
+        requestMvc(get("/portfolio/" + id))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void 포트폴리오_상세보기_404() throws Exception {
         auth();
-        long pk = createPortfolio(user, "title", "introduce").getPk();
+        long id = createPortfolio(user, "title", "introduce").getId();
 
-        requestMvc(get("/portfolio/" + (pk+1)))
+        requestMvc(get("/portfolio/" + (id+1)))
                 .andExpect(status().isNotFound());
     }
 
@@ -124,9 +124,9 @@ class PortfolioControllerTest extends ApiTest {
     public void 포트폴리오_삭제_204() throws Exception {
         auth();
 
-        long pk = createPortfolio(user, "title", "introduce").getPk();
+        long id = createPortfolio(user, "title", "introduce").getId();
 
-        requestMvc(delete("/portfolio/" + pk))
+        requestMvc(delete("/portfolio/" + id))
             .andExpect(status().isNoContent());
 
         assertEquals(portfolioRepository.findAll().size(), 0);
@@ -137,10 +137,10 @@ class PortfolioControllerTest extends ApiTest {
         //given
         auth();
 
-        long pk = createPortfolio(user, "title", "introduce").getPk();
+        long id = createPortfolio(user, "title", "introduce").getId();
 
         //when
-        requestMvc(put("/portfolio/" + pk),
+        requestMvc(put("/portfolio/" + id),
                 new PortfolioRequest(
                         "1",
                         "link",
@@ -160,7 +160,7 @@ class PortfolioControllerTest extends ApiTest {
                 .andExpect(status().isOk());
 
         //then
-        assertEquals(portfolioRepository.findById(pk)
+        assertEquals(portfolioRepository.findById(id)
                 .orElseThrow().getTitle(), "updated title");
 
     }
@@ -193,7 +193,7 @@ class PortfolioControllerTest extends ApiTest {
         createPortfolio(user, "title1", "introduce1");
         createPortfolio(user, "title2", "introduce2");
 
-        requestMvc(get("/portfolio/user/" + user.getPk()))
+        requestMvc(get("/portfolio/user/" + user.getId()))
                 .andExpect(status().isOk());
     }
 
@@ -203,11 +203,11 @@ class PortfolioControllerTest extends ApiTest {
         createPortfolio(user, "title1", "introduce1");
         createPortfolio(user, "title2", "introduce2");
 
-        requestMvc(get("/portfolio/user/" + user.getPk() + "/touching"))
+        requestMvc(get("/portfolio/user/" + user.getId() + "/touching"))
                 .andExpect(status().isOk());
     }
 
     private void auth() {
-        setToken(jwtTokenProvider.generateAccessToken(user.getPk()));
+        setToken(jwtTokenProvider.generateAccessToken(user.getId()));
     }
 }

@@ -65,6 +65,6 @@ class FileControllerTest extends ApiTest {
     }
 
     private void auth() {
-        setToken(jwtTokenProvider.generateAccessToken(user.getPk()));
+        setToken(jwtTokenProvider.generateAccessToken(user.getId()));
     }
 }

@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class MoreInfo {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    private long pk;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "portfolio_id", nullable = false)

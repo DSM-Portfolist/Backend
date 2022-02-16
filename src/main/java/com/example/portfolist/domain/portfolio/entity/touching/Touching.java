@@ -29,7 +29,7 @@ public class Touching {
 
     public static Touching toEntity(User user, Portfolio portfolio) {
         return Touching.builder()
-                .id(new TouchingId(user.getPk(), portfolio.getPk()))
+                .id(new TouchingId(user.getId(), portfolio.getId()))
                 .user(user)
                 .portfolio(portfolio)
                 .build();

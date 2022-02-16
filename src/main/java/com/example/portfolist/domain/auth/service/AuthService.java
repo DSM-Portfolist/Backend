@@ -71,8 +71,8 @@ public class AuthService {
             throw new PasswordNotMatchedException();
         }
 
-        String accessToken = jwtTokenProvider.generateAccessToken(user.getPk());
-        String refreshToken = jwtTokenProvider.generateRefreshToken(user.getPk());
+        String accessToken = jwtTokenProvider.generateAccessToken(user.getId());
+        String refreshToken = jwtTokenProvider.generateRefreshToken(user.getId());
         authFacade.save(refreshToken, refreshLifespan);
 
         return new NormalUserLoginResponse(accessToken, refreshToken);
@@ -86,7 +86,7 @@ public class AuthService {
         String url = response.getAvatarUrl();
 
         Optional<User> optionalUser = authFacade.findUserByGithubId(nickname);
-        long pk;
+        long id;
 
         if (optionalUser.isEmpty()) {
             User user = User.builder()
@@ -96,16 +96,16 @@ public class AuthService {
                     .url(url)
                     .build();
             user = authFacade.save(user);
-            pk = user.getPk();
+            id = user.getId();
         }
         else{
             User user = optionalUser.get();
-            pk = user.getPk();
+            id = user.getId();
             user.updateChange(name, url);
         }
 
-        String accessToken = jwtTokenProvider.generateAccessToken(pk);
-        String refreshToken = jwtTokenProvider.generateRefreshToken(pk);
+        String accessToken = jwtTokenProvider.generateAccessToken(id);
+        String refreshToken = jwtTokenProvider.generateRefreshToken(id);
         authFacade.save(refreshToken, refreshLifespan);
 
         return new GithubUserLoginResponse(accessToken, refreshToken);
@@ -157,8 +157,8 @@ public class AuthService {
         user = authFacade.save(user);
 
         List<Field> fields = new ArrayList<>();
-        for (int pk : request.getField()) {
-            FieldKind fieldKind = authCheckFacade.findFieldKindById(pk);
+        for (int id : request.getField()) {
+            FieldKind fieldKind = authCheckFacade.findFieldKindById(id);
             Field field = Field.builder()
                     .user(user)
                     .fieldKind(fieldKind)

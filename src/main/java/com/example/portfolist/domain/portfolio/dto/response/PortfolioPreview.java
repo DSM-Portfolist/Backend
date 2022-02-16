@@ -52,7 +52,7 @@ public class PortfolioPreview {
 
     public static PortfolioPreview of(Portfolio portfolio) {
         return PortfolioPreview.builder()
-                .id(portfolio.getPk())
+                .id(portfolio.getId())
                 .thumbnail(portfolio.getThumbnail())
                 .title(portfolio.getTitle())
                 .introduce(portfolio.getIntroduce())

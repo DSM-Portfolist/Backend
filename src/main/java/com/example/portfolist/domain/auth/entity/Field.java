@@ -17,14 +17,14 @@ public class Field {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long pk;
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_pk", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "fieldKind_pk", nullable = false)
+    @JoinColumn(name = "fieldKind_id", nullable = false)
     private FieldKind fieldKind;
 
 }

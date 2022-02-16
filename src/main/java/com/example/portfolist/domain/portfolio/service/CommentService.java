@@ -36,8 +36,8 @@ public class CommentService {
 
     public CommentListResponse queryCommentList(long portfolioId) {
 
-        List<CommentResponse> comments = commentRepository.findByPortfolioPk(portfolioId).stream()
-                .map(comment -> CommentResponse.of(comment, comment.getUser() != null && getCurrentUser().getPk() == comment.getUser().getPk()))
+        List<CommentResponse> comments = commentRepository.findByportfolioId(portfolioId).stream()
+                .map(comment -> CommentResponse.of(comment, comment.getUser() != null && getCurrentUser().getId() == comment.getUser().getId()))
                 .collect(Collectors.toList());
 
         return new CommentListResponse(comments);
@@ -47,7 +47,7 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
 
         return commentRepository.findAllBypComment(comment).stream()
-                .map(reComment -> ReCommentResponse.of(reComment, getCurrentUser().getPk() == reComment.getUser().getPk()))
+                .map(reComment -> ReCommentResponse.of(reComment, getCurrentUser().getId() == reComment.getUser().getId()))
                 .collect(Collectors.toList());
     }
 
@@ -77,7 +77,7 @@ public class CommentService {
     public void deleteComment(long commentId) {
         Comment comment = getComment(commentId);
 
-        if (comment.getUser().getPk() != getCurrentUser().getPk())
+        if (comment.getUser().getId() != getCurrentUser().getId())
             throw new PermissionDeniedException();
 
         commentRepository.deleteById(commentId);

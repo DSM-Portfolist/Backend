@@ -71,7 +71,7 @@ public class MypageControllerTest extends ApiTest {
             user = userRepository.save(user);
 
             PasswordChangeRequest request = makeRequest("testPassword", "newPassword");
-            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+            String token = jwtTokenProvider.generateAccessToken(user.getId());
 
             // when
             setToken(token);
@@ -98,7 +98,7 @@ public class MypageControllerTest extends ApiTest {
             user = userRepository.save(user);
 
             PasswordChangeRequest request = makeRequest(null, null);
-            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+            String token = jwtTokenProvider.generateAccessToken(user.getId());
 
             // when
             setToken(token);
@@ -125,7 +125,7 @@ public class MypageControllerTest extends ApiTest {
             user = userRepository.save(user);
 
             PasswordChangeRequest request = makeRequest("testPassword", "newPassword");
-            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+            String token = jwtTokenProvider.generateAccessToken(user.getId());
 
             // when
             setToken(token);
@@ -164,7 +164,7 @@ public class MypageControllerTest extends ApiTest {
             user = userRepository.save(user);
 
             PasswordCheckRequest request = makeRequest("testPassword");
-            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+            String token = jwtTokenProvider.generateAccessToken(user.getId());
 
             // when
             setToken(token);
@@ -191,7 +191,7 @@ public class MypageControllerTest extends ApiTest {
             user = userRepository.save(user);
 
             PasswordCheckRequest request = makeRequest(null);
-            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+            String token = jwtTokenProvider.generateAccessToken(user.getId());
 
             // when
             setToken(token);
@@ -218,7 +218,7 @@ public class MypageControllerTest extends ApiTest {
             user = userRepository.save(user);
 
             PasswordCheckRequest request = makeRequest("testPassword");
-            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+            String token = jwtTokenProvider.generateAccessToken(user.getId());
 
             // when
             setToken(token);
@@ -250,7 +250,7 @@ public class MypageControllerTest extends ApiTest {
                     .build();
             user = userRepository.save(user);
 
-            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+            String token = jwtTokenProvider.generateAccessToken(user.getId());
             MockMultipartFile file =
                     new MockMultipartFile("file", "hello.png", "image/png", "hello".getBytes(StandardCharsets.UTF_8));
 
@@ -278,7 +278,7 @@ public class MypageControllerTest extends ApiTest {
                     .build();
             user = userRepository.save(user);
 
-            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+            String token = jwtTokenProvider.generateAccessToken(user.getId());
 
             // when
             setToken(token);
@@ -309,7 +309,7 @@ public class MypageControllerTest extends ApiTest {
                     .build();
             user = userRepository.save(user);
 
-            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+            String token = jwtTokenProvider.generateAccessToken(user.getId());
 
             // when
             setToken(token);
@@ -335,7 +335,7 @@ public class MypageControllerTest extends ApiTest {
                     .build();
             user = userRepository.save(user);
 
-            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+            String token = jwtTokenProvider.generateAccessToken(user.getId());
 
             // when
             setToken(token);
@@ -374,9 +374,9 @@ public class MypageControllerTest extends ApiTest {
                     .build();
             fieldKind = fieldKindRepository.save(fieldKind);
 
-            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+            String token = jwtTokenProvider.generateAccessToken(user.getId());
             List<Integer> field = new ArrayList<>();
-            field.add(fieldKind.getPk());
+            field.add(fieldKind.getId());
             UserInfoChangeRequest request = makeRequest(field, "바람이 불지 않으면 노를 저어라", "김땡땡");
 
             // when
@@ -397,7 +397,7 @@ public class MypageControllerTest extends ApiTest {
                     .build();
             user = userRepository.save(user);
 
-            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+            String token = jwtTokenProvider.generateAccessToken(user.getId());
             UserInfoChangeRequest request = makeRequest(null, null, "바람이 불지 않으면 노를 저어라 김땡땡");
 
             // when
@@ -418,7 +418,7 @@ public class MypageControllerTest extends ApiTest {
                     .build();
             user = userRepository.save(user);
 
-            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+            String token = jwtTokenProvider.generateAccessToken(user.getId());
             List<Integer> field = new ArrayList<>();
             field.add(1);
             UserInfoChangeRequest request = makeRequest(field, "바람이 불지 않으면 노를 저어라", "김땡땡");
@@ -471,7 +471,7 @@ public class MypageControllerTest extends ApiTest {
                     .build();
             portfolioRepository.save(portfolio);
 
-            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+            String token = jwtTokenProvider.generateAccessToken(user.getId());
 
             // when
             setToken(token);
@@ -507,13 +507,13 @@ public class MypageControllerTest extends ApiTest {
             portfolio = portfolioRepository.save(portfolio);
 
             Touching touching = Touching.builder()
-                    .id(new TouchingId(user.getPk(), portfolio.getPk()))
+                    .id(new TouchingId(user.getId(), portfolio.getId()))
                     .user(user)
                     .portfolio(portfolio)
                     .build();
             touchingRepository.save(touching);
 
-            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+            String token = jwtTokenProvider.generateAccessToken(user.getId());
 
             // when
             setToken(token);
@@ -533,7 +533,7 @@ public class MypageControllerTest extends ApiTest {
                     .build();
             user = userRepository.save(user);
 
-            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+            String token = jwtTokenProvider.generateAccessToken(user.getId());
 
             // when
             setToken(token);
@@ -568,7 +568,7 @@ public class MypageControllerTest extends ApiTest {
                     .build();
             portfolioRepository.save(portfolio);
 
-            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+            String token = jwtTokenProvider.generateAccessToken(user.getId());
 
             // when
             setToken(token);
@@ -602,7 +602,7 @@ public class MypageControllerTest extends ApiTest {
                     .build();
             notificationRepository.save(notification);
 
-            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+            String token = jwtTokenProvider.generateAccessToken(user.getId());
 
             // when
             setToken(token);
@@ -629,7 +629,7 @@ public class MypageControllerTest extends ApiTest {
                     .build();
             user = userRepository.save(user);
 
-            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+            String token = jwtTokenProvider.generateAccessToken(user.getId());
 
             // when
             setToken(token);
@@ -662,7 +662,7 @@ public class MypageControllerTest extends ApiTest {
                     .build();
             user = userRepository.save(user);
 
-            String token = jwtTokenProvider.generateAccessToken(user.getPk());
+            String token = jwtTokenProvider.generateAccessToken(user.getId());
             NotificationStatusChangeRequest request = makeRequest(true);
 
             // when

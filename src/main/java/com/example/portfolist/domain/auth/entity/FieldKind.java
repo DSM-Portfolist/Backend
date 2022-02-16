@@ -19,7 +19,7 @@ public class FieldKind {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int pk;
+    private int id;
 
     @Column(name = "content", nullable = false)
     private String content;

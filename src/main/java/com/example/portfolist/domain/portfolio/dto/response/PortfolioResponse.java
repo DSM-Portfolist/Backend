@@ -54,7 +54,7 @@ public class PortfolioResponse {
         return PortfolioResponse.builder()
                 .user(UserDto.of(portfolio.getUser()))
                 .createDate(portfolio.getDate())
-                .portfolioId(portfolio.getPk())
+                .portfolioId(portfolio.getId())
                 .touched(touched)
                 .isMine(isMine)
                 .totalTouching(portfolio.getTouchingList().size())
