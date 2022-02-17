@@ -28,6 +28,8 @@ public class PortfolioResponse {
 
     private boolean isMine;
 
+    private boolean isOpen;
+
     private int totalTouching;
 
     private String icon;
@@ -77,6 +79,7 @@ public class PortfolioResponse {
                                         .map(Certificate::getContent)
                                         .collect(Collectors.toList())).build())
                         .collect(Collectors.toList()))
+                .isOpen(portfolio.isOpen())
                 .link(portfolio.getLink())
                 .file(portfolio.getUrl())
                 .thumbnail(portfolio.getThumbnail())
