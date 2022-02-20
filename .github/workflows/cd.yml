@@ -7,7 +7,7 @@ on:
       - completed
 
 env:
-  S3_BUCKET_NAME: portfolist-bucket
+  S3_BUCKET_NAME: portfolist-deploy
   PROJECT_NAME: portfolist
 
 jobs:
