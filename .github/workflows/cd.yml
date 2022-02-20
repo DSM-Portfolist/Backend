@@ -6,6 +6,10 @@ on:
     types:
       - completed
 
+env:
+  S3_BUCKET_NAME: portfolist-bucket
+  PROJECT_NAME: portfolist
+
 jobs:
   build:
     runs-on: ubuntu-latest
