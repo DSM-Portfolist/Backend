@@ -99,3 +99,7 @@ check.dependsOn jacocoTestReport
 test {
     useJUnitPlatform()
 }
+
+jar {
+    enabled = false
+}
