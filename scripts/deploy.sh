@@ -1,10 +1,10 @@
 #!/bin/bash
-BUILD_JAR=$(ls /home/ec2-user/action/build/libs/*.jar)
+BUILD_JAR=$(ls /home/ec2-user/action/*.jar)
 JAR_NAME=$(basename "$BUILD_JAR")
 echo "> build 파일명: $JAR_NAME" >> /home/ec2-user/action/deploy.log
 
 echo "> build 파일 복사" >> /home/ec2-user/action/deploy.log
-DEPLOY_PATH=/home/ec2-user/action/
+DEPLOY_PATH=/home/ec2-user/
 cp "$BUILD_JAR" $DEPLOY_PATH
 
 echo "> 현재 실행중인 애플리케이션 pid 확인" >> /home/ec2-user/action/deploy.log
@@ -19,6 +19,6 @@ else
   sleep 5
 fi
 
-DEPLOY_JAR=$DEPLOY_PATH/build/libs/$JAR_NAME
+DEPLOY_JAR=$DEPLOY_PATH/$JAR_NAME
 echo "> DEPLOY_JAR 배포"    >> /home/ec2-user/action/deploy.log
 nohup java -jar "$DEPLOY_JAR" >> /home/ec2-user/deploy.log 2>/home/ec2-user/action/deploy_err.log &
