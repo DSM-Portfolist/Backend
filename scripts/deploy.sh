@@ -23,6 +23,4 @@ chmod +x $JAR_NAME
 
 DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
 echo "> DEPLOY_JAR 배포"    >> /home/ec2-user/action/deploy.log
-nohup java -jar \
-        -Dspring.config.location=/home/ec2-user/application.yml, /home/ec2-user/application-aws.yml, /home/ec2-user/application-credentials.yml \ 
-        "$DEPLOY_JAR" >> /home/ec2-user/deploy.log 2>/home/ec2-user/action/deploy_err.log &
+nohup java -jar "$DEPLOY_JAR" >> /home/ec2-user/deploy.log 2>/home/ec2-user/action/deploy_err.log &
